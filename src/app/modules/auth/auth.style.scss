@@ -9,7 +9,7 @@ form {
 .global-container {
     height: 100vh;
     width: 100%;
-    background-image: url("../../../assets/login-bg-5.png");
+
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
@@ -33,7 +33,7 @@ form {
 
 .login-logo {
     width: 45%;
-    padding: 14% 0 0
+    padding: 10% 0 0
 }
 
 .login-form .label {
@@ -109,7 +109,6 @@ form {
     color: #fff !important;
 }
 
-
 .toast-success {
     background-color: green !important;
 }
@@ -138,5 +137,40 @@ form {
     color: #dc3545;
     font-weight: 500;
     letter-spacing: 1px;
+    font-size: 12px;
+}
+
+.forgot-password {
+    cursor: pointer;
+    font-size: 15px;
+    font-family: Helvetica, Avenir LT Std !important;
+}
+
+a {
+    color: #343434;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.forgot-btn {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    font-weight: 500;
+    height: 45px;
+    font-size: 14px;
+    padding: 0 18px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.1);
+    width: 48%;
+    margin: 0 1%;
+}
+
+.forgot-pass a {
     font-size: 12px;
 }

@@ -1,6 +1,6 @@
 mat-sidenav-container {
     height: 100%;
-    background-color: #dadada;
+    background-color: #f1f1f1;
 
     .mat-toolbar {
         background-color: white;
@@ -84,12 +84,30 @@ hr {
     color: #e87033;
 }
 
-.btn-collapse-icon{
+.btn-collapse-icon {
     position: absolute;
     bottom: 15px;
-    right: 15px;
+    right: 10px;
 }
 
-.btn-collapse-icon .fa{
+.btn-collapse-icon {
     color: #fff;
+}
+
+mat-list-item span {
+    margin: 0px 5px;
+    font-size: 14px;
+    padding: 0px 10px;
+}
+
+.foregroundColor {
+    background: #f7f7f7;
+    color: #9e9e9e;
+    cursor: pointer;
+}
+
+.devider_vertical {
+    height: 35px;
+    display: inline-block;
+    border-right: 1px solid #ccc !important;
 }

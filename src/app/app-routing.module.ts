@@ -1,28 +1,41 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ForgotPasswordComponent } from './modules/auth/forgot-password/forgot-password.component';
 import { LoginComponent } from './modules/auth/login/login.component';
 import { SignupComponent } from './modules/auth/signup/signup.component';
 import { HomeComponent } from './modules/landing/home/home.component';
 import { LandingComponent } from './modules/landing/landing/landing.component';
-import { SidebarComponent } from './modules/landing/sidebar/sidebar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
   {
-    path: "home",
+    path: 'home',
     component: LandingComponent,
     children: [
       {
-        path: "",
+        path: '',
         component: HomeComponent
       },
       {
-        path: "dynamic-form",
+        path: 'user',
+        loadChildren: () => import('./modules/user-management/user-management.module').then(m => m.UserManagementModule)
+      },
+      {
+        path: 'role',
+        loadChildren: () => import('./modules/role/role.module').then(m => m.RoleModule)
+      },
+      {
+        path: 'projects',
+        loadChildren: () => import('./modules/projects/projects.module').then(m => m.ProjectsModule)
+      },
+      {
+        path: 'dynamic-form',
         loadChildren: () => import('./modules/dynamic-form/dynamic-form.module').then(m => m.DynamicFormModule)
       },
       {
-        path: "application",
+        path: 'application',
         loadChildren: () => import('./modules/application/application.module').then(m => m.ApplicationModule)
       },
     ]
@@ -31,7 +44,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{ useHash: true})],
+  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy', initialNavigation: 'enabled' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -1,1 +1,63 @@
-<p>signup works!</p>
+<div class="global-container">
+    <div class="row">
+        <div class="col-md-6 word-img d-none d-md-block">
+            <div class="cloud-image ">
+            </div>
+        </div>
+        <div class="col-md-6 ">
+            <div class="login-bg">
+                <div class="card login-form">
+                    <div class="card-body p-0">
+                        <div class="text-center">
+                            <img src="../../../../assets/logo_nts2.png" class="img-fluid login-logo" alt="">
+                        </div>
+                        <div class="card-text">
+                            <form [formGroup]="form" (ngSubmit)="submit()">
+                                <label class="mb-1 label">Name</label>
+                                <div style="position: relative;">
+                                    <input class="form-input" type="text" formControlName="name"
+                                        [ngClass]="{'border-danger': form.controls['name'].hasError('email')}">
+
+                                    <span *ngIf="form.controls['name'].hasError('email')" class="help-block">
+                                        *Please Check Email Id
+                                    </span>
+
+                                </div>
+
+                                <label class="mb-1 label">Email Id</label>
+                                <div style="position: relative;">
+                                    <input class="form-input" type="text" formControlName="userName"
+                                        [ngClass]="{'border-danger': form.controls['userName'].hasError('email')}">
+
+                                    <span *ngIf="form.controls['userName'].hasError('email')" class="help-block">
+                                        *Please Check Email Id
+                                    </span>
+
+                                </div>
+                                <div style="position: relative;">
+                                    <label class="mb-1 label">Password</label>
+                                    <input class="form-input password" type="password" formControlName="password"
+                                        [type]="showPassword ? 'password' : 'text'">
+                                    <mat-icon class="pwd_eyeicon" matSuffix (click)="showPassword = !showPassword">
+                                        {{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                    <span *ngIf="!form.controls['password'].valid && form.controls['password'].value"
+                                        class="help-block">
+                                    </span>
+                                </div>
+                                <button class="w-100 login-btn mt-3" type="submit" mat-raised-button
+                                    color="primary">SIGN UP</button>
+                                <div class="text-center" style="margin-bottom: 7%;">Already have patient account ? <a
+                                        style="color: #e87033;" [routerLink]="['/login']"> Log In </a></div>
+                                <div class="login-footer  py-3">
+                                    <span><b>Powered By </b><a href="https://neutrinotechsystems.com/" target="_blank">
+                                            <img src="../../../../assets/logo_nts2.png"
+                                                class="img-fluid powered-logo" alt=""></a></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
