@@ -1,0 +1,68 @@
+<div class="global-container">
+    <div class="row">
+      <div class="col-md-6 word-img d-none d-md-block">
+        <div class="cloud-image ">
+         
+        </div>
+      </div>
+      <div class="col-md-6 ">
+        <div class="login-bg">
+          <div class="card login-form">
+            <div class="card-body p-0">
+              <div class="text-center">
+                <img src="../../../../assets/logo_nts2.png" class="img-fluid login-logo" alt="">
+              </div>
+              <div class="card-text">
+                <form [formGroup]="form" (ngSubmit)="submit()">
+                  <label class="mb-1 label">Email Id</label>
+                  <div style="position: relative;">
+                    <input class="form-input"  type="text" formControlName="userName"
+                    [ngClass]="{'border-danger': form.controls['userName'].hasError('email')}">
+                    
+                    <span *ngIf="form.controls['userName'].hasError('email')" class="help-block">
+                      *Please Check Email Id
+                    </span>
+  
+                  </div>
+                  <div style="position: relative;">
+                    <label class="mb-1 label">Password</label>
+                    <input class="form-input password" type="password" formControlName="password" [type]="showPassword ? 'password' : 'text'">
+                    <mat-icon class="pwd_eyeicon" matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                   
+                  </div>
+                  <div class="text-right forgot-password" style="margin-bottom: 7%;">Forgot Password?</div>
+  
+                  <button class="w-100 login-btn mt-3"  type="submit" mat-raised-button color="primary" >LOG IN</button>
+  
+                  <div class="text-center" style="margin-bottom: 7%;">New User ? &nbsp;<a style="color: #e87033;" [routerLink]="['/signup']"> Sign Up </a></div>
+  
+                  <div class="login-footer  py-3">
+                    <span><b>Powered By </b><a href="https://neutrinotechsystems.com/" target="_blank"> <img src="../../../../assets/logo_nts2.png" class="img-fluid powered-logo" alt=""></a></span>
+                  </div>
+                </form>
+              </div>            
+            </div>
+            <!-- <div class="card-body p-0" *ngIf="sucssesCodeForOTP == 'Otp sent successfully'">
+              <div class="card-text">
+                <form [formGroup]="form" (ngSubmit)="submit('')">
+                
+                  <div style="position: relative;">
+                    <label class="mb-3 label" style="font-weight: bold;
+                    font-size: 20px;">OTP Verification</label>
+                    <label class="mb-1 label" style="font-size: 16px;">We've sent a verification code to your <br> mail ID - {{backupUserId}}</label>
+                    <input class="form-input " type="text" formControlName="otp">
+                  </div>
+                  <div class="text-right forgot-password"> <a style="cursor: pointer;" (click)="submit('resendOtp')">Resend OTP</a></div>
+                  <button class="w-100 login-btn mt-3"  type="submit" mat-raised-button color="primary" >Verify</button>
+                  <div class="login-footer  py-3">
+                    <span><b>Powered By </b><a href="https://neutrinotechsystems.com/" target="_blank"> <img src="./../../assets/images/logo_nts2.png" class="img-fluid powered-logo" alt=""></a></span>
+                  </div>
+                </form>
+              </div>            
+            </div> -->
+          </div>    
+        </div>
+      </div>
+    </div>
+  </div>
+  

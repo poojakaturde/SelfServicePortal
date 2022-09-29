@@ -1,0 +1,62 @@
+<mat-sidenav-container autosize>
+    <mat-sidenav #sidenav mode="side" opened="isExpanded">
+        <mat-nav-list>
+            <mat-list-item class="row-color">
+                <div class="logo-image">
+                    <img *ngIf="!isExpanded" src="../../../../assets/projectLogoN.png" class="img-fluid" />
+                    <span *ngIf="isExpanded" class="menu-item">
+                        <img src="../../../../assets/logo_nts2.png" class="img-fluid"
+                            style="height: 24px; width: 107px" />
+                    </span>
+                </div>
+            </mat-list-item>
+
+            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/user']">
+                <img src="../../../../assets/Icons_Users.svg" class="img-fluid" matTooltip="User" [matTooltipPosition]="'right'"/>
+                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Users</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/role']">
+                <img src="../../../../assets/Icons_Roles.svg" class="img-fluid" matTooltip="Role" [matTooltipPosition]="'right'" />
+                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Role</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/project']">
+                <img src="../../../../assets/Icons_Projects.svg" class="img-fluid" matTooltip="Projects" [matTooltipPosition]="'right'" />
+                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Projects</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/dynamic-form']">
+                <img src="../../../../assets/Icons_Dynamic_Form.svg" class="img-fluid" matTooltip="Dynamic Form" [matTooltipPosition]="'right'"/>
+                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Dynamic Form</span>
+            </mat-list-item>
+
+            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/application']">
+                <img src="../../../../assets/Icons_Application.svg" class="img-fluid" matTooltip="Application" [matTooltipPosition]="'right'"/>
+                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Application</span>
+            </mat-list-item>
+
+            <!-- <mat-list-item (click)="isExpanded = !isExpanded">
+          <mat-icon mat-list-icon class="chevron-button chevron-button.rotated wh-text "
+            [ngClass]="{ rotated: isExpanded }">chevron_right
+          </mat-icon>
+        </mat-list-item> -->
+
+            <button (click)="isExpanded = !isExpanded" mat-mini-fab class="outline-none btn-collapse-icon"
+                aria-label="open close sidebav button">
+                <mat-icon> {{isExpanded ? 'keyboard_arrow_left' : 'keyboard_arrow_right'}} </mat-icon>
+            </button>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <mat-toolbar class="navigation-bar px-4">
+            <span class="example-spacer "></span>
+            <span matTooltip="Logout"
+                class="text-center ml-3 link primary-font-color d-flex justify-content-center align-items-center logout-color">
+                <i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;
+            </span>
+        </mat-toolbar>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>
