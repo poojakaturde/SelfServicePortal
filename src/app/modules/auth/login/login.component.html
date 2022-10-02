@@ -12,8 +12,8 @@
               <div class="text-center">
                 <img src="../../../../assets/logo_nts2.png" class="img-fluid login-logo" alt="">
               </div>
-              <div class="card-text">
-                <form [formGroup]="form" (ngSubmit)="submit()">
+              <div class="card-text" *ngIf="sucssesCodeForOTP != 'Otp sent successfully'">
+                <form [formGroup]="form" (ngSubmit)="submit('')">
                   <label class="mb-1 label">Email Id</label>
                   <div style="position: relative;">
                     <input class="form-input"  type="text" formControlName="userName"
@@ -42,7 +42,7 @@
                 </form>
               </div>            
             </div>
-            <!-- <div class="card-body p-0" *ngIf="sucssesCodeForOTP == 'Otp sent successfully'">
+            <div class="card-body p-0" *ngIf="sucssesCodeForOTP == 'Otp sent successfully'">
               <div class="card-text">
                 <form [formGroup]="form" (ngSubmit)="submit('')">
                 
@@ -55,11 +55,11 @@
                   <div class="text-right forgot-password"> <a style="cursor: pointer;" (click)="submit('resendOtp')">Resend OTP</a></div>
                   <button class="w-100 login-btn mt-3"  type="submit" mat-raised-button color="primary" >Verify</button>
                   <div class="login-footer  py-3">
-                    <span><b>Powered By </b><a href="https://neutrinotechsystems.com/" target="_blank"> <img src="./../../assets/images/logo_nts2.png" class="img-fluid powered-logo" alt=""></a></span>
+                    <span><b>Powered By </b><a href="https://neutrinotechsystems.com/" target="_blank"> <img src="../../../../assets/logo_nts2.png" class="img-fluid powered-logo" alt=""></a></span>
                   </div>
                 </form>
               </div>            
-            </div> -->
+            </div>
           </div>    
         </div>
       </div>

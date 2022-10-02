@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
 
 @Component({
@@ -16,8 +17,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   returnUrl: string = '';
 
-  constructor(private router: Router,
-    private route: ActivatedRoute,
+  constructor(private router: Router,private apiServ: RequestApiService,
     private snackbar: SnackbarService) { }
 
   ngOnInit(): void {
@@ -29,22 +29,22 @@ export class ForgotPasswordComponent implements OnInit {
       "userName": this.form.value.email
     }
 
-    // this.apiServ.forgotpassword(reqObj)
-    //   .subscribe(res => {
-    //     if (res) {
-    //       if (res.status === 'S') {
-    //         this.snackbar.open(res.description, '', { type: 'success' });
-    //         this.router.navigate(['./login']);
-    //       } else if (res.responseCode === 'EX_DI_406') {
-    //         this.snackbar.open(res.description, '', { type: 'warning' })
-    //         this.router.navigate(['./login']);
-    //       } else {
-    //         this.snackbar.open(res.description, '', { type: 'warning' })
-    //       }
-    //     }
-    //   }, error => {
-    //     this.snackbar.open('Something Went Wrong ...!', '', { type: 'warning' })
-    //   });
+    this.apiServ.forgotPassword(reqObj)
+      .subscribe(res => {
+        if (res) {
+          if (res.status === 'S') {
+            this.snackbar.open(res.description, '', { type: 'success' });
+            this.router.navigate(['./login']);
+          } else if (res.responseCode === 'EX_DI_406') {
+            this.snackbar.open(res.description, '', { type: 'warning' })
+            this.router.navigate(['./login']);
+          } else {
+            this.snackbar.open(res.description, '', { type: 'warning' })
+          }
+        }
+      }, error => {
+        this.snackbar.open('Something Went Wrong ...!', '', { type: 'warning' })
+      });
   }
 
 }

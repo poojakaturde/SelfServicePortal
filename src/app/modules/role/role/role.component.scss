@@ -1,0 +1,100 @@
+.form-icon-group .mat-form-field-suffix {
+    position: absolute;
+    right: 0px;
+    height: 52px;
+    width: 40px;
+    // background: #ccc;
+}
+
+.form-icon-group .mat-form-field-suffix mat-icon {
+    top: 15px;
+    margin: auto;
+    position: relative;
+}
+
+.table-container {
+    height: 400px;
+    overflow: auto;
+}
+
+mat-header-cell,
+mat-cell {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.mat-column-name {
+    flex: 0 0 20% !important;
+    width: 20% !important;
+}
+
+.mat-column-permissions {
+    flex: 0 0 38% !important;
+    width: 48% !important;
+    margin: 0px 10px;
+}
+
+.mat-column-updated,
+.mat-column-created {
+    flex: 0 0 15% !important;
+    width: 12% !important;
+}
+
+.mat-column-action {
+    flex: 0 0 10% !important;
+    width: 6% !important;
+}
+
+.example-container {
+    overflow: overlay;
+    width: 100%;
+    min-height: 280px;
+}
+
+.mat-table {
+    max-height: calc(100vh - 195px) !important;
+    table-layout: fixed;
+}
+
+.person-icon {
+    vertical-align: middle;
+    font-size: 22px;
+}
+
+tr.mat-row {
+    cursor: pointer;
+}
+
+.mat-column-permissions {
+    padding-right: 2%;
+    flex: 0 0 38% !important;
+    width: 48% !important;
+    margin: 0px 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .primary-tooltip {
+    margin-top: -10px !important;
+}
+
+.mat-column-icon {
+    flex: 0 0 4%;
+    width: 4%;
+    word-break: break-all;
+}
+
+.mat-column-role {
+    width: 15%;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    padding-right: 1% !important;
+}
