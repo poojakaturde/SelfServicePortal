@@ -90,4 +90,48 @@ export class RequestApiService {
     return this.http.get(this.url + "/dynamicform/search_criteria?landingPage=submittedForm" + obj)
   }
 
+
+  //  -------------------------------- API SERVICES FOR ROLES ---------------------------------//
+
+  fetchCreatedRoles() {
+    return this.http.get(this.url + "/role")
+  }
+
+  fetchRolesByStatus(status: string) {
+    return this.http.get(this.url + "/role/" + status)
+  }
+
+  createUpdateRole(reqObj: any, isCreateOperation: boolean) {
+    if (isCreateOperation) {
+      return this.http.post<any>(this.url + "/role", reqObj)
+    }
+    else {
+      return this.http.patch<any>(this.url + "/role", reqObj)
+    }
+  }
+
+  //  -------------------------------- API SERVICES FOR USERS ---------------------------------//
+
+  getAllUsers() {
+    return this.http.get(this.url + "/admin/user")
+  }
+
+  getUserDetails(userId: any) {
+    return this.http.get(this.url + "/admin/user/id/" + userId)
+  }
+
+  createUpdateUser(reqObj: any, isCreateOperation: boolean) {
+    if (isCreateOperation) {
+      return this.http.post<any>(this.url + "/admin/user", reqObj)
+    }
+    else {
+      return this.http.patch<any>(this.url + "/admin/user", reqObj)
+    }
+  }
+
+  getAssignedProject(userName: any) {
+    return this.http.get(this.url + "/activeprojectdetails/" + userName)
+  }
+
+
 }

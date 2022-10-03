@@ -1,29 +1,246 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: #212121;
+}
+
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 
-.toast-success {
-    background-color: green !important;
-  }
-  
-  .toast-success .mat-simple-snackbar-action {
-    color: #fff;
-  }
-  
-  .toast-error {
-    background-color: #f44336 !important;
-  }
-  
-  .toast-warning {
-    background-color: rgb(201, 73, 13) !important;
-  }
-  
-  .toast-error .mat-simple-snackbar-action {
-    color: #fff;
-  }
-  
+.mt-4 {
+  margin-top: 1.5rem;
+}
 
+.toast-success {
+  background-color: green !important;
+}
+
+.toast-success .mat-simple-snackbar-action {
+  color: #fff;
+}
+
+.toast-error {
+  background-color: #f44336 !important;
+}
+
+.toast-warning {
+  background-color: rgb(201, 73, 13) !important;
+}
+
+.toast-error .mat-simple-snackbar-action {
+  color: #fff;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  border-radius: 5px;
+}
+
+.searchbox .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.5em 0 0.5em 0 !important;
+}
+
+.searchbox .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  margin: 0 0 !important;
+  padding-bottom: 0px !important;
+  opacity: 0.95;
+  border-radius: 5px;
+  color: #212121;
+  background: #fff;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.7em 0 0.7em 0 !important;
+  // font-size: 14px;
+  height: 40px !important;
+  line-height: 17px;
+  border-top: 4px solid transparent;
+}
+
+.form-icon-group.mat-form-field-appearance-outline:not(.mat-form-field-disabled) .mat-form-field-flex:hover .mat-form-field-outline {
+  // border: 1px solid #ccc;
+  opacity: 1;
+  border-radius: 4px;
+
+  .mat-form-field-outline-start,
+  .mat-form-field-outline-gap,
+  .mat-form-field-outline-end {
+    border: none;
+  }
+}
+
+.searchbox .mat-form-field-appearance-outline .mat-form-field-flex {
+  padding: 7px 0.75em 0 0.75em !important;
+  height: 41px !important;
+}
+
+.mat-form-field-suffix .mat-icon-button {
+  height: 31px !important;
+}
+
+.mat-form-field-flex:hover .mat-form-field-outline {
+  color: #ccc !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: #ccc !important;
+}
+
+.text-danger .mat-select-value {
+  color: red;
+}
+
+.cdk-overlay-container {
+  z-index: 2000 !important;
+}
+
+.filter-icon,
+.mat-sort-header-arrow {
+  color: #e87033 !important;
+}
+
+.mat-mini-fab.mat-button-disabled {
+  background-color: #bababa !important;
+}
+
+.mat-table-header-bg mat-header-cell {
+  color: white !important;
+}
+
+.table-action-icon {
+  font-size: 17px;
+  top: 5px;
+  color: #b0bec5;
+  position: relative;
+  margin: 5px;
+}
+
+
+body.body,
+.mat-table,
+.mat-card {
+  font-family: "Helvetica", "Avenir LT Std" !important;
+}
+
+.mat-table,
+.mat-card {
+  background: transparent;
+}
+
+.mat-table {
+  background: #f7f7f7 !important;
+}
+
+.mat-mini-fab.foregroundColor {
+  color: #9f9f9f !important;
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.form-control {
+  border: 0.5px solid #ced4da;
+  height: 50px;
+  font-weight: 500;
+  font-size: 13px;
+  color: #afa8a3;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  max-height: 70vh;
+  overflow: auto;
+  opacity: 0.95;
+}
+
+.example-header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 400px;
+}
+
+.form-icon-group .mat-form-field-suffix {
+  position: absolute;
+  right: 0px;
+  height: 37px;
+  cursor: pointer;
+  width: 40px;
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.form-icon-group .mat-form-field-suffix mat-icon {
+  top: 8px;
+  margin: auto;
+  position: relative;
+}
+
+mat-form-field .mat-slide-toggle {
+  height: 10px;
+}
+
+mat-form-field .mat-checkbox {
+  position: relative;
+  bottom: 8px;
+}
+
+.mat-checkbox .mat-form-field-infix {
+  height: 55px;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.font_roboto {
+  font-family: 'Roboto', sans-serif;
+}
+
+.center-text {
+  text-align: center !important;
+}
+
+.container-fluid.p-3.body_bg {
+  min-height: 90vh;
+}
+
+.minHeight92 {
+  min-height: 92vh;
+}
+
+.mat-table,
+.mat-card {
+  background: transparent;
+}
+
+.mat-card-header-text {
+  margin: 0px;
+}
+
+.mat-card {
+  background-color: #fff;
+}
+
+.primary-font-color {
+  color: #e87033;
+  font-size: 1rem;
+  font-weight: 500;
+}

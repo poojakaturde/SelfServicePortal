@@ -47,24 +47,23 @@ export class RoleComponent implements OnInit {
   }
 
   getAllCreatedRoles() {
-  //   this.apiRequest.fetchCreatedRoles()
-  //     .subscribe(res => {
-  //       this.isRecordLoaded = true;
-  //       if (res && res.detail && res.detail.length) {
-  //         res.detail = res.detail.map(role => {
-  //           role.isEnabled = role.status === "enabled" ? true : false
-  //           return { ...role };
-  //         });
-  //         this.dataSource.data = res.detail.sort(this.sharedService.compare);
-  //         if (this.roleManagementPermssion.edit || this.roleManagementPermssion.changeStatus) {
-  //           this.displayedColumns.push('action');
-  //         }
-  //       }
-  //     }, error => {
-  //       this.isRecordLoaded = true;
-  //       this.snackbar.open('Failed To Fetch the Role List ...!', '', { type: 'warning' });
-  //     })
-  // }
+    this.apiRequest.fetchCreatedRoles()
+      .subscribe((res: any) => {
+        this.isRecordLoaded = true;
+        if (res && res.detail && res.detail.length) {
+          res.detail = res.detail.map((role: any) => {
+            role.isEnabled = role.status === "enabled" ? true : false
+            return { ...role };
+          });
+          // this.dataSource.data = res.detail.sort(this.sharedService.compare);
+          if (this.roleManagementPermssion.edit || this.roleManagementPermssion.changeStatus) {
+            this.displayedColumns.push('action');
+          }
+        }
+      }, (error: any) => {
+        this.isRecordLoaded = true;
+        this.snackbar.open('Failed To Fetch the Role List ...!', '', { type: 'warning' });
+      })
   }
 
   filterUserTableData(event: Event) {
@@ -74,14 +73,13 @@ export class RoleComponent implements OnInit {
     //   role.updated = this.datePipe.transform(role.updated, 'MM-dd-yyyy HH:mm:ss');
     //   return { ...role };
     // })
-    this.dataSource.filterPredicate = function(data:any, filter: any): any {
-      return JSON.stringify(data.permissions).toLowerCase().indexOf(filter) !== -1 || data.role.toLowerCase().includes(filter) || 
-             data.created.toLowerCase().includes(filter) || data.updated.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate = function (data: any, filter: any): any {
+      return JSON.stringify(data.permissions).toLowerCase().indexOf(filter) !== -1 || data.role.toLowerCase().includes(filter) ||
+        data.created.toLowerCase().includes(filter) || data.updated.toLowerCase().includes(filter);
     }
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
-
 }

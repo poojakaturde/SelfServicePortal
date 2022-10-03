@@ -1,0 +1,169 @@
+.user-info-container>div>div {
+    background-color: #f1f1f1;
+    // width: 100px;
+    margin: 10px 0;
+    text-align: center;
+    line-height: 75px;
+    height: 80px;
+    font-size: 30px;
+}
+
+.form-icon-group .mat-form-field-suffix {
+    position: absolute;
+    right: 0px;
+    height: 52px;
+    width: 40px;
+    // background: #ccc;
+}
+
+.form-icon-group .mat-form-field-suffix mat-icon {
+    top: 15px;
+    margin: auto;
+    position: relative;
+}
+
+.table-container {
+    height: 400px;
+    overflow: auto;
+}
+
+mat-header-cell,
+mat-cell {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.mat-column-email,
+.mat-column-name,
+.mat-column-assignedProjects {
+    flex: 0 0 25% !important;
+    max-width: 25vw !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    padding-right: 24px;
+}
+
+.mat-column-updated,
+.mat-column-created {
+    flex: 0 0 15% !important;
+    width: 15% !important;
+}
+
+.mat-column-dob,
+.mat-column-gender,
+.mat-column-action {
+    flex: 0 0 10% !important;
+    width: 10% !important;
+}
+
+.example-container {
+    overflow: overlay;
+    width: 100%;
+    min-height: 280px;
+}
+
+.mat-table {
+    max-height: calc(100vh - 195px) !important;
+    table-layout: fixed;
+}
+
+tr.mat-row {
+    cursor: pointer;
+}
+
+.person-icon {
+    vertical-align: middle;
+    font-size: 22px;
+}
+
+.card-person-icon {
+    vertical-align: middle;
+    font-size: 50px;
+}
+
+.mat-card {
+    background: none;
+    border-radius: 10px;
+    border: none;
+}
+
+.cardstats {
+    padding: 2px 18px;
+    background-color: #fff;
+    opacity: 0.92;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    height: 118px !important;
+}
+
+.infocards {
+    margin-bottom: 30px;
+    box-shadow: none !important;
+}
+
+.infocards:hover {
+    transform: scale(1.05);
+    transition: transform 250ms;
+}
+
+.proj_name {
+    padding: 10px;
+    background-color: #f9f9f9;
+    z-index: 1;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    // border-bottom: 1px solid #ccc;
+}
+
+.proj_name .col-8,
+.proj_name h5 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gridicon .mat-button-toggle-group-appearance-standard {
+    border: none;
+}
+
+.gridicon .mat-button-toggle-checked {
+    background: none;
+}
+
+.gridicon .mat-button-toggle-group-appearance-standard .mat-button-toggle+.mat-button-toggle {
+    border: none;
+}
+
+.iconPos {
+    position: relative;
+    // top: 6px;
+    font-size: 20px;
+}
+
+.heading {
+    font-size: 14px;
+}
+
+.overEllipsis {
+    width: 84%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+::ng-deep .primary-tooltip {
+    margin-top: -10px !important;
+}
+
+.px-4 {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+}

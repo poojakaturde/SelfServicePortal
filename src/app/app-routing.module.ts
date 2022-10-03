@@ -24,27 +24,22 @@ const routes: Routes = [
       {
         path: 'user',
         loadChildren: () => import('./modules/user-management/user-management.module').then(m => m.UserManagementModule),
-        canActivate: [AuthguardService]
       },
       {
         path: 'role',
         loadChildren: () => import('./modules/role/role.module').then(m => m.RoleModule),
-        canActivate: [AuthguardService]
       },
       {
         path: 'projects',
         loadChildren: () => import('./modules/projects/projects.module').then(m => m.ProjectsModule),
-        canActivate: [AuthguardService]
       },
       {
         path: 'dynamic-form',
         loadChildren: () => import('./modules/dynamic-form/dynamic-form.module').then(m => m.DynamicFormModule),
-        canActivate: [AuthguardService]
       },
       {
         path: 'application',
         loadChildren: () => import('./modules/application/application.module').then(m => m.ApplicationModule),
-        canActivate: [AuthguardService]
       },
     ]
   },

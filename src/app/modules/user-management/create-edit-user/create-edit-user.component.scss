@@ -1,0 +1,31 @@
+.padding-l-r-6 {
+    padding-left: 6rem !important;
+    padding-right: 6rem !important;
+}
+
+.error-msg {
+    font-size: 1em;
+    width: max-content;
+    width: 100%;
+}
+
+.required-asterisk {
+    color: red;
+}
+
+.iconPos {
+    position: relative;
+    // top: 6px;
+    font-size: 20px;
+}
+
+.example-section {
+    display: flex;
+    // align-content: center;
+    align-items: center;
+    height: 60px;
+}
+
+.button-cls {
+    top: -5px;
+}
