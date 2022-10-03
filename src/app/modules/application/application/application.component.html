@@ -1,1 +1,181 @@
-<p>application works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-7 col-md-3 sol-sm-4 mt-3 pr-0">
+            <h6 class="mt-3 primary-font-color"
+                style="color: #e87033;font-weight: 500;line-height: 1.2;font-size: 1rem;">List
+                of Applications</h6>
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-sm-3 col-7 pt-3 ml-auto font-color">
+            <button mat-raised-button color="primary" class="font-17 float-right btn-xs-block" (click)="openDialog()">
+                Apply
+            </button>
+        </div>
+    </div>
+    <mat-accordion class="example-headers-align m-2">
+        <mat-expansion-panel [expanded]="false" hideToggle="true" #filter>
+            <mat-expansion-panel-header>
+                <mat-panel-title class="justify-content-start">
+                    <mat-icon
+                        [ngClass]="{'primary-font-color' : filter.expanded , 'text-secondary' : !filter.expanded}">
+                        {{filter.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+                    </mat-icon>
+                    <span class="ml-2"
+                        [ngClass]="{'primary-font-color' : filter.expanded , 'text-secondary' : !filter.expanded}">
+                        Filter </span>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <span class="invisible">Processing Time Taken By The Dynamic Forms</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="row user-info-container">
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <mat-label>Project Name</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field">
+                        <input matInput type="text" autocomplete="off" [(ngModel)]="tableData.projectName">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <mat-label>Form Name</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field">
+                        <input matInput type="text" autocomplete="off" [(ngModel)]="tableData.name">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <mat-label>Status</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field">
+                        <mat-select [(ngModel)]="tableData.status " multiple>
+                            <mat-option value="enabled">enabled</mat-option>
+                            <mat-option value="disabled">disabled</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <mat-label>Submitted By</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field">
+                        <input matInput type="text" autocomplete="off" [(ngModel)]="tableData.by">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <mat-label>Start Date</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput [matDatepicker]="picker" [(ngModel)]="tableData.startDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <mat-label>End Date</mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput [matDatepicker]="picker1" [(ngModel)]="tableData.endDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div class="text-right">
+                <button class="mt-1 text-center mr-3" mat-stroked-button color="accent"
+                    (click)="clearFilter(tableData)">Clear</button>
+                <button type="submit" mat-flat-button color="primary" (click)="searchByFilter(tableData)"> Apply
+                </button>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="row mb-3" *ngIf="dataSource.filteredData.length !== 0; else elseBlock">
+        <div class="col-sm-12">
+            <div class="example-container mat-elevation-z0 documentTable">
+                <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+
+                        <ng-container matColumnDef="status">
+                            <b>
+                                <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                            </b>
+                            <td mat-cell *matCellDef="let element" class="text"> {{element.status}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="projectName">
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Project Name </th>
+
+                            <td mat-cell *matCellDef="let element">
+                                <i class="fa fa-newspaper-o primary-font-color mr-2" aria-hidden="true"></i>
+                                <span matTooltipPosition="below"> {{ element.projectName }} </span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="formName">
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Form Name </th>
+                            <td mat-cell *matCellDef="let element">
+
+                                <span matTooltipPosition="below"> {{ element.formName }} </span>
+                            </td>
+                        </ng-container>
+
+
+
+                        <ng-container matColumnDef="submittedBy">
+                            <b>
+                                <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Submitted By
+                                </th>
+                            </b>
+                            <td mat-cell *matCellDef="let element"> {{element.submittedBy}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="submittedOn">
+                            <b>
+                                <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Submitted On
+                                </th>
+                            </b>
+                            <td mat-cell *matCellDef="let element"> {{element.submittedOn | date : 'longDate'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <b>
+                                <th class="font-14px" mat-header-cell *matHeaderCellDef> Action </th>
+                            </b>
+                            <td mat-cell *matCellDef="let element let i = index;">
+                                <button class="outline-none foregroundColor" mat-mini-fab
+                                    aria-label="edit role details">
+                                    <mat-icon [routerLink]="['./view-form', element.id]">visibility</mat-icon>
+                                </button>&nbsp;
+
+                                <button class="outline-none foregroundColor" mat-mini-fab aria-label="edit role details"
+                                    (click)="deleteForm(element)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+                    <mat-paginator [pageSize]="tableData.size" [pageIndex]="pageIndex"
+                        [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons (page)="pageSizeChange($event)">
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #elseBlock>
+        <div class="card bg-default h-100-pb30 opacity95">
+            <div class="card-body pb-0 text-center">
+                <h3 class="text-center py-4">
+                    <img class="mb-3" src="../../../../assets/No content.png" alt="image"> <br>
+                    {{ dataSource.data.length ? 'No Records Found !' : 'There are no Applications available at this
+                    moment.' }}
+                </h3>
+            </div>
+        </div>
+    </ng-template>
+</div>

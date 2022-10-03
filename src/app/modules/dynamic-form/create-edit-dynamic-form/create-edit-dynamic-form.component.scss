@@ -1,0 +1,28 @@
+.material-icons.color_grey {
+    color: #999999
+}
+
+.formRender {
+    display: inline-block;
+    padding-top: 0.4%;
+    padding-right: 0.4%;
+}
+
+.mat-radio-button {
+    margin: 1%;
+}
+
+.radioDiv {
+    padding-left: 10%;
+}
+
+.fix_bottom {
+    position: fixed;
+    right: 1%;
+    bottom: 0%;
+    z-index: 1000;
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+}

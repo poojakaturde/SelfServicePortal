@@ -60,6 +60,10 @@ export class RequestApiService {
     return this.http.post<any>(this.url + "/dynamicform/search_criteria?landingPage=dynamicForm", obj)
   }
 
+  getOperatorList(){
+    return this.http.get(this.url + "/config/validationTypeDetails")
+  }
+
   //  ---------------------------- API SERVICES FOR APPLICATION ---------------------------------//
 
   getSSPEnabledProjects(username: any) {

@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Project List</h1>
+<hr>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label> Project List...</mat-label>
+        <input [formControl]="myControl" matInput type="text" [matAutocomplete]="auto" />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let item of  projectsList" [value]="item.project">
+                {{item.project}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial> Proceed
+    </button>
+</div>

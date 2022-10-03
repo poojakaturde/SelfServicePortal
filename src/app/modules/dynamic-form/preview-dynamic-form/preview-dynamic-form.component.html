@@ -1,1 +1,91 @@
-<p>preview-dynamic-form works!</p>
+<mat-card style="background-color:#E3E3E3;" class="border rounded m-3 p-3">
+    <h4>{{viewFormData.name}} </h4>
+</mat-card>
+<div *ngFor="let form of viewFormData.sections" [ngSwitch]="true">
+    <mat-card class="border rounded p-3 m-3">
+        <h5 style="font-weight:bold;">{{form.sectionTitle}} :</h5>
+        <hr style="background-color: black;">
+        <div *ngFor="let f of form.rows">
+            <h6 style="font-weight:bold;" *ngIf="f.rowTitle.length != 0">{{f.rowTitle}}</h6>
+
+            <div class="formRender" *ngFor="let formData of f.fields"
+                [ngStyle]="{'width':(f.fields.length === 2) ? '50%' : (f.fields.length === 3) ? '33.33%'  : (f.fields.length >= 4) ? '25%' : '100%'}">
+
+                <div *ngSwitchCase="formData.type === 'EDIT_TEXT'">
+                    <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">*</span>
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="">
+                    </mat-form-field>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'EDIT_LABEL'">
+                    <h5 style="font-weight: bold;"> {{formData.title}}</h5>
+
+
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'EDIT_TEXT_PHONE'">
+                    <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">&nbsp;*</span>
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="">
+                    </mat-form-field>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'DROPDOWN'">
+                    <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">&nbsp;*</span>
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                        <mat-select>
+                            <mat-option *ngFor="let option of formData.widgetData" [value]="option.value">
+                                {{option.title}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'AUTOCOMPLETE'">
+                    <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">&nbsp;*</span>
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                        <input type="text" placeholder="Pick one" aria-label="Admin" matInput [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let option of formData.widgetData" [value]="option.value">
+                                {{option.title}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+
+                <div class="radioDiv" *ngSwitchCase="formData.type === 'RADIO'">
+                    <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">&nbsp;*</span>
+                    </mat-label><br />
+                    <mat-radio-group>
+                        <mat-radio-button class="mt-3" [value]="option.title"
+                            *ngFor="let option of formData.widgetData">
+                            {{option.title}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'DATE_PICKER'">
+                    <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">&nbsp;*</span>
+                    </mat-label>
+                    <mat-form-field appearance="outline">
+                        <input matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'CHECKBOX'">
+                    <mat-label>{{formData.title}} :</mat-label><br>
+                    <section class="check" *ngFor="let option of formData.widgetData">
+                        <mat-checkbox>{{option.title}}</mat-checkbox> &nbsp;
+                    </section>
+                </div>
+
+            </div>
+        </div>
+    </mat-card>
+</div>

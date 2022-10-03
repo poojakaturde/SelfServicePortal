@@ -1,1 +1,164 @@
-<p>form-render-submission works!</p>
+<mat-card style="background-color: #E3E3E3;padding: 1%; margin:1%;margin-bottom: 2%;" class="border rounded">
+    <h4>{{dynamicFormDetails.name}} &nbsp;</h4>
+</mat-card>
+
+<form [formGroup]="submitForm" autocomplete="off">
+    <div *ngFor="let f of dynamicFormDetails.sections" [ngSwitch]="true">
+        <mat-card class="border rounded p-3  m-3">
+            <h5>{{f.sectionTitle}}</h5>
+            <hr style="background-color: black;">
+            <div *ngFor="let form of f.rows">
+                <div class="formRender" *ngFor="let formData of form.fields"
+                    [ngStyle]="{'width':(form.fields.length === 2) ? '50%' : (form.fields.length === 3) ? '33%'  : (form.fields.length >= 4) ? '25%' : '100%'}">
+                    <div *ngSwitchCase="formData.type === 'EDIT_TEXT'">
+                        <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">*</span>
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput [formControlName]="formData.title" ngModel>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('required')">It is required
+                                field </mat-error>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('maxlength')">
+                                {{formData.title}} can be max {{formData.maxLength}} characters long.
+                            </mat-error>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('pattern')">
+                                {{formData.validationType.tooltip}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="formData.type === 'EDIT_TEXT_PHONE'">
+                        <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">*</span>
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput [formControlName]="formData.title" ngModel>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('required')">It is required
+                                field
+                            </mat-error>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('maxlength')">
+                                {{formData.title}} can be max {{formData.maxLength}} characters long.
+                            </mat-error>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('pattern')">
+                                {{formData.validationType.tooltip}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="formData.type === 'DROPDOWN'">
+                        <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">*</span>
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                            <mat-select [formControlName]="formData.title" ngModel>
+                                <mat-option *ngFor="let option of formData.widgetData" [value]="option.value">
+                                    {{option.title}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('required')">It is required
+                                field
+                            </mat-error>
+
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('pattern')">
+                                {{formData.validationType.tooltip}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="formData.type === 'API_AUTOCOMPLETE'">
+                        <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">*</span>
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+
+                            <input type="text" matInput [matAutocomplete]="auto" [formControlName]="formData.title"
+                                ngModel>
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of formData.widgetData" [value]="option.value">
+                                    {{option.title}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('required')">It is required
+                                field
+                            </mat-error>
+
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('pattern')">
+                                {{formData.validationType.tooltip}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="formData.type === 'AUTOCOMPLETE'">
+                        <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">*</span>
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+
+                            <input type="text" matInput [matAutocomplete]="auto" [formControlName]="formData.title"
+                                ngModel>
+                            <mat-autocomplete #auto="matAutocomplete">
+                                <mat-option *ngFor="let option of formData.widgetData" [value]="option.value">
+                                    {{option.title}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('required')">It is required
+                                field
+                            </mat-error>
+
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('pattern')">
+                                {{formData.validationType.tooltip}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- <div class="radioDiv" *ngSwitchCase="formData.type === 'RADIO'">
+                        <mat-label>{{formData.title}} :</mat-label>
+                        <br>
+
+                        <mat-radio-group  ngModel  [formControlName]="formData.title">
+                            <mat-radio-button class="mt-3"
+                                value="option.value" name="formData.title" *ngFor="let option of formData.widgetData">
+                                {{option.title}}
+                            </mat-radio-button>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('required')">It is required field
+                            </mat-error>
+                     
+              
+                        </mat-radio-group>
+
+
+                    </div> -->
+                    <div class="radioDiv" *ngSwitchCase="formData.type === 'RADIO'">
+                        <mat-label id="example-radio">{{formData.title}}<span *ngIf="formData.required"
+                                style="color: red;">*</span> :</mat-label><br>
+                        <mat-radio-group aria-labelledby="example-radio" [formControlName]="formData.title" ngModel>
+                            <mat-radio-button *ngFor="let option of formData.widgetData" [value]="option.value">
+                                {{option.title}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+
+                    <div *ngSwitchCase="formData.type === 'DATE_PICKER'">
+                        <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">*</span>:
+                        </mat-label><br />
+                        <mat-form-field appearance="outline">
+                            <input matInput [matDatepicker]="picker" [formControlName]="formData.title" ngModel>
+
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker startAt="{{formData.enteredValue}}" #picker></mat-datepicker>
+                            <mat-error *ngIf="submitForm.controls[formData.title].hasError('required')">It is required
+                                field
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div *ngSwitchCase="formData.type === 'CHECKBOX'">
+                        <mat-label>{{formData.title}}<span *ngIf="formData.required" style="color: red;">*</span> :
+                        </mat-label><br>
+                        <section *ngFor="let option of formData.widgetData">
+                            <mat-checkbox [value]="option.value" (change)="onCheckboxChange($event)">{{option.title}}
+                            </mat-checkbox> &nbsp;
+                        </section>
+                        <mat-error *ngIf="submitForm.controls[formData.title].hasError('required')">It is required
+                            field
+                        </mat-error>
+                    </div>
+
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+</form>
+
+<button mat-raised-button color="primary" (click)="onSubmit()" class="font-17 float-right btn-xs-block"
+    style="margin-right: 1.4%" [routerLink]="['/home/application']"> Submit </button>

@@ -1,1 +1,91 @@
-<p>view-form works!</p>
+<mat-card style="background-color:#E3E3E3;width: 98%;padding: 1%; margin:1%;margin-bottom: 2%;" class="border rounded">
+    <h4>{{viewFormData.name}} </h4>
+</mat-card>
+<div *ngFor="let f of viewFormData.sections" [ngSwitch]="true">
+    <mat-card class="border rounded p-3   m-3">
+        <h5>{{f.sectionTitle}}</h5>
+        <hr style="background-color: black;">
+        <br>
+
+        <div *ngFor="let form of f.rows">
+            <div class="formRender" *ngFor="let formData of form.fields"
+                [ngStyle]="{'width':(form.fields.length === 2) ? '50%' : (form.fields.length === 3) ? '33%'  : (form.fields.length >= 4) ? '25%' : '100%'}">
+                <div *ngSwitchCase="formData.type === 'EDIT_TEXT'">
+                    <mat-label>{{formData.title}}</mat-label>
+                    <mat-form-field appearance="outline" style="color: black;">
+
+                        <input matInput value="{{formData.enteredValue}}" [disabled]="true">
+                    </mat-form-field>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'EDIT_TEXT_PHONE'">
+                    <mat-label>{{formData.title}}</mat-label>
+                    <mat-form-field appearance="outline">
+
+                        <input matInput value="{{formData.enteredValue}}" [disabled]="true">
+
+                    </mat-form-field>
+                </div>
+
+
+                <div *ngSwitchCase="formData.type === 'DROPDOWN'">
+                    <mat-label>{{formData.title}}</mat-label>
+                    <mat-form-field appearance="outline">
+                        <!-- <mat-select  [(value)]="formData.enteredValue" [disabled]="true">
+                            <mat-option  *ngFor="let option of formData.widgetData" [value]="option.value">
+                                {{option.title}}</mat-option>
+                        </mat-select> -->
+
+                        <select matNativeControl disabled>
+                            <option *ngFor="let option of formData.widgetData" [value]="option.value"
+                                [selected]="option.selected">
+                                {{option.title}}</option>
+                        </select>
+
+
+                    </mat-form-field>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'API_AUTOCOMPLETE'">
+                    <mat-label>{{formData.title}}</mat-label>
+                    <mat-form-field appearance="outline">
+                        <mat-label>{{formData.title}}</mat-label>
+                        <input type="text" [disabled]="true" matInput [matAutocomplete]="auto"
+                            value="{{formData.enteredValue}}">
+                        <mat-autocomplete #auto="matAutocomplete">
+                            <mat-option *ngFor="let option of formData.widgetData" [value]="option.value">
+                                {{option.title}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'RADIO'">
+                    <mat-label>{{formData.title}} :</mat-label><br>
+                    <mat-radio-group [disabled]="true" *ngFor="let option of formData.widgetData">
+                        <mat-radio-button class="mt-3" [checked]="option.selected" value="option.value">{{option.title}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'DATE_PICKER'">
+                    <mat-label>{{formData.title}}:</mat-label><br />
+                    <mat-form-field appearance="outline">
+                        <input matInput [disabled]="true" [matDatepicker]="picker" [ngModel]="formData.enteredValue">
+
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker startAt="{{formData.value}}" #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div *ngSwitchCase="formData.type === 'CHECKBOX'">
+                    <mat-label>{{formData.title}} :</mat-label><br>
+                    <section *ngFor="let option of formData.widgetData">
+                        <mat-checkbox [disabled]="true" [checked]="option.selected">{{option.title}}</mat-checkbox>
+                        &nbsp;
+                    </section>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
