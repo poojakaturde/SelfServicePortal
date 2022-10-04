@@ -11,27 +11,27 @@ export class HomeComponent implements OnInit {
   userAccess: any = [
     {
       name: "Users",
-      icon: "../../../../assets/Icons_Users.svg",
+      icon: "../../../../assets/icons/Icons_Users.svg",
       route: "/home/user"
     },
     {
       name: "Role",
-      icon: "../../../../assets/Icons_Roles.svg",
+      icon: "../../../../assets/icons/Icons_Roles.svg",
       route: "/home/role"
     },
     {
       name: "Projects",
-      icon: "../../../../assets/Icons_Projects.svg",
+      icon: "../../../../assets/icons/Icons_Projects.svg",
       route: "/home/projects"
     },
     {
       name: "Dynamic Form",
-      icon: "../../../../assets/Icons_Dynamic_Form.svg",
+      icon: "../../../../assets/icons/Icons_Dynamic_Form.svg",
       route: "/home/dynamic-form"
     },
     {
       name: "Application",
-      icon: "../../../../assets/Icons_Application.svg",
+      icon: "../../../../assets/icons/Icons_Application.svg",
       route: "/home/application"
     }
   ];

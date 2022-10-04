@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { LoaderService } from '../app/core/services/loader-service/loader.service';
+import { LoaderService } from '../../core/services/loader-service/loader.service';
 
 @Component({
   selector: 'app-loader',

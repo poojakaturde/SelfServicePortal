@@ -3,40 +3,40 @@
         <mat-nav-list>
             <mat-list-item class="row-color">
                 <div class="logo-image">
-                    <img *ngIf="!isExpanded" src="../../../../assets/projectLogoN.png" class="img-fluid" />
+                    <img *ngIf="!isExpanded" src="../../../../assets/images/projectLogoN.png" class="img-fluid" />
                     <span *ngIf="isExpanded" class="menu-item">
-                        <img src="../../../../assets/logo_nts2.png" class="img-fluid"
+                        <img src="../../../../assets/images/logo_nts2.png" class="img-fluid"
                             style="height: 24px; width: 107px" />
                     </span>
                 </div>
             </mat-list-item>
 
             <mat-list-item class="mt-2" [routerLinkActive]="['active']" [routerLink]="['/home/user']">
-                <img src="../../../../assets/Icons_Users.svg" class="img-fluid mr-2" matTooltip="User"
+                <img src="../../../../assets/icons/Icons_Users.svg" class="img-fluid mr-2" matTooltip="User"
                     [matTooltipPosition]="'right'" />
                 <span *ngIf="isExpanded" class="menu-item wh-text text-font">Users</span>
             </mat-list-item>
 
             <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/role']">
-                <img src="../../../../assets/Icons_Roles.svg" class="img-fluid mr-2" matTooltip="Role"
+                <img src="../../../../assets/icons/Icons_Roles.svg" class="img-fluid mr-2" matTooltip="Role"
                     [matTooltipPosition]="'right'" />
                 <span *ngIf="isExpanded" class="menu-item wh-text text-font">Role</span>
             </mat-list-item>
 
             <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/projects']">
-                <img src="../../../../assets/Icons_Projects.svg" class="img-fluid mr-2" matTooltip="Projects"
+                <img src="../../../../assets/icons/Icons_Projects.svg" class="img-fluid mr-2" matTooltip="Projects"
                     [matTooltipPosition]="'right'" />
                 <span *ngIf="isExpanded" class="menu-item wh-text text-font">Projects</span>
             </mat-list-item>
 
             <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/dynamic-form']">
-                <img src="../../../../assets/Icons_Dynamic_Form.svg" class="img-fluid mr-2" matTooltip="Dynamic Form"
+                <img src="../../../../assets/icons/Icons_Dynamic_Form.svg" class="img-fluid mr-2" matTooltip="Dynamic Form"
                     [matTooltipPosition]="'right'" />
                 <span *ngIf="isExpanded" class="menu-item wh-text text-font">Dynamic Form</span>
             </mat-list-item>
 
             <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/application']">
-                <img src="../../../../assets/Icons_Application.svg" class="img-fluid mr-2" matTooltip="Application"
+                <img src="../../../../assets/icons/Icons_Application.svg" class="img-fluid mr-2" matTooltip="Application"
                     [matTooltipPosition]="'right'" />
                 <span *ngIf="isExpanded" class="menu-item wh-text text-font">Application</span>
             </mat-list-item>
