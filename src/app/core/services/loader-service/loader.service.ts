@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Injectable({
   providedIn: 'root'
@@ -6,4 +7,5 @@ import { Injectable } from '@angular/core';
 export class LoaderService {
 
   constructor() { }
+  public isLoading = new BehaviorSubject(false);
 }

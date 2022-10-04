@@ -11,6 +11,11 @@ body {
   color: #212121;
 }
 
+.mat-app-background {
+  height: 100%;
+  height: 100vh;
+}
+
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';

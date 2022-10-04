@@ -8,9 +8,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LandingModule } from './modules/landing/landing.module';
 import { MaterialModule } from './modules/Material/material.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AppLoaderComponent } from './app-loader.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AppLoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -19,7 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
     NgbModule,
     LandingModule,
     MaterialModule,
-    AuthModule
+    AuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
