@@ -4,7 +4,7 @@ import { MaterialModule } from '../Material/material.module';
 import { RoleRoutingModule } from './role-routing.module';
 import { RoleComponent } from './role/role.component';
 import { CreateEditRoleComponent } from './create-edit-role/create-edit-role.component';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,9 @@ import { CreateEditRoleComponent } from './create-edit-role/create-edit-role.com
   imports: [
     CommonModule,
     RoleRoutingModule,
-    MaterialModule
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class RoleModule { }

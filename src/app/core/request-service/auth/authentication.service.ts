@@ -8,10 +8,10 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 })
 export class AuthenticationService {
 
-  authenticationToken:any ;
+  authenticationToken: any;
   private userInfo = new BehaviorSubject<any>(null);
 
-  constructor(private router: Router) { 
+  constructor(private router: Router) {
     this.authenticationToken = localStorage.getItem('token');
   }
 
@@ -26,7 +26,7 @@ export class AuthenticationService {
     return SHA256(text).toString();
   }
 
-  setUserInfo(userInfo:any) {
+  setUserInfo(userInfo: any) {
     this.userInfo.next(userInfo);
   }
 
@@ -46,6 +46,10 @@ export class AuthenticationService {
     return this.userInfo;
   }
 
+  getPermissions() {
+
+  }
+
   logout() {
     localStorage.removeItem('userProjects');
     localStorage.removeItem('selectedProject');
@@ -54,7 +58,7 @@ export class AuthenticationService {
     localStorage.removeItem('projectFilterStatus');
     localStorage.removeItem('token');
     localStorage.removeItem('patientPermission');
-   
+
     this.userInfo.next(null);
     this.router.navigate(['./login']);
 

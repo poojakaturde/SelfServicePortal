@@ -1,0 +1,107 @@
+<div class="container-fluid p-3 body_bg opacity95">
+    <form [formGroup]="roleInfoForm" autocomplete="off">
+        <h5>
+            <strong class="primary-font-color">{{isCreateRoleOperation ? 'Create Role' : 'Edit Role'}}</strong>
+            <button mat-stroked-button color="accent" class="float-right button-cls ml-2"
+                [routerLink]="['/home/role']">Cancel</button>
+            <button (click)="createUpdateRole(); iscreateUpdateBtnClicked = true;" mat-raised-button color="primary"
+                class=" float-right button-cls">
+                {{ isCreateRoleOperation ? 'Create' : 'Update' }}
+            </button>
+        </h5>
+        <mat-card class="border rounded p-3 my-3">
+            <div class="row">
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <mat-label>Role Name
+                        <span class="required-asterisk">*</span>
+                    </mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field">
+                        <input matInput type="text" formControlName="role" minlength="3" maxlength="15" required #role
+                            pattern='^([a-zA-Z0-9\s])+([a-zA-Z0-9\s()]+)*(-[\(\)a-zA-Z0-9\s]+)*$'
+                            (blur)="trim($event.target)">
+                        <mat-error *ngIf="roleInfoForm.controls['role'].hasError('required')">Please enter a valid role name.
+                        </mat-error>
+                        <mat-error *ngIf="roleInfoForm.controls['role'].hasError('minlength')">Please enter a valid role
+                            name.
+                        </mat-error>
+                        <mat-error *ngIf="roleInfoForm.controls['role'].hasError('pattern')">Only
+                            alphabets,digits,parenthesis and hyphens are allowed while giving a role name.</mat-error>
+                        <mat-hint align="end">{{role.value.length}} / 15</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="roleInfoForm.controls['created']" class="col-sm-6 col-md-4 col-lg-3">
+                    <mat-label>Created</mat-label>
+                    <mat-form-field color="primary" appearance="outline">
+                        <input formControlName="created" matInput>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="roleInfoForm.controls['updated']" class="col-sm-6 col-md-4 col-lg-3">
+                    <mat-label>Updated</mat-label>
+                    <mat-form-field color="primary" appearance="outline">
+                        <input formControlName="updated" matInput>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <mat-label class="ml-5">Active Role</mat-label>
+                    <section class="example-section ml-5">
+                        <mat-slide-toggle color="primary" formControlName="status"></mat-slide-toggle>
+                    </section>
+                </div>
+                <div class="col-sm-12 mt-3 ">
+                    <mat-label>Permissions</mat-label>
+                    <div class="jumbotron py-3 px-1 my-0 border"
+                        [ngClass]="{'border-danger': (!selectedPermission.length && iscreateUpdateBtnClicked)}">
+                        <div class="row">
+                            <div class="col-sm-10 col-md-11">
+                                <mat-chip-list aria-label="permissions">
+                                    <mat-chip *ngFor="let permission of selectedPermission; let i = index">{{ permission
+                                        }}
+                                        <mat-icon (click)="removePermission(permission)" matChipRemove>cancel</mat-icon>
+                                    </mat-chip>
+                                </mat-chip-list>
+                            </div>
+                        </div>
+                    </div>
+                    <mat-error class="ml-2 mt-1 small" *ngIf="!selectedPermission.length && iscreateUpdateBtnClicked ">
+                        Please add some permissions for the role created.
+                    </mat-error>
+                </div>
+                <div class="col-sm-2 col-md-1 text-right mt-3 customPanel" (click)="search.value=''; search.focus()">
+        
+                    <mat-menu #main_menu="matMenu" class="customize">
+                        <div class="menuSmart_Search">
+                            <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                                (keydown)="$event.stopPropagation();" autocomplete="off"
+                                (keyup)="search.value.length === 0 ? search.value='': '' " #search>
+                        </div>
+                        <ng-container *ngFor="let permission of getcategoryList(search.value)">
+                            <button mat-menu-item [matMenuTriggerFor]="sub_menu"
+                                (mouseover)="selectedCategory = permission">
+                                {{ permission | titlecase }}
+                            </button>
+                            <mat-menu #sub_menu="matMenu" class="customize">
+                                <div *ngFor="let dataset of permissionWithDesc ; let i = index">
+                                    <div *ngIf="dataset.type === selectedCategory"
+                                        (click)="selectUsers($event, dataset)" mat-menu-item>
+                                        <mat-checkbox color="primary"
+                                            [checked]="selectedPermission.includes(dataset.displayName)"></mat-checkbox>
+                                        {{ dataset.displayName }}
+                                    </div>
+                                </div>
+                            </mat-menu>
+                        </ng-container>
+                        <div *ngIf="permissionList.length" class="text-center text-secondary p-2">
+                            {{getpermissionList(search.value).length === 0 ? 'No Records Found !' : ''}}
+                        </div>
+                    </mat-menu>
+                    <span class="text-scondary ml-auto p-1">
+                        <button mat-raised-button color="primary" [matMenuTriggerFor]="main_menu"
+                            (click)="search.value=''; search.focus()" class="">
+                            Add permission <mat-icon>add_circle_outline</mat-icon>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+    </form>
+</div>

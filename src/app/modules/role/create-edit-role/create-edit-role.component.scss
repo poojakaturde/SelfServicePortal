@@ -1,0 +1,30 @@
+.required-asterisk {
+    color: red;
+}
+
+.example-section {
+    display: flex;
+    // align-content: center;
+    align-items: center;
+    height: 60px;
+}
+
+.jumbotron {
+    min-height: 64px;
+    background: none;
+}
+
+.button-cls {
+    top: -5px;
+}
+
+::ng-deep .customPanel .mat-select {
+    margin-left: 40px !important;
+    margin-top: 35px;
+}
+
+.h6 {
+    font-weight: 500;
+    line-height: 1.2;
+    font-size: 1rem;
+}

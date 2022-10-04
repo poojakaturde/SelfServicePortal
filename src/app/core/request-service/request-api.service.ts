@@ -60,7 +60,7 @@ export class RequestApiService {
     return this.http.post<any>(this.url + "/dynamicform/search_criteria?landingPage=dynamicForm", obj)
   }
 
-  getOperatorList(){
+  getOperatorList() {
     return this.http.get(this.url + "/config/validationTypeDetails")
   }
 
@@ -105,6 +105,10 @@ export class RequestApiService {
     return this.http.get(this.url + "/role/" + status)
   }
 
+  getRoleDetails(id: any) {
+    return this.http.get(this.url + "/role/id/" + id)
+  }
+
   createUpdateRole(reqObj: any, isCreateOperation: boolean) {
     if (isCreateOperation) {
       return this.http.post<any>(this.url + "/role", reqObj)
@@ -135,6 +139,13 @@ export class RequestApiService {
 
   getAssignedProject(userName: any) {
     return this.http.get(this.url + "/activeprojectdetails/" + userName)
+  }
+
+
+  //  -------------------------------- API SERVICES FOR PERMISSIONS ---------------------------------//
+
+  fetchPermissionList() {
+    return this.http.get(this.url + "/permission")
   }
 
 
