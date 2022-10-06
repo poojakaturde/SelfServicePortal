@@ -55,7 +55,7 @@ export class RoleComponent implements OnInit {
             role.isEnabled = role.status === "enabled" ? true : false
             return { ...role };
           });
-          // this.dataSource.data = res.detail.sort(this.sharedService.compare);
+          this.dataSource.data = res.detail.sort();
           if (this.roleManagementPermssion.edit || this.roleManagementPermssion.changeStatus) {
             this.displayedColumns.push('action');
           }

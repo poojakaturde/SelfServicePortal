@@ -75,71 +75,73 @@
     <div class="row mb-3" *ngIf="dataSource.filteredData.length !== 0; else elseBlock">
         <div class="col-sm-12">
             <div class="example-container mat-elevation-z0 documentTable">
-                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+                <div class="mat-elevation-z8">
+                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
 
-                    <ng-container matColumnDef="name">
-                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Form Name </th>
-                        <td *matCellDef="let element" style="padding-left: 2%;">
-                            <i class="fa fa-newspaper-o primary-font-color mr-2" aria-hidden="true"></i>
-                            <span matTooltipPosition="below"> {{ element.name }} </span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Form Name </th>
+                            <td *matCellDef="let element" style="padding-left: 2%;">
+                                <i class="fa fa-newspaper-o primary-font-color mr-2" aria-hidden="true"></i>
+                                <span matTooltipPosition="below"> {{ element.name }} </span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="createdBy">
-                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Created By </th>
-                        <td *matCellDef="let element">
-                            <span matTooltipPosition="below"> {{ element.createdBy }} </span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="createdBy">
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Created By </th>
+                            <td *matCellDef="let element">
+                                <span matTooltipPosition="below"> {{ element.createdBy }} </span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="status">
-                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                        <td mat-cell *matCellDef="let element"><span *ngIf="element.status == 'enabled'">
-                                <mat-slide-toggle color="primary" checked="true" (toggleChange)="changeStatus(element)">
-                                </mat-slide-toggle>
-                            </span>
-                            <span *ngIf="element.status == 'disabled'">
-                                <mat-slide-toggle color="primary" checked="false"
-                                    (toggleChange)="changeStatus(element)"></mat-slide-toggle>
-                            </span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="status">
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                            <td mat-cell *matCellDef="let element"><span *ngIf="element.status == 'enabled'">
+                                    <mat-slide-toggle color="primary" checked="true"
+                                        (toggleChange)="changeStatus(element)">
+                                    </mat-slide-toggle>
+                                </span>
+                                <span *ngIf="element.status == 'disabled'">
+                                    <mat-slide-toggle color="primary" checked="false"
+                                        (toggleChange)="changeStatus(element)"></mat-slide-toggle>
+                                </span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="created">
-                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Created </th>
-                        <td *matCellDef="let element">
-                            <span matTooltipPosition="below"> {{ element.created }} </span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="created">
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Created </th>
+                            <td *matCellDef="let element">
+                                <span matTooltipPosition="below"> {{ element.created }} </span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="updated">
-                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Updated </th>
-                        <td *matCellDef="let element">
-                            <span matTooltipPosition="below"> {{ element.updated }} </span>
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="updated">
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Updated </th>
+                            <td *matCellDef="let element">
+                                <span matTooltipPosition="below"> {{ element.updated }} </span>
+                            </td>
+                        </ng-container>
 
-                    <ng-container matColumnDef="action">
-                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
-                        <td mat-cell *matCellDef="let element let i = index;">
-                            <button class="outline-none foregroundColor" mat-mini-fab>
-                                <mat-icon [routerLink]="['./view-form', element.name]">visibility
-                                </mat-icon>
-                            </button>&nbsp;
-                            <button class="outline-none foregroundColor" mat-mini-fab>
-                                <mat-icon [routerLink]="['./edit-form', element.name]">create</mat-icon>
-                            </button>&nbsp;
-                        </td>
-                    </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+                            <td mat-cell *matCellDef="let element let i = index;">
+                                <button class="outline-none foregroundColor" mat-mini-fab>
+                                    <mat-icon [routerLink]="['./view-form', element.name]">visibility
+                                    </mat-icon>
+                                </button>&nbsp;
+                                <button class="outline-none foregroundColor" mat-mini-fab>
+                                    <mat-icon [routerLink]="['./edit-form', element.name]">create</mat-icon>
+                                </button>&nbsp;
+                            </td>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
 
-                <mat-paginator [pageSize]="tableData.size" [pageIndex]="pageIndex"
-                    [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons (page)="pageSizeChange($event)">
-                </mat-paginator>
-
+                    <mat-paginator [pageSize]="tableData.size" [pageIndex]="pageIndex"
+                        [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons (page)="pageSizeChange($event)">
+                    </mat-paginator>
+                </div>
             </div>
         </div>
     </div>
@@ -147,7 +149,7 @@
         <div class="card bg-default h-100-pb30 opacity95">
             <div class="card-body pb-0 text-center">
                 <h3 class="text-center py-4">
-                    <img class="mb-3" src="../../../../assets/No content.png" alt="image"> <br>
+                    <img class="mb-3" src="../../../../assets/images/No content.png" alt="image"> <br>
                     {{ dataSource.data.length ? 'No Records Found !' : 'There are no dynamic forms available at this
                     moment.' }}
                 </h3>

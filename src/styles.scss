@@ -63,7 +63,6 @@ body {
 
 .mat-form-field-appearance-outline .mat-form-field-infix {
   padding: 0.7em 0 0.7em 0 !important;
-  // font-size: 14px;
   height: 40px !important;
   line-height: 17px;
   border-top: 4px solid transparent;
@@ -111,10 +110,6 @@ body {
   color: #e87033 !important;
 }
 
-.mat-mini-fab.mat-button-disabled {
-  background-color: #bababa !important;
-}
-
 .mat-table-header-bg mat-header-cell {
   color: white !important;
 }
@@ -139,12 +134,13 @@ body.body,
   background: transparent;
 }
 
-.mat-table {
-  background: #f7f7f7 !important;
+.filter-icon,
+.mat-sort-header-arrow {
+  color: #e87033 !important;
 }
 
-.mat-mini-fab.foregroundColor {
-  color: #9f9f9f !important;
+.mat-mini-fab {
+  background-color: #f7f7f7 !important;
   width: 34px !important;
   height: 34px !important;
 }
@@ -164,6 +160,7 @@ body.body,
   max-height: 70vh;
   overflow: auto;
   opacity: 0.95;
+  background-color: #fff;
 }
 
 .example-header {
@@ -176,9 +173,8 @@ body.body,
   width: 100%;
 }
 
-.mat-table {
-  overflow: auto;
-  max-height: 400px;
+.outline-none {
+  outline: none !important;
 }
 
 .form-icon-group .mat-form-field-suffix {
@@ -245,6 +241,10 @@ mat-form-field .mat-checkbox {
   margin: 0px;
 }
 
+.mat-table {
+  background-color: #fff;
+}
+
 .mat-card {
   background-color: #fff;
 }
@@ -253,4 +253,50 @@ mat-form-field .mat-checkbox {
   color: #e87033;
   font-size: 1rem;
   font-weight: 500;
+}
+
+intelli-paginator .mat-mini-fab {
+  line-height: 15px;
+  width: 30px !important;
+  height: 30px !important;
+  margin: 0 3px;
+}
+
+.intelli-paginator .mat-mini-fab .mat-button-wrapper {
+  padding: 4px 0 !important;
+  display: inline-block;
+  line-height: 14px;
+}
+
+.mat-header-cell {
+  background-color: #e3e3e3;
+  color: #212121;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1px;
+  border-bottom: 1px solid;
+}
+
+.mat-row.cdk-row {
+  color: #212121;
+  border-bottom: 5px solid #f7f7f7;
+}
+
+.foregroundColor {
+  background-color: #f7f7f7;
+  color: #9e9e9e;
+}
+
+.mat-icon {
+  height: 24px;
+  width: 24px;
+  font-size: 20px;
+  color: #9e9e9e;
+}
+
+.mat-button-wrapper {
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 24px;
+  padding: 7px 0 !important;
 }

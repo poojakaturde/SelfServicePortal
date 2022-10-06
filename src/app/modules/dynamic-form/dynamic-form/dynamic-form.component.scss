@@ -1,0 +1,31 @@
+table {
+    width: 100%;
+}
+
+example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+}
+
+.example-headers-align,
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.example-headers-align,
+.mat-expansion-panel-header.mat-expanded {
+    height: 50px;
+}
+
+.example-headers-align .mat-form-field+.mat-form-field {
+    margin-left: 8px;
+}

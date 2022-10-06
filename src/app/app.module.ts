@@ -9,6 +9,10 @@ import { LandingModule } from './modules/landing/landing.module';
 import { MaterialModule } from './modules/Material/material.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AppLoaderComponent } from './modules/loader/app-loader.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RequestInterceptor } from './core/interceptor/request-interceptor';
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,8 +26,15 @@ import { AppLoaderComponent } from './modules/loader/app-loader.component';
     LandingModule,
     MaterialModule,
     AuthModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestInterceptor,
+      multi:true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

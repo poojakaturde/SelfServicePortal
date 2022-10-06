@@ -78,7 +78,7 @@ export class UserManagementComponent implements OnInit {
             return { ...user };
           })
           let activeUsers: any = [];
-          // this.dataSource.data = res.detail.sort(this.compare);
+          this.dataSource.data = res.detail.sort();
           this.dataSource.data = this.dataSource.data.map((x: any) => {
             x.isEnabled = x.status === "enabled" ? true : false
             if (x.isEnabled) {
