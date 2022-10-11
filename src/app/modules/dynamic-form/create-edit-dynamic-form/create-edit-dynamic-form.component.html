@@ -28,17 +28,17 @@
             </div>
 
         </div>
-        <mat-card class="border rounded p-3 mt-3 create_project" formArrayName="sections"
+        <mat-card class="border rounded p-3 mt-2 create_project" formArrayName="sections"
             *ngFor="let section of sections().controls; let sectionIndex = index">
 
             <div class="row" [formGroupName]="sectionIndex">
-                <div class="col-md-7  mt-3">
+                <div class="col-md-7  mt-2">
                     <mat-form-field appearance="outline" style="width: 40%;">
                         <mat-label>Section Title</mat-label>
                         <input matInput formControlName="sectionTitle">
                     </mat-form-field>
                 </div>
-                <div class="col-md-5 mt-3">
+                <div class="col-md-5 mt-2">
                     <button mat-icon-button class="float-right mr-4">
                         <i class="material-icons color_grey" (click)="removeSection(sectionIndex)">delete</i>
                     </button>
@@ -47,17 +47,17 @@
                         Row</button>
                 </div>
 
-                <mat-card class="border rounded p-3 m-2 mt-3 create_project" formArrayName="rows"
+                <mat-card class="border rounded p-3 m-2 mt-2 create_project" formArrayName="rows"
                     *ngFor="let row of rows(sectionIndex).controls; let rowIndex = index" style="width: 99%;">
                     <div class="row" [formGroupName]="rowIndex">
 
-                        <div class="col-md-7  mt-3">
+                        <div class="col-md-7  mt-2">
                             <mat-form-field appearance="outline" style="width: 40%;">
                                 <mat-label>Title</mat-label>
                                 <input matInput formControlName="rowTitle">
                             </mat-form-field>
                         </div>
-                        <div class="col-md-5 mt-3">
+                        <div class="col-md-5 mt-2">
 
                             <button mat-icon-button class="float-right mr-3">
                                 <i class="material-icons color_grey"
@@ -68,7 +68,7 @@
                                 Field</button>
                         </div>
 
-                        <mat-card class="border rounded p-3 m-3 mt-3 create_project " formArrayName="fields"
+                        <mat-card class="border rounded p-3 m-3 mt-2 create_project " formArrayName="fields"
                             *ngFor="let field of fields(sectionIndex,rowIndex).controls; let fieldIndex = index"
                             style="width: 98%;">
                             <div class="row" [formGroupName]="fieldIndex">

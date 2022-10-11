@@ -6,11 +6,10 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
-
 @Component({
   selector: 'app-role',
   templateUrl: './role.component.html',
-  styleUrls: ['./role.component.scss']
+  styleUrls: ['./role.component.scss'],
 })
 export class RoleComponent implements OnInit {
 
@@ -25,8 +24,16 @@ export class RoleComponent implements OnInit {
     create: true
   }
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatPaginator;
+  @ViewChild(MatPaginator, { static: false })
+  set paginator(value: MatPaginator) {
+    if (this.dataSource) {
+      this.dataSource.paginator = value;
+    }
+  }
+
+  @ViewChild(MatSort, { static: false }) set content(sort: MatSort) {
+    this.dataSource.sort = sort;
+  }
 
   constructor(private snackbar: SnackbarService, private authenticationService: AuthenticationService,
     private router: Router, private apiRequest: RequestApiService,
@@ -38,12 +45,13 @@ export class RoleComponent implements OnInit {
   }
 
   initPermissions() {
-    // let permissions = this.authenticationService.getPermissions();
-    // this.roleManagementPermssion = {
-    //   edit: permissions.includes('CREATE_ROLE') || permissions.includes('UPDATE_ROLE'),
-    //   changeStatus: permissions.includes('CREATE_ROLE') || permissions.includes('UPDATE_ROLE'),
-    //   create: permissions.includes('CREATE_ROLE')
-    // }
+    let permission = this.authenticationService.getPermissions();
+    let permissions = Array.from(permission)
+    this.roleManagementPermssion = {
+      edit: permissions.includes('CREATE_ROLE') || permissions.includes('UPDATE_ROLE'),
+      changeStatus: permissions.includes('CREATE_ROLE') || permissions.includes('UPDATE_ROLE'),
+      create: permissions.includes('CREATE_ROLE')
+    }
   }
 
   getAllCreatedRoles() {
@@ -68,11 +76,11 @@ export class RoleComponent implements OnInit {
 
   filterUserTableData(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    // this.dataSource.data = this.dataSource.data.map((role:any) => {
-    //   role.created = this.datePipe.transform(role.created, 'MM-dd-yyyy HH:mm:ss');
-    //   role.updated = this.datePipe.transform(role.updated, 'MM-dd-yyyy HH:mm:ss');
-    //   return { ...role };
-    // })
+    this.dataSource.data = this.dataSource.data.map((role: any) => {
+      // role.created = this.datePipe.transform(role.created, 'MM-dd-yyyy HH:mm:ss');
+      // role.updated = this.datePipe.transform(role.updated, 'MM-dd-yyyy HH:mm:ss');
+      return { ...role };
+    })
     this.dataSource.filterPredicate = function (data: any, filter: any): any {
       return JSON.stringify(data.permissions).toLowerCase().indexOf(filter) !== -1 || data.role.toLowerCase().includes(filter) ||
         data.created.toLowerCase().includes(filter) || data.updated.toLowerCase().includes(filter);

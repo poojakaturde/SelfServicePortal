@@ -7,7 +7,7 @@ import { LoaderService } from '../../core/services/loader-service/loader.service
   template: `
         <div class="progress-loader" [hidden]="!loading">
             <div class="loading-spinner">
-                <img src="assets/loader.svg">
+                <img src="assets/images/loader.svg">
                 <span class="loading-message">Please wait...</span>
             </div>
         </div>
