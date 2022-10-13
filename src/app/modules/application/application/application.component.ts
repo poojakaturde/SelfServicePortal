@@ -51,9 +51,9 @@ export class ApplicationComponent implements OnInit {
   ngOnInit(): void {
     this.specificuserpatient();
   }
-
+ 
   // calling api for all submitted forms
-
+ 
   specificuserpatient() {
     if (this.username) {
       this.apiRequest.getPatientForms(this.username).subscribe((res: any) => {

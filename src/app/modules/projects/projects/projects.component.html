@@ -36,7 +36,7 @@
                         <div class="col-8">
                             <h5 class="my-0 project-name"  #el [matTooltip]="(el.scrollWidth > el.clientWidth) ? project.projectName : ''"> 
                                 <span class="mr-2" [ngClass]="{'primary-font-color' : project.isEnabled , 'text-secondary' : !project.isEnabled}">
-                                <mat-icon class="docStIconPos"></mat-icon> </span>{{project.projectName}} </h5>
+                                <mat-icon class="docStIconPos">{{ docStructureIconMap[project.documentStructure] }} </mat-icon> </span>{{project.projectName}} </h5>
                             <span class="email" *ngIf="project.startDate; else noLead" >{{project.projectLead}}</span>
                             <ng-template #noLead>
                                 <span class="email">No Lead Assigned</span>
@@ -109,7 +109,7 @@
             <div *ngIf="isRecordLoaded" class="card bg-default w-100 h-100-pb30 opacity95">
                 <div class="card-body pb-0 text-center"> 
                     <h3 class="text-center py-4">
-                        <img class="mb-3" src="../../../../assets/images/No content.png" alt="image">  <br>
+                        <img class="mb-3" src="./assets/images/No content.png" alt="image">  <br>
                         {{ enabledProjList.data.length ? enabledProjList.filteredData.length ? '...' : 'No Records Found !' : 'There are no active projects at this moment.' }}
                     </h3>
                 </div>

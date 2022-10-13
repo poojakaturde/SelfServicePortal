@@ -1,6 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
+import { Router } from '@angular/router';
+import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
+import { RequestApiService } from 'src/app/core/request-service/request-api.service';
+import { SharedService } from 'src/app/core/services/shared-service/shared.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
@@ -17,20 +25,126 @@ export class ProjectsComponent implements OnInit {
     changeStatus: true,
     create: true
   }
-  docStructureIconMap = {
+  docStructureIconMap:any = {
     'Structured': 'crop',
     'Semi-Structured' : 'list_alt',
     'Free-Form': 'gesture',
     'Medical Chart': 'assignment_ind'
   }
+  isPlatformAdmin: boolean = false;
+  userInfoSunscription!: Subscription;
   isRecordLoaded: boolean = false;
-  constructor(private datePipe:DatePipe) { }
-
-  ngOnInit(): void {
+  userInfo: any = null;
+  currentProjSubscription!: Subscription;
+  @ViewChild(MatPaginator, {static: false})
+  set paginator(value: MatPaginator) {
+    if (this.dataSource){
+      this.dataSource.paginator = value;
+    }
   }
 
-  toggleCardView(value:any) {
-    this.showCards = value;
+@ViewChild(MatSort, {static: false}) set content(sort: MatSort) {
+  this.dataSource.sort = sort;
+}
+  constructor(private datePipe:DatePipe,private authenticationService:AuthenticationService ,private router:Router,
+    private snackbar:SnackbarService,private apiRequest:RequestApiService,private sharedService:SharedService) { }
+   
+  ngOnInit(): void {
+    
+    this.currentProjSubscription = this.authenticationService.selectedProjectOb$
+    .subscribe((currentProj: any) => {
+      if (currentProj && Object.keys(currentProj).length) {
+       // this.userRole = currentProj.roles;
+       this.isPlatformAdmin = currentProj.roles.includes('Platform Admin');
+      }
+    });
+    this.userInfoSunscription = this.authenticationService.userInfoOb$
+    .subscribe((userData:any) => {
+      this.userInfo = userData;
+    });
+    this.getCreatedProjects();
+    this.showCards = true;
+    this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string) => {
+      const value: any = data[sortHeaderId];
+      return typeof value === "string" ? value.toLowerCase() : value;
+    };
+
+  }
+  // initPermissions() {
+  //   let permissions = this.authenticationService.getPermissions();
+  //   this.projectManagementPermssion = {
+  //    edit: permissions.includes('CREATE_PROJECT') || permissions.includes('UPDATE_PROJECT'),
+  //    changeStatus: permissions.includes('CREATE_PROJECT') || permissions.includes('UPDATE_PROJECT'),
+  //    create: permissions.includes('CREATE_PROJECT')
+  //  }
+  // }
+  getCreatedProjects() {
+    // forkJoin(this.apiRequest.getAllProjects(),
+    // this.apiRequest.getAssignedProjects(this.userInfo.userName))
+    //this.apiRequest.getAllProjects(this.userInfo.userName)
+    this.apiRequest.getAllProjets(this.userInfo.userName, this.isPlatformAdmin)
+    .subscribe((response : any) => {
+      // let projectIdList: string[] = [];
+      // if(response && response[1] && response[1].detail.length) {
+      //   projectIdList = response[1].detail.map( project => project.projectId)
+      // }
+      
+      let documentData : any[] = [];
+      for (const property in response.detail) { // response.detail -> response[0].detail
+        let placeholderData = response.detail[property]; // response.detail -> response[0].detail
+        placeholderData['projectName'] = property;
+        // if(projectIdList.includes(placeholderData.projectId)) {
+          documentData.push(placeholderData);
+        // }
+      }
+      this.isRecordLoaded = true;
+      let activeProj:any = [];
+      if(documentData && documentData.length) {
+        this.dataSource.data = documentData;
+        this.dataSource.data = this.dataSource.data.map((x:any) => {
+          x.isEnabled = x.status === "enabled" ? true : false
+          if(x.isEnabled){
+            activeProj.push(x);
+          }
+          // x.updated = this.sharedService.convertUTCDateToLocalDate(new Date(x.updated));
+          // x.startDate = this.datePipe.transform(x.startDate, 'MM-dd-yyyy');
+          // x.endDate = this.datePipe.transform(x.endDate, 'MM-dd-yyyy');
+          // x.updated = this.datePipe.transform(x.updated, 'MM-dd-yyyy HH:mm:ss');
+          return { ...x}
+        })
+        this.enabledProjList.data = [...activeProj];
+        // this.dataSource.data = documentData.sort(this.sharedService.compare);
+        // this.enabledProjList.data = this.enabledProjList.data.sort(this.sharedService.compare);
+        // this.dataSource.data = this.dataSource.data.map(x => {
+        //   x.isEnabled = x.status === "enabled" ? true : false
+        //   return { ...x}
+        // })
+
+        if(this.projectManagementPermssion.edit || this.projectManagementPermssion.changeStatus) {
+          this.displayedColumns.push('action');
+        }
+      }
+    }, error => {
+      this.isRecordLoaded = true;
+      this.snackbar.open('Failed To Get Created Projects ...!', '', { type: 'warning' });
+     })
+  }
+  changeProjectStatus(project:any) {
+    // console.log(project);
+    const status = project.isEnabled ? 'enabled' : 'disabled';
+    this.apiRequest.enableDisableProject(project.projectId, status)
+    .subscribe((res:any) => {
+      // console.log(res);
+      if(res) {
+      //  this.snackbar.open(res.description, '', {type: 'success'});
+      }
+    }, (error:any) => {
+      this.snackbar.open('Error In Changing Status Of Project', '', {type: 'warning'});
+    })
+  }
+  editUserInfo (userId:any) {
+    // console.log(userId);
+    this.router.navigate(['./user-management/edit-user', userId]);
   }
   filterUserTableData(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -60,4 +174,21 @@ export class ProjectsComponent implements OnInit {
       this.enabledProjList.filter = filterValue.trim().toLowerCase();
     }
   }
+  toggleCardView(value:any) {
+    this.showCards = value;
+  }
+
+
+  ngOnDestroy() {
+    if(this.userInfoSunscription) {
+      this.userInfoSunscription.unsubscribe();
+    }
+  }
+  
+
+
+  
+ 
+
 }
+
