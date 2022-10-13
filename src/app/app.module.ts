@@ -12,6 +12,11 @@ import { AppLoaderComponent } from './modules/loader/app-loader.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RequestInterceptor } from './core/interceptor/request-interceptor';
 import { HttpClientModule } from '@angular/common/http';
+import { RequestApiService } from './core/request-service/request-api.service';
+import { SnackbarService } from './core/snack-bar/snackbar.service';
+import { AuthenticationService } from './core/request-service/auth/authentication.service';
+import { AuthguardService } from './core/request-service/auth-guard/authguard.service';
+import { NgIdleModule } from '@ng-idle/core';
 
 @NgModule({
   declarations: [
@@ -26,13 +31,18 @@ import { HttpClientModule } from '@angular/common/http';
     LandingModule,
     MaterialModule,
     AuthModule,
-    HttpClientModule
+    HttpClientModule,
+    NgIdleModule.forRoot(),
   ],
   providers: [
+    RequestApiService,
+    SnackbarService,
+    AuthenticationService,
+    AuthguardService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,
-      multi:true
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

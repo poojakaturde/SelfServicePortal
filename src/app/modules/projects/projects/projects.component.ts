@@ -24,6 +24,7 @@ export class ProjectsComponent implements OnInit {
     'Medical Chart': 'assignment_ind'
   }
   isRecordLoaded: boolean = false;
+
   constructor(private datePipe:DatePipe) { }
 
   ngOnInit(): void {
@@ -32,6 +33,7 @@ export class ProjectsComponent implements OnInit {
   toggleCardView(value:any) {
     this.showCards = value;
   }
+
   filterUserTableData(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.data = this.dataSource.data.map((x:any) => {
@@ -50,7 +52,6 @@ export class ProjectsComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
     if(this.enabledProjList) {
-      // return this.enabledProjList.filter(list => list.projectName.toLowerCase().includes(filterValue.toLowerCase()));
       this.enabledProjList.filterPredicate = function(data:any, filter: any): any {
         return data.projectName.toLowerCase().includes(filter) || data.projectLead.toLowerCase().includes(filter) ||
         JSON.stringify(data.total).toLowerCase().includes(filter) || JSON.stringify(data.processed).toLowerCase().includes(filter) || 
