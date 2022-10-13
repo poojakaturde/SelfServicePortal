@@ -30,14 +30,14 @@
             </mat-list-item>
 
             <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/dynamic-form']">
-                <img src="../../../../assets/icons/Icons_Dynamic_Form.svg" class="img-fluid mr-2" matTooltip="Dynamic Form"
-                    [matTooltipPosition]="'right'" />
+                <img src="../../../../assets/icons/Icons_Dynamic_Form.svg" class="img-fluid mr-2"
+                    matTooltip="Dynamic Form" [matTooltipPosition]="'right'" />
                 <span *ngIf="isExpanded" class="menu-item wh-text text-font">Dynamic Form</span>
             </mat-list-item>
 
             <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/application']">
-                <img src="../../../../assets/icons/Icons_Application.svg" class="img-fluid mr-2" matTooltip="Application"
-                    [matTooltipPosition]="'right'" />
+                <img src="../../../../assets/icons/Icons_Application.svg" class="img-fluid mr-2"
+                    matTooltip="Application" [matTooltipPosition]="'right'" />
                 <span *ngIf="isExpanded" class="menu-item wh-text text-font">Application</span>
             </mat-list-item>
 
@@ -52,14 +52,54 @@
         <mat-toolbar class="navigation-bar px-4">
             <span class="example-spacer "></span>
 
+            <button mat-icon-button style="line-height: 30px !important;" matTooltip="{{userInfo}}" color="accent"
+                [matMenuTriggerFor]="menuProfile">
+                <div *ngIf="photoUrl == null; else iconBlock" class="profileImageIcon">{{
+                    userInfo ? userInfo.charAt(0).toUpperCase() : ''}}</div>
+                <ng-template #iconBlock>
+                    <img class="profileImageIcon mr-5" [src]="photoUrl">
+                </ng-template>
+            </button>
+
             <div class="devider_vertical mx-2"> </div>
+
             <span matTooltip="Logout" (click)="logout()"
                 class="text-center ml-3 link primary-font-color d-flex justify-content-center align-items-center logout-color">
-                <i class="fa fa-power-off" aria-hidden="true"></i>&nbsp;
+                <i class="fa fa-power-off" aria-hidden="true" style="font-size: 20px;"></i>&nbsp;
             </span>
         </mat-toolbar>
-               
+
+        <mat-menu #menuProfile="matMenu" class="theme_color">
+            <div (click)="$event.stopPropagation()">
+                <div class="coverPic greybg px-4 py-2"> </div>
+                <div class="avatar-upload px-4">
+                    <label>
+
+                        <div *ngIf="photoUrl == null; else profileBlock" class="profileImage">{{
+                            userInfo.charAt(0).toUpperCase() }}</div>
+                        <ng-template #profileBlock>
+                            <img class="profileImage" [src]="photoUrl">
+                        </ng-template>
+
+                    </label>
+                </div>
+                <div class="font-15 primary-font-color userNameLabel px-4 profile_menu"
+                    matTooltipClass="primary-tooltip" #ele
+                    [matTooltip]="(ele.scrollWidth > ele.clientWidth) ? userInfo : ''">
+                    <span> {{ userInfo }} </span>
+                </div>
+                <div class="font-13 userNameLabel px-4 profile_menu" Class="primary-tooltip" #el
+                    [matTooltip]="(el.scrollWidth > el.clientWidth) ? userMail : ''">
+                    <span> {{ userMail }} </span>
+                </div><br>
+            </div>
+            <button mat-menu-item id="profile-modal-button" data-toggle="modal"
+                data-target="#profileModal">
+                <mat-icon class="primary-font-color font-20 p-1">create</mat-icon>
+                Edit Profile
+            </button>
+        </mat-menu>
+
         <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>
-

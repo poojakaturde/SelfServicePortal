@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +10,51 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 export class AuthenticationService {
 
   authenticationToken: any;
+  projectPermissions: any = new Set();
+  projectIdList: string[] = [];
   private userInfo = new BehaviorSubject<any>(null);
-  private selectedProject = new BehaviorSubject<any>(null);
+ private selectedProject = new BehaviorSubject<any>(null);
   selectedProjectOb$ = this.selectedProject.asObservable();
   // private userInfo = new BehaviorSubject<any>(null);
   // userInfoOb$ = this.userInfo.asObservable();
 
+  userInfoOb$ = this.userInfo.asObservable();
+  private assignedProjects = new BehaviorSubject<any>([]);
+  assignedProjectsOb$ = this.assignedProjects.asObservable();
+
+  public currentProject: Observable<any>;
+  public currentProjectSubject!: BehaviorSubject<any>;
+  perviousNav: string = '';
+  currentNav: string = '';
+
+
   constructor(private router: Router) {
+
     this.authenticationToken = localStorage.getItem('token');
+    let currentUserProject = localStorage.getItem('userProjects');
+    let selectedProject = localStorage.getItem('selectedProject');
+    if (currentUserProject && JSON.parse(currentUserProject) && JSON.parse(currentUserProject)[0]) {
+      this.currentProjectSubject = new BehaviorSubject<any>(JSON.parse(currentUserProject)[0]);
+      this.selectedProject.next(selectedProject ? JSON.parse(selectedProject) : JSON.parse(currentUserProject)[0]);
+      this.assignedProjects.next(JSON.parse(currentUserProject));
+      this.setAssignedProjectList(JSON.parse(currentUserProject));
+    } else {
+      this.currentProjectSubject = new BehaviorSubject<any>([]);
+    }
+
+    let userInfo = localStorage.getItem('__UI');
+    if (userInfo) {
+      this.setUserInfo(JSON.parse(userInfo));
+    }
+
+    this.currentProject = this.currentProjectSubject.asObservable();
+    this.currentNav = this.router.url;
+    router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.perviousNav = this.currentNav;
+        this.currentNav = event.url;
+      };
+    });
   }
 
   validateCredential(eid: any, password: any): { status: boolean, msg: string } {
@@ -50,22 +88,62 @@ export class AuthenticationService {
     return this.userInfo;
   }
 
-  getPermissions() {
+  setAssignedProjectList(projectList: any) {
+    this.assignedProjects.next(projectList);
+    localStorage.setItem('userProjects', JSON.stringify(projectList));
+    this.updatePermissions();
+    if (projectList && projectList.length) {
+      if (!this.selectedProject.value) {
+        this.setUserProject(projectList[0]);
+      }
+    } else if (projectList.isPatient) {
+      // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0].permissions));
+      // this.router.navigate(['./home/application']);
+      //   let url = '/home/application';
+    } else {
+      this.setUserProject(null);
+      localStorage.removeItem('userProjects');
+      localStorage.removeItem('selectedProject');
+      this.router.navigate(['./home']);
+    }
+  }
 
+  updatePermissions() {
+    this.projectPermissions = [];
+    this.projectIdList = []
+
+    if (this.assignedProjects.value && this.assignedProjects.value.length) {
+      this.assignedProjects.value.forEach((project: any) => {
+        this.projectIdList.push(project.projectId);
+        this.projectPermissions = new Set([...this.projectPermissions, ...project.permissions]);
+      });
+      this.projectPermissions = [...this.projectPermissions];
+
+    } else if (this.assignedProjects.value.isPatient) {
+      // this.projectPermissions = new Set([...this.projectPermissions, ...(attributesList.patientPermissionList[0].permissions)]);
+      this.projectPermissions = [...this.projectPermissions];
+    }
+  }
+
+  getPermissions() {
+    return this.projectPermissions;
+  }
+
+  setUserProject(selectedProject: any) {
+    this.selectedProject.next(selectedProject);
+    localStorage.setItem('selectedProject', JSON.stringify(selectedProject))
+    this.updatePermissions();
   }
 
   logout() {
     localStorage.removeItem('userProjects');
     localStorage.removeItem('selectedProject');
-    localStorage.removeItem('__st');
     localStorage.removeItem('__UI');
-    localStorage.removeItem('projectFilterStatus');
     localStorage.removeItem('token');
-    localStorage.removeItem('patientPermission');
-
+    this.assignedProjects.next(null);
+    this.selectedProject.next(null);
     this.userInfo.next(null);
     this.router.navigate(['./login']);
-
   }
   
 

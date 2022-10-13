@@ -152,8 +152,8 @@
                                         <div *ngFor="let proj of getAuthorisedProjects(search.value)"
                                             [matTooltip]="proj.project.length > 23 ? proj.project : ''">
                                             <button mat-menu-item (click)="addProject(proj,i)">
-                                                <!-- <mat-icon color="primary">{{ docStructureIconMap[proj.documentStructure]
-                                                    }} </mat-icon> -->
+                                                <mat-icon color="primary">{{ docStructureIconMap[proj.documentStructure]
+                                                    }} </mat-icon>
                                                 <span> {{ proj.project}} </span>
                                             </button>
                                         </div>

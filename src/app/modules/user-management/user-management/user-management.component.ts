@@ -25,9 +25,9 @@ export class UserManagementComponent implements OnInit {
     create: true
   }
 
-  docStructureIconMap = {
+  docStructureIconMap: any = {
     'Structured': 'crop',
-    'Semi-Structured' : 'list_alt',
+    'Semi-Structured': 'list_alt',
     'Free-Form': 'gesture',
     'Medical Chart': 'assignment_ind'
   }
@@ -50,18 +50,18 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.initPermissions()
+    this.getUsersList();
     this.dataSource.paginator = this.paginator;
     this.showCards = true;
-    this.getUsersList();
   }
 
   initPermissions() {
-    // let permissions = this.authenticationService.getPermissions();
-    // this.userManagementPermssion = {
-    //   edit: permissions.includes('CREATE_USER') || permissions.includes('UPDATE_USER'),
-    //   changeStatus: permissions.includes('CREATE_USER') || permissions.includes('UPDATE_USER'),
-    //   create: permissions.includes('CREATE_USER')
-    // }
+    let permissions = this.authenticationService.getPermissions();
+    this.userManagementPermssion = {
+      edit: Array.from(permissions).includes('CREATE_USER') || Array.from(permissions).includes('UPDATE_USER'),
+      changeStatus: Array.from(permissions).includes('CREATE_USER') || Array.from(permissions).includes('UPDATE_USER'),
+      create: Array.from(permissions).includes('CREATE_USER')
+    }
   }
 
   toggleCardView(value: any) {
@@ -87,7 +87,7 @@ export class UserManagementComponent implements OnInit {
             return { ...x }
           })
           this.enabledUserList.data = [...activeUsers];
-          // this.enabledUserList.data = this.enabledUserList.data.sort(this.sharedService.compare);
+          this.enabledUserList.data = this.enabledUserList.data.sort();
           if (this.userManagementPermssion.edit || this.userManagementPermssion.changeStatus) {
             this.displayedColumns.push('action');
           }
@@ -102,7 +102,7 @@ export class UserManagementComponent implements OnInit {
 
   filterUserTableData(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.data = this.dataSource.data.map((users:any) => {
+    this.dataSource.data = this.dataSource.data.map((users: any) => {
       // users.created = this.datePipe.transform(users.created, 'MM-dd-yyyy HH:mm:ss');
       // users.updated = this.datePipe.transform(users.updated, 'MM-dd-yyyy HH:mm:ss');
       return { ...users };
@@ -117,7 +117,7 @@ export class UserManagementComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
     if (this.enabledUserList) {
-      this.enabledUserList.data = this.enabledUserList.data.map((user:any) => {
+      this.enabledUserList.data = this.enabledUserList.data.map((user: any) => {
         // user.created = this.datePipe.transform(user.created, 'MM-dd-yyyy HH:mm:ss');
         // user.updated = this.datePipe.transform(user.updated, 'MM-dd-yyyy HH:mm:ss');
         return { ...user };

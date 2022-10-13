@@ -84,7 +84,6 @@ export class LoginComponent implements OnInit {
                 "name": res.detail.name,
                 "userId": res.detail.id,
                 "photo": res.detail.photo,
-                "activeTheme": res.detail.activeTheme?.signedUrl
               })
 
               localStorage.setItem('token', res.detail.type + ' ' + res.detail.token);
@@ -93,7 +92,7 @@ export class LoginComponent implements OnInit {
 
               this.authenticationService.setUserInfo({ ...reqObj, name: res.detail.name, userId: res.detail.id, activeTheme: res.detail.activeTheme?.signedUrl, photo: res.detail.photo });
               this.authenticationService.setAuthenticationToken(res.detail.type + ' ' + res.detail.token)
-              this.router.navigate(['/home/dynamic-form'])
+              this.getAssignedProjects();
             }
           }
           else {
@@ -115,24 +114,22 @@ export class LoginComponent implements OnInit {
                 "name": res.detail.name,
                 "userId": res.detail.id,
                 "photo": res.detail.photo,
-                "activeTheme": res.detail.activeTheme?.signedUrl
               })
               localStorage.setItem('token', res.detail.type + ' ' + res.detail.token);
 
               localStorage.setItem('__UI', userInfo);
               this.authenticationService.setUserInfo({ ...reqObj, name: res.detail.name, userId: res.detail.id, activeTheme: res.detail.activeTheme?.signedUrl, photo: res.detail.photo });
               this.authenticationService.setAuthenticationToken(res.detail.type + ' ' + res.detail.token);
-              this.router.navigate(['/home/dynamic-form'])
-              //  this.getAssignedProjects();
-              // if (res.detail.isPatient) {
-              //   // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0]));
-              //   this.authenticationService.setAssignedProjectList(res.detail);
-              //   let url = './home/application';
+              this.getAssignedProjects();
+              if (res.detail.isPatient) {
+                // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0]));
+                this.authenticationService.setAssignedProjectList(res.detail);
+                let url = './home/application';
 
-              //   this.routeToPermissibleModule(url);
-              // } else {
-              //   this.getAssignedProjects();
-              // }
+                this.routeToPermissibleModule(url);
+              } else {
+                this.getAssignedProjects();
+              }
 
             } else if (res.responseCode === 'SU_DI_202') {
               this.userDataService.setUserInfo(res);
@@ -149,6 +146,24 @@ export class LoginComponent implements OnInit {
         });
     }
 
+  }
+
+  getAssignedProjects() {
+    this.apiServ.getAssignedProject(this.form.value.userName)
+      .subscribe((res: any) => {
+        if (res && res.detail && res.detail.length) {
+          this.authenticationService.setAssignedProjectList(res.detail);
+        }
+        let routeLink = res.detail && res.detail.length ? this.returnUrl : './home';
+        this.routeToPermissibleModule(routeLink);
+
+      }, error => {
+        this.snackbar.open('Something Went Wrong ...!', '', { type: 'warning' });
+      })
+  }
+
+  routeToPermissibleModule(routeLink: any) {
+    this.router.navigate([routeLink]);
   }
 
 }

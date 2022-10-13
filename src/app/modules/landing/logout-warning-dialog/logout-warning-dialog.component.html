@@ -1,0 +1,21 @@
+<div class="modal-dialog modal-md modal-dialog-centered m-0 p-0" data-backdrop="static" data-keyboard="false">
+    <div class="modal-content">
+        <div class="modal-body px-5 py-4 text-secondary">
+            <div class="text-center">
+                <circle-progress [radius]="50"
+                    [backgroundColor]="'#f0f0f0'" [backgroundGradientStopColor]="'#9c9696'"
+                    [backgroundStroke]="'#2c0202'" [animation]=true [animationDuration]=0 [toFixed]="0"
+                    [showUnits]="true" [backgroundPadding]=-10 [outerStrokeColor]="'#e87033'"
+                    [outerStrokeGradientStopColor]="'#8f3838'" [innerStrokeColor]="'#b3b3b3'" [titleColor]="'#f76922'"
+                    [unitsColor]="'#f76922'" [outerStrokeWidth]="6" [space]="0" [innerStrokeWidth]="2"
+                    [backgroundStrokeWidth]="0" [outerStrokeLinecap]="'round'" units=" sec" title="{{timer$ | async }}"
+                    [unitsFontWeight]="'700'" [showSubtitle]="false" [clockwise]="true" [showTitle]="true"
+                    unitsFontSize="12">
+                </circle-progress>
+                <h5>
+                    You will be logged out in {{timer$ | async }}<small> sec </small>
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>

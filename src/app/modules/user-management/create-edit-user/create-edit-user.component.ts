@@ -28,7 +28,7 @@ export class CreateEditUserComponent implements OnInit {
   hidePassword: boolean = true;
   userInfo: any = null;
   assignedProjects: any = [];
-  docStructureIconMap = {
+  docStructureIconMap: any = {
     'Structured': 'crop',
     'Semi-Structured': 'list_alt',
     'Free-Form': 'gesture',
