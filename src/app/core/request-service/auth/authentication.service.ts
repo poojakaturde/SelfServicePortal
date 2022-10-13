@@ -10,6 +10,10 @@ export class AuthenticationService {
 
   authenticationToken: any;
   private userInfo = new BehaviorSubject<any>(null);
+  private selectedProject = new BehaviorSubject<any>(null);
+  selectedProjectOb$ = this.selectedProject.asObservable();
+  // private userInfo = new BehaviorSubject<any>(null);
+  // userInfoOb$ = this.userInfo.asObservable();
 
   constructor(private router: Router) {
     this.authenticationToken = localStorage.getItem('token');
@@ -63,6 +67,7 @@ export class AuthenticationService {
     this.router.navigate(['./login']);
 
   }
+  
 
 }
 

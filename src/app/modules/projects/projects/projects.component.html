@@ -1,1 +1,197 @@
-<p>projects works!</p>
+<div class="container-fluid">
+    <div class="row px-2 align-items-top gridicon mb-3">        
+        <div class="col-lg-7 col-md-3 col-sm-4 col-5 pt-3 pr-0">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <button  mat-mini-fab [color]="!showCards ? '' : ''" (click)="toggleCardView(true)" class="font-17 mr-3">
+                        <mat-icon class="" aria-hidden="false" [color]="showCards ? 'primary' : ''" aria-label="list icon"> grid_on</mat-icon>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button  mat-mini-fab [color]="!showCards ? '' : ''" (click)="toggleCardView(false)" class="font-17">
+                        <mat-icon aria-hidden="false" [color]="!showCards ? 'primary' : ''" aria-label="grid icon"> list </mat-icon>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-5 col-12 order-sm-1 order-2 pt-3 searchbox text-right" >
+            <mat-form-field appearance="outline" >
+                <input (keyup)="filterUserTableData($event)" autocomplete="off" style="top: -4px; 
+               position: relative; " matInput placeholder="Search" class="form-icon-group">
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </div> 
+        <div class="col-lg-2 col-md-3 col-sm-3 col-7 order-1 pt-3 ml-auto font-color">
+            <button  *ngIf="projectManagementPermssion.create" mat-raised-button color="primary" class="font-17 float-right" [routerLink]="['./create-project']"> Create Project </button>
+        </div>
+    </div>
+</div>
+<div class="container-fluid px-4">    
+    <div class="row" *ngIf="showCards">
+        <ng-container *ngIf="enabledProjList.filteredData.length !== 0;else elseBlock1">
+        <div class="col-xl-4 col-md-6 mb-3" *ngFor="let project of enabledProjList.filteredData">
+            <mat-card class="infocards p-0 mb-2">
+                <div class="proj_name">
+                    <div class="row">
+                        <div class="col-8">
+                            <h5 class="my-0 project-name"  #el [matTooltip]="(el.scrollWidth > el.clientWidth) ? project.projectName : ''"> 
+                                <span class="mr-2" [ngClass]="{'primary-font-color' : project.isEnabled , 'text-secondary' : !project.isEnabled}">
+                                <mat-icon class="docStIconPos"></mat-icon> </span>{{project.projectName}} </h5>
+                            <span class="email" *ngIf="project.startDate; else noLead" >{{project.projectLead}}</span>
+                            <ng-template #noLead>
+                                <span class="email">No Lead Assigned</span>
+                            </ng-template>
+                        </div>
+                        <div class="col-4 text-right">  
+                            <button mat-mini-fab class="foregroundColor" aria-label="edit user details" *ngIf="projectManagementPermssion.edit" [routerLink]="['./edit-project', project.projectId]">
+                                <mat-icon >create</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>                
+                <div class="cardstats">
+                    <div class="mb-3 mt-1">  
+                        <div class="row">   
+                            <div class="col-3 pr-0">
+                                <h5 class=""> {{project.total | number: '.0-0'}} </h5>
+                                <span>Total </span>
+                            </div>                         
+                            <div class="col-3 px-0 processed">
+                                <h5 class="" > {{project.processed | number: '.0-0'}} </h5>
+                                <span > Processed </span>
+                            </div>
+                            <div class="col-3 px-0 ready">
+                                <h5 class=""> {{project.ready | number: '.0-0'}} </h5>
+                                <span> Ready </span>
+                            </div>
+                            <div class="col-3 pl-0 rejected">
+                                <h5 class=""> {{project.rejected | number: '.0-0'}} </h5>
+                                <span > Rejected </span>
+                            </div>
+                        </div> 
+                    </div>
+                    <hr class="mt-4">
+                    <div class="mb-1">
+                        <div class="row">
+                            <div class="col-6 col-sm-2 pr-0 d-flex-center">
+                                <!-- <h6 *ngIf="project.startDate; else noStartDate"> {{project.totalValidationCount | number: '.0-2'}} <br> <span class="text-secondary font-12" style=" color: #575757;">sec  </span></h6> -->
+                                <h6 *ngIf="project.startDate; else noStartDate"> {{project.totalValidationCount}} </h6>
+                                <!-- <span >12345678</span> -->
+                                <ng-template #noStartDate>
+                                    <h6>No Data Available</h6>
+                                </ng-template>
+                            </div>
+                            <div class="col-6 col-sm-3 px-0 pl-3 d-flex-center">
+                                <span class="validation-time">Validation<br> 
+                                <span class="">Count</span>
+                            </span>
+                            </div>
+                            <div class="col-6 col-sm-4 pr-0 d-flex-center">
+                                <!-- <h6 *ngIf="project.endDate; else noEndDate"> {{project.totalValidationTime | number: '.0-2'}} <br> <span class="text-secondary font-12" style=" color: #575757;">sec  </span></h6> -->
+                                <h6 *ngIf="project.endDate; else noEndDate"> {{project.totalValidationTime}} </h6>
+                                <!-- <span >540h 44m 60s</span> -->
+                                <ng-template #noEndDate>
+                                    <h6>No Data Available</h6>
+                                </ng-template>
+                            </div>
+                            <div class="col-6 col-sm-3 pl-0 pr-2 d-flex-center">
+                                <span  class="validation-time" >Validation<br> 
+                                <span class="" >Time</span>
+                             </span>             
+                            </div>
+                        </div> 
+                    </div>  
+                </div>         
+            </mat-card>
+        </div>
+        </ng-container>
+        <ng-template #elseBlock1>
+            <div *ngIf="isRecordLoaded" class="card bg-default w-100 h-100-pb30 opacity95">
+                <div class="card-body pb-0 text-center"> 
+                    <h3 class="text-center py-4">
+                        <img class="mb-3" src="../../../../assets/images/No content.png" alt="image">  <br>
+                        {{ enabledProjList.data.length ? enabledProjList.filteredData.length ? '...' : 'No Records Found !' : 'There are no active projects at this moment.' }}
+                    </h3>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+
+    <div *ngIf="!showCards">
+        
+      <div *ngIf="dataSource.filteredData.length !== 0; else elseBlock">  
+        <div class="example-container  mt-4 documentTable" >
+            <table mat-table matSort multiTemplateDataRows [dataSource]="dataSource" matSortActive="updated" matSortDirection="desc" matSortDisableClear>
+              <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+    
+              <ng-container matColumnDef="projectName">
+                <th class="font-14px" mat-header-cell mat-sort-header *matHeaderCellDef> Projects </th>
+                <!-- <td [routerLink]="['./edit-project', element.projectId]" mat-cell *matCellDef="let element" matTooltip="{{element.projectName}}" >  
+                    <mat-icon class="docStIconPos">{{ docStructureIconMap[project.documentStructure] }} </mat-icon>
+                    <i class="fa fa-briefcase primary-font-color mr-2"  [ngClass]="{'primary-font-color' : element.isEnabled , 'text-secondary' : !element.isEnabled}" aria-hidden="true"></i>
+                    {{element.projectName}} 
+                </td> -->
+                <td  [routerLink]="['./edit-project', element.projectId]" mat-cell *matCellDef="let element" matTooltipClass="primary-tooltip" #el [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.projectName : ''">
+                    <i class="fa fa-briefcase primary-font-color mr-2"  [ngClass]="{'primary-font-color' : element.isEnabled , 'text-secondary' : !element.isEnabled}" aria-hidden="true"></i>
+                    <span matTooltipPosition="below">  {{element.projectName}} </span>
+                   </td> 
+             
+              </ng-container>
+    
+              <ng-container matColumnDef="documentStructure">
+                <th class="font-14px" mat-header-cell mat-sort-header  *matHeaderCellDef>Document Structure </th>
+                <td mat-cell *matCellDef="let element" > {{ element.documentStructure}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="projectLead">
+                <th class="font-14px" mat-header-cell mat-sort-header *matHeaderCellDef> Lead </th>
+                <!-- <td mat-cell *matCellDef="let element" matTooltip="{{element.projectLead}}">{{element.projectLead}}</td> -->
+                <td mat-cell *matCellDef="let element" matTooltipClass="primary-tooltip" #el [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.projectLead : ''">
+                    <span matTooltipPosition="below">  {{element.projectLead}} </span>
+                   </td> 
+                </ng-container>
+    
+              <ng-container matColumnDef="startDate">
+                <th class="font-14px" mat-header-cell mat-sort-header  *matHeaderCellDef> Start Date </th>
+                <td mat-cell *matCellDef="let element"> {{ element.startDate | date: "MM-dd-yyyy" }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="endDate">
+                <th class="font-14px" mat-header-cell mat-sort-header  *matHeaderCellDef>End Date</th>
+                <td mat-cell *matCellDef="let element"> {{ element.endDate | date: "MM-dd-yyyy" }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="updated">
+                <th class="font-14px" mat-header-cell mat-sort-header  *matHeaderCellDef> Updated  </th>
+                <td mat-cell *matCellDef="let element"> {{ element.updated | date: "MM-dd-yyyy HH:mm:ss" }} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="action">
+                <th class="font-14px" mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element let i = index;">
+                    <button *ngIf="projectManagementPermssion.edit" class="outline-none foregroundColor" mat-mini-fab aria-label="edit user details">
+                        <mat-icon>create</mat-icon>
+                    </button>
+                </td>
+              </ng-container>
+    
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                class="table-list-header secondary-background"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="['./edit-project', row.projectId]"></tr>
+            </table>
+         </div>
+         <mat-paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons></mat-paginator>
+        </div>
+        <ng-template #elseBlock>
+            <div *ngIf="isRecordLoaded" class="card bg-default h-100-pb30 opacity95">
+                <div class="card-body pb-0 text-center">
+                    <h3 class="text-center py-4">
+                        <img class="mb-3" src="./assets/images/No content.png" alt="image">  <br>
+                        {{ dataSource.data.length ?  'No Records Found !' : 'There are no active projects at this moment.' }}
+                    </h3>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+    <!-- <mat-paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons></mat-paginator> -->
+</div>

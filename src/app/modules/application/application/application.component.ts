@@ -159,7 +159,9 @@ export class ApplicationComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(ProjectListDialogComponent);
+    const dialogRef = this.dialog.open(ProjectListDialogComponent,{
+      width:'35%'
+    },);
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {

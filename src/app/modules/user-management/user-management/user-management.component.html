@@ -52,7 +52,7 @@
                     <ng-container matColumnDef="email">
                         <th class="font-14px" mat-header-cell mat-sort-header *matHeaderCellDef> Email </th>
                         <td mat-cell *matCellDef="let element" matTooltipClass="primary-tooltip" #el
-                            [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.email : ''"> {{element.email}}
+                            [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.email : ''" > {{element.email}}
                         </td>
                     </ng-container>
 
