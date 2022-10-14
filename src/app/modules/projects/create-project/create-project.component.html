@@ -36,15 +36,15 @@
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3">
             <mat-label>Lead</mat-label>
-            <mat-form-field appearance="outline" class="example-form-field">
+            <mat-form-field appearance="outline" class="example-form-field"  >
               <!-- <mat-select formControlName="lead" class="select_panel">
                       <mat-option *ngFor="let userName of userList" [value]="userName"> {{ userName }} </mat-option>
                   </mat-select> -->
               <mat-select formControlName="lead" #lead class="select_panel" (click)="search.value=''; search.focus()">
                 <div class="menuSmart_Search">
-                  <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                  <input  class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
                     (keydown)="$event.stopPropagation();" (keyup)="search.value.length === 0 ? search.value='': '' "
-                    #search>
+                    #search style="width: 100%; border:none;">
                 </div>
                 <div *ngFor="let userName of getuserList(search.value)">
                   <mat-option [value]="userName"> {{ userName }} </mat-option>
