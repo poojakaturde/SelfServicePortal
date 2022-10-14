@@ -36,7 +36,7 @@
                         <div class="col-8">
                             <h5 class="my-0 project-name"  #el [matTooltip]="(el.scrollWidth > el.clientWidth) ? project.projectName : ''"> 
                                 <span class="mr-2" [ngClass]="{'primary-font-color' : project.isEnabled , 'text-secondary' : !project.isEnabled}">
-                                <mat-icon class="docStIconPos">{{ docStructureIconMap[project.documentStructure] }} </mat-icon> </span>{{project.projectName}} </h5>
+                                <mat-icon class="docStIconPos primary-font-color">{{ docStructureIconMap[project.documentStructure] }} </mat-icon> </span>{{project.projectName}} </h5>
                             <span class="email" *ngIf="project.startDate; else noLead" >{{project.projectLead}}</span>
                             <ng-template #noLead>
                                 <span class="email">No Lead Assigned</span>

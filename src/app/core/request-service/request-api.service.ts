@@ -145,13 +145,68 @@ export class RequestApiService {
 
 
 getAllProjets(username:any,userRole:any){
-  return this.http.get(this.url+userRole?'/admin/project/projectLandingPage':'/admin/project/projectLandingPage?userName='+username)
-
+  // return this.http.get(this.url+userRole?'/admin/project/projectLandingPage':'/admin/project/projectLandingPage?userName='+username)
+if(userRole){
+  return this.http.get(this.url+'/admin/project/projectLandingPage')
+}
+else{
+return this.http.get(this.url+'/admin/project/projectLandingPage?userName='+username)
+}
 }
 
 enableDisableProject(projectId:any,status:any){
 return this.http.get(this.url+'/admin/project/status/'+projectId+'/'+ status)
 }
+
+//==================================API SERVICE FOR CREATE-PROJECT==============================
+
+fetchRolesByStatuss(status:any){
+return this.http.get(this.url+'/role/' + status)
+}
+
+getDatsetList(){
+  return this.http.get(this.url+'/dataset/list/activeDatasets')
+}
+
+getProjectDetails(id:any){
+return this.http.get(this.url+'/admin/project/id/' + id)
+}
+
+
+
+
+getOperatorListt(){
+  return this.http.get(this.url+'/config/validationTypeDetails')
+}
+
+getUsersByStatus(status:any){
+return this.http.get(this.url+'/admin/user/' + status)
+}
+
+getTemplatesList(){
+  return this.http.get(this.url+'/template/activeTemplateList')
+}
+
+
+createUpdateProject(reqObj:any,isCreateOperation:any){
+  if(isCreateOperation){
+return this.http.post(this.url+ '/admin/project',reqObj)
+  }
+  else{
+    return this.http.patch(this.url+ '/admin/project',reqObj)
+  }
+
+}
+
+getDynamicFormList(){
+  return this.http.get(this.url+'/dynamicform/enabled')
+}
+
+
+
+
+
+
 
 
 
