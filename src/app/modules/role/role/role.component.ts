@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -36,7 +36,7 @@ export class RoleComponent implements OnInit {
   }
 
   constructor(private snackbar: SnackbarService, private authenticationService: AuthenticationService,
-    private apiRequest: RequestApiService,
+    private apiRequest: RequestApiService, private changeDetector: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -46,6 +46,10 @@ export class RoleComponent implements OnInit {
       const value: any = data[sortHeaderId];
       return typeof value === "string" ? value.toLowerCase() : value;
     };
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 
   initPermissions() {

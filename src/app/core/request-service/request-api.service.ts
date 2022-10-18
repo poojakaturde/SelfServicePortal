@@ -149,19 +149,58 @@ export class RequestApiService {
     }
 
     else {
+
       return this.http.get(this.url + '/admin/project/projectLandingPage?userName=' + userName)
     }
   }
 
+
   enableDisableProject(projectId: any, status: any) {
     return this.http.get(this.url + '/admin/project/status/' + projectId + '/' + status)
   }
+
+  //==================================API SERVICE FOR CREATE-PROJECT==============================
+
+  fetchRolesByStatuss(status: any) {
+    return this.http.get(this.url + '/role/' + status)
+  }
+
+  getDatsetList() {
+    return this.http.get(this.url + '/dataset/list/activeDatasets')
+  }
+
+  getProjectDetails(id: any) {
+    return this.http.get(this.url + '/admin/project/id/' + id)
+  }
+
+  getUsersByStatus(status: any) {
+    return this.http.get(this.url + '/admin/user/' + status)
+  }
+
+  getTemplatesList() {
+    return this.http.get(this.url + '/template/activeTemplateList')
+  }
+
+
+  createUpdateProject(reqObj: any, isCreateOperation: any) {
+    if (isCreateOperation) {
+      return this.http.post(this.url + '/admin/project', reqObj)
+    }
+    else {
+      return this.http.patch(this.url + '/admin/project', reqObj)
+    }
+
+  }
+
+  getDynamicFormList() {
+    return this.http.get(this.url + '/dynamicform/enabled')
+  }
+
 
   //  -------------------------------- API SERVICES FOR PERMISSIONS ---------------------------------//
 
   fetchPermissionList() {
     return this.http.get(this.url + "/permission")
   }
-
 
 }

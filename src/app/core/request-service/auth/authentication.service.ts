@@ -4,6 +4,9 @@ import { SHA256 } from 'crypto-js';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
 
+declare var require: any;
+const __routes: Array<any> = require('../../navigation-options/routes.json');
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,12 +15,9 @@ export class AuthenticationService {
   authenticationToken: any;
   projectPermissions: any = new Set();
   projectIdList: string[] = [];
-  private userInfo = new BehaviorSubject<any>(null);
- private selectedProject = new BehaviorSubject<any>(null);
+  private selectedProject = new BehaviorSubject<any>(null);
   selectedProjectOb$ = this.selectedProject.asObservable();
-  // private userInfo = new BehaviorSubject<any>(null);
-  // userInfoOb$ = this.userInfo.asObservable();
-
+  private userInfo = new BehaviorSubject<any>(null);
   userInfoOb$ = this.userInfo.asObservable();
   private assignedProjects = new BehaviorSubject<any>([]);
   assignedProjectsOb$ = this.assignedProjects.asObservable();
@@ -26,7 +26,8 @@ export class AuthenticationService {
   public currentProjectSubject!: BehaviorSubject<any>;
   perviousNav: string = '';
   currentNav: string = '';
-
+  navigationOptions: any = [];
+  private appRoutes: any[] = __routes;
 
   constructor(private router: Router) {
 
@@ -48,6 +49,7 @@ export class AuthenticationService {
     }
 
     this.currentProject = this.currentProjectSubject.asObservable();
+    this.updateNavigation();
     this.currentNav = this.router.url;
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -55,6 +57,18 @@ export class AuthenticationService {
         this.currentNav = event.url;
       };
     });
+  }
+
+  updateNavigation() {
+    this.navigationOptions = [];
+    if (this.projectPermissions && this.projectPermissions.length) {
+      this.appRoutes.forEach((route: any) => {
+        if (route.permissions.some((ele: any) => this.projectPermissions.indexOf(ele) >= 0)) {
+          let { permissions, ...routeData } = route;
+          this.navigationOptions.push(routeData)
+        }
+      })
+    }
   }
 
   validateCredential(eid: any, password: any): { status: boolean, msg: string } {
@@ -123,6 +137,7 @@ export class AuthenticationService {
       // this.projectPermissions = new Set([...this.projectPermissions, ...(attributesList.patientPermissionList[0].permissions)]);
       this.projectPermissions = [...this.projectPermissions];
     }
+    this.updateNavigation();
   }
 
   getPermissions() {
@@ -145,7 +160,14 @@ export class AuthenticationService {
     this.userInfo.next(null);
     this.router.navigate(['./login']);
   }
-  
+
+  getPreviousNavigation() {
+    return this.perviousNav;
+  }
+
+  getNavigationOptions() {
+    return this.navigationOptions;
+  }
 
 }
 

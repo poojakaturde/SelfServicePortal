@@ -39,8 +39,9 @@ export class CreateEditRoleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let permissions = this.authenticationService.getPermissions();
-    if (this.isCreateRoleOperation) {
+    let permission = this.authenticationService.getPermissions();
+    let permissions = Array.from(permission);
+    if (permissions.includes('CREATE_ROLE') || (permissions.includes('UPDATE_ROLE') && !this.isCreateRoleOperation)) {
       this.fetchAllPermission();
       this.createForm();
       const roleId = this.routes.snapshot.params['id'];

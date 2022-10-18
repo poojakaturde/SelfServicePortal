@@ -20,6 +20,7 @@ export class LandingComponent implements OnInit {
   userMail: any;
   userId: any;
   userInfoSubscription: any = null;
+  navigationOptions: any = [];
 
   dialogRef: any = null;
   showDialog: boolean = true;
@@ -56,7 +57,7 @@ export class LandingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.navigationOptions = this.authenticationService.getNavigationOptions();
     this.userInfoSubscription = this.authenticationService.userInfoOb$
       .subscribe((userData: any) => {
         if (userData && userData.userName) {
@@ -79,7 +80,7 @@ export class LandingComponent implements OnInit {
     if (this.showDialog) {
       this.dialogRef = this.dialog.open(LogoutWarningDialogComponent, { disableClose: true, width: '400px' });
 
-      this.dialogRef.afterClosed().subscribe((result:any) => {
+      this.dialogRef.afterClosed().subscribe((result: any) => {
         if (result) {
           this.logout();
         } else {
@@ -99,15 +100,4 @@ export class LandingComponent implements OnInit {
       })
   }
 
-  ngOnDestroy() {
-    this.idle.stop();
-    // console.log('landing page destroyed');
-    if(this.dialogRef && this.dialog.openDialogs.length) {
-      this.dialogRef.close();
-    }
-    this.idleEnd.unsubscribe();
-    this.idleTimeOut.unsubscribe();
-    this.onIdleStart.unsubscribe();
-    this.userInfoSubscription.unsubscribe();
-  }
 }

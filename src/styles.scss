@@ -323,6 +323,27 @@ intelli-paginator .mat-mini-fab {
   color: #86db46;
 }
 
+.ready {
+  color: #4fbff9;
+}
+
+.rejected {
+  color: #d12424;
+}
+
+.pending {
+  color: #0f4dc9;
+}
+
+.h5 {
+  font-size: 14px;
+}
+
+
+.processed {
+  color: #86db46;
+}
+
 .audited {
   color: #26AF54;
 }
@@ -337,4 +358,28 @@ intelli-paginator .mat-mini-fab {
 
 .rejected {
   color: #d12424;
+}
+
+.menuSmart_Search {
+  height: 38px;
+  position: sticky;
+  z-index: 26;
+  top: 0;
+}
+
+.menuSmart_Search input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  z-index: 26;
+  top: 0;
+}
+
+.customize {
+  max-height: 250px !important;
+}
+
+.mat-list-item.mat-focus-indicator.active {
+  color: #e87033 !important; // Left navigation hover 
 }

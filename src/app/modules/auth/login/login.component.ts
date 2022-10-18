@@ -30,8 +30,13 @@ export class LoginComponent implements OnInit {
     private userDataService: UserDataService) { }
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || './home/dynamic-form';
-
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home/dynamic-form';
+    let previousRoute = this.authenticationService.getPreviousNavigation();
+    if (previousRoute != '/') {
+      window.location.reload();
+      return
+    }
+    this.routeIfUserAunthicated();
   }
 
   routeIfUserAunthicated() {
@@ -42,9 +47,9 @@ export class LoginComponent implements OnInit {
       const UI = localStorage.getItem('__UI') || '{}';
       this.authenticationService.setUserInfo({ ...JSON.parse(UI) });
       this.authenticationService.setAuthenticationToken(token);
-      this.router.navigate(['./home']);
+      this.router.navigate(['/home']);
     } else if (useInfo) {
-      this.router.navigate(['./home']);
+      this.router.navigate(['/home']);
     }
   }
 
@@ -120,7 +125,6 @@ export class LoginComponent implements OnInit {
               localStorage.setItem('__UI', userInfo);
               this.authenticationService.setUserInfo({ ...reqObj, name: res.detail.name, userId: res.detail.id, activeTheme: res.detail.activeTheme?.signedUrl, photo: res.detail.photo });
               this.authenticationService.setAuthenticationToken(res.detail.type + ' ' + res.detail.token);
-              this.getAssignedProjects();
               if (res.detail.isPatient) {
                 // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0]));
                 this.authenticationService.setAssignedProjectList(res.detail);
@@ -154,7 +158,8 @@ export class LoginComponent implements OnInit {
         if (res && res.detail && res.detail.length) {
           this.authenticationService.setAssignedProjectList(res.detail);
         }
-        let routeLink = res.detail && res.detail.length ? this.returnUrl : './home';
+        let routeLink = res.detail && res.detail.length ? this.returnUrl : '/home';
+        console.log(routeLink)
         this.routeToPermissibleModule(routeLink);
 
       }, error => {
@@ -162,7 +167,7 @@ export class LoginComponent implements OnInit {
       })
   }
 
-  routeToPermissibleModule(routeLink: any) {
+  routeToPermissibleModule(routeLink: string) {
     this.router.navigate([routeLink]);
   }
 

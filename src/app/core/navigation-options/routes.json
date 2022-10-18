@@ -1,0 +1,58 @@
+[
+    {
+        "name": "Users",
+        "act_icon": "./../../assets/icons/Act_Users.svg",
+        "blk_icon": "./../../assets/icons/Icons_Users.svg",
+        "route": "/home/user",
+        "permissions": [
+            "CREATE_USER",
+            "UPDATE_USER",
+            "VIEW_USER"
+        ]
+    },
+    {
+        "name": "Roles",
+        "act_icon": "./../../assets/icons/Act_Roles.svg",
+        "blk_icon": "./../../assets/icons/Icons_Roles.svg",
+        "route": "/home/role",
+        "permissions": [
+            "CREATE_ROLE",
+            "UPDATE_ROLE",
+            "VIEW_ROLE"
+        ]
+    },
+    {
+        "name": "Projects",
+        "act_icon": "./../../assets/icons/Act_Projects.svg",
+        "blk_icon": "./../../assets/icons/Icons_Projects.svg",
+        "route": "/home/projects",
+        "permissions": [
+            "CREATE_PROJECT",
+            "UPDATE_PROJECT",
+            "VIEW_PROJECT",
+            "VIEW_API",
+            "UPDATE_API"
+        ]
+    },
+    {
+        "name": "Application",
+        "act_icon": "./../../assets/icons/Act_Application.svg",
+        "blk_icon": "./../../assets/icons/Icons_Application.svg",
+        "route": "/home/application",
+        "permissions": [
+            "CREATE_APPLICATION",
+            "VIEW_APPLICATION"
+        ]
+    },
+    {
+        "name": "Dynamic Form",
+        "act_icon": "./../../assets/icons/Act_Dynamic_Form.svg",
+        "blk_icon": "./../../assets/icons/Icons_Dynamic_Form.svg",
+        "route": "/home/dynamic-form",
+        "permissions": [
+            "VIEW_DYNAMIC_FORM",
+            "CREATE_DYNAMIC_FORM",
+            "EDIT_DYNAMIC_FORM"
+        ]
+    }
+]

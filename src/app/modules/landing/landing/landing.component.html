@@ -11,34 +11,11 @@
                 </div>
             </mat-list-item>
 
-            <mat-list-item class="mt-2" [routerLinkActive]="['active']" [routerLink]="['/home/user']">
-                <img src="../../../../assets/icons/Icons_Users.svg" class="img-fluid mr-2" matTooltip="User"
-                    [matTooltipPosition]="'right'" />
-                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Users</span>
-            </mat-list-item>
-
-            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/role']">
-                <img src="../../../../assets/icons/Icons_Roles.svg" class="img-fluid mr-2" matTooltip="Role"
-                    [matTooltipPosition]="'right'" />
-                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Role</span>
-            </mat-list-item>
-
-            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/projects']">
-                <img src="../../../../assets/icons/Icons_Projects.svg" class="img-fluid mr-2" matTooltip="Projects"
-                    [matTooltipPosition]="'right'" />
-                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Projects</span>
-            </mat-list-item>
-
-            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/dynamic-form']">
-                <img src="../../../../assets/icons/Icons_Dynamic_Form.svg" class="img-fluid mr-2"
-                    matTooltip="Dynamic Form" [matTooltipPosition]="'right'" />
-                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Dynamic Form</span>
-            </mat-list-item>
-
-            <mat-list-item [routerLinkActive]="['active']" [routerLink]="['/home/application']">
-                <img src="../../../../assets/icons/Icons_Application.svg" class="img-fluid mr-2"
-                    matTooltip="Application" [matTooltipPosition]="'right'" />
-                <span *ngIf="isExpanded" class="menu-item wh-text text-font">Application</span>
+            <mat-list-item *ngFor="let icons of navigationOptions" [routerLinkActive]="['active']"
+                #rla="routerLinkActive" [routerLink]="icons.route">
+                <img class="img-fluid" matTooltip="{{!isExpanded ? icons.name : ''}}" [matTooltipPosition]="'right'"
+                    src="{{rla.isActive ? icons.act_icon : icons.blk_icon}}" alt="icons.name">
+                <span> {{isExpanded ? icons.name : ''}} </span>
             </mat-list-item>
 
             <button (click)="isExpanded = !isExpanded" mat-mini-fab
@@ -93,8 +70,7 @@
                     <span> {{ userMail }} </span>
                 </div><br>
             </div>
-            <button mat-menu-item id="profile-modal-button" data-toggle="modal"
-                data-target="#profileModal">
+            <button mat-menu-item id="profile-modal-button" data-toggle="modal" data-target="#profileModal">
                 <mat-icon class="primary-font-color font-20 p-1">create</mat-icon>
                 Edit Profile
             </button>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -45,7 +45,8 @@ export class UserManagementComponent implements OnInit {
 
   constructor(private apiRequest: RequestApiService,
     private snackbar: SnackbarService,
-    private authenticationService: AuthenticationService,) { }
+    private authenticationService: AuthenticationService,
+    private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initPermissions()
@@ -58,8 +59,13 @@ export class UserManagementComponent implements OnInit {
     this.showCards = true;
   }
 
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
+  }
+
   initPermissions() {
-    let permissions = this.authenticationService.getPermissions();
+    let permission = this.authenticationService.getPermissions();
+    let permissions = Array.from(permission)
     this.userManagementPermssion = {
       edit: Array.from(permissions).includes('CREATE_USER') || Array.from(permissions).includes('UPDATE_USER'),
       changeStatus: Array.from(permissions).includes('CREATE_USER') || Array.from(permissions).includes('UPDATE_USER'),
