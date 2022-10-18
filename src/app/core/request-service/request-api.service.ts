@@ -140,7 +140,22 @@ export class RequestApiService {
   getAssignedProject(userName: any) {
     return this.http.get(this.url + "/activeprojectdetails/" + userName)
   }
+  //  -------------------------------- API SERVICES FOR PROJECT ---------------------------------//
 
+  getAllProjets(userName: any, userRole?: any) {
+
+    if (userRole) {
+      return this.http.get(this.url + '/admin/project/projectLandingPage')
+    }
+
+    else {
+      return this.http.get(this.url + '/admin/project/projectLandingPage?userName=' + userName)
+    }
+  }
+
+  enableDisableProject(projectId: any, status: any) {
+    return this.http.get(this.url + '/admin/project/status/' + projectId + '/' + status)
+  }
 
   //  -------------------------------- API SERVICES FOR PERMISSIONS ---------------------------------//
 

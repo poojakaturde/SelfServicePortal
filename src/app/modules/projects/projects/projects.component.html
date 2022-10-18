@@ -33,95 +33,88 @@
 <div class="container-fluid px-4">
     <div class="row" *ngIf="showCards">
         <ng-container *ngIf="enabledProjList.filteredData.length !== 0;else elseBlock1">
-            <div class="col-xl-4 col-md-6 mb-3" *ngFor="let project of enabledProjList.filteredData">
-                <mat-card class="infocards p-0 mb-2">
-                    <div class="proj_name">
+        <div class="col-xl-4 col-md-6 mb-3" *ngFor="let project of enabledProjList.filteredData">
+            <mat-card class="infocards p-0 mb-2">
+                <div class="proj_name">
+                    <div class="row">
+                        <div class="col-8">
+                            <h5 class="my-0 project-name"  #el [matTooltip]="(el.scrollWidth > el.clientWidth) ? project.projectName : ''"> 
+                                <span class="mr-2" [ngClass]="{'primary-font-color' : project.isEnabled , 'text-secondary' : !project.isEnabled}">
+                                <mat-icon class="docStIconPos primary-font-color">{{ docStructureIconMap[project.documentStructure] }} </mat-icon> </span>{{project.projectName}} </h5>
+                            <span class="email" *ngIf="project.startDate; else noLead" >{{project.projectLead}}</span>
+                            <ng-template #noLead>
+                                <span class="email">No Lead Assigned</span>
+                            </ng-template>
+                        </div>
+                        <div class="col-4 text-right">  
+                            <button mat-mini-fab class="foregroundColor" aria-label="edit user details" *ngIf="projectManagementPermssion.edit" [routerLink]="['./edit-project', project.projectId]">
+                                <mat-icon >create</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>                
+                <div class="cardstats">
+                    <div class="mb-3 mt-1">  
+                        <div class="row">   
+                            <div class="col-3 pr-0">
+                                <h5 class=""> {{project.total | number: '.0-0'}} </h5>
+                                <span>Total </span>
+                            </div>                         
+                            <div class="col-3 px-0 processed">
+                                <h5 class="" > {{project.processed | number: '.0-0'}} </h5>
+                                <span > Processed </span>
+                            </div>
+                            <div class="col-3 px-0 ready">
+                                <h5 class=""> {{project.ready | number: '.0-0'}} </h5>
+                                <span> Ready </span>
+                            </div>
+                            <div class="col-3 pl-0 rejected">
+                                <h5 class=""> {{project.rejected | number: '.0-0'}} </h5>
+                                <span > Rejected </span>
+                            </div>
+                        </div> 
+                    </div>
+                    <hr class="mt-4">
+                    <div class="mb-1">
                         <div class="row">
-                            <div class="col-8">
-                                <h5 class="my-0 project-name" #el
-                                    [matTooltip]="(el.scrollWidth > el.clientWidth) ? project.projectName : ''">
-                                    <span class="mr-2"
-                                        [ngClass]="{'primary-font-color' : project.isEnabled , 'text-secondary' : !project.isEnabled}">
-                                        <mat-icon class="docStIconPos"></mat-icon>
-                                    </span>{{project.projectName}}
-                                </h5>
-                                <span class="email"
-                                    *ngIf="project.startDate; else noLead">{{project.projectLead}}</span>
-                                <ng-template #noLead>
-                                    <span class="email">No Lead Assigned</span>
+                            <div class="col-6 col-sm-2 pr-0 d-flex-center">
+                                <!-- <h6 *ngIf="project.startDate; else noStartDate"> {{project.totalValidationCount | number: '.0-2'}} <br> <span class="text-secondary font-12" style=" color: #575757;">sec  </span></h6> -->
+                                <h6 *ngIf="project.startDate; else noStartDate"> {{project.totalValidationCount}} </h6>
+                                <!-- <span >12345678</span> -->
+                                <ng-template #noStartDate>
+                                    <h6>No Data Available</h6>
                                 </ng-template>
                             </div>
-                            <div class="col-4 text-right">
-                                <button mat-mini-fab class="foregroundColor" aria-label="edit user details"
-                                    *ngIf="projectManagementPermssion.edit"
-                                    [routerLink]="['./edit-project', project.projectId]">
-                                    <mat-icon>create</mat-icon>
-                                </button>
+                            <div class="col-6 col-sm-3 px-0 pl-3 d-flex-center">
+                                <span class="validation-time">Validation<br> 
+                                <span class="">Count</span>
+                            </span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="cardstats">
-                        <div class="mb-3 mt-1">
-                            <div class="row">
-                                <div class="col-3 pr-0">
-                                    <h5 class=""> {{project.total | number: '.0-0'}} </h5>
-                                    <span>Total </span>
-                                </div>
-                                <div class="col-3 px-0 processed">
-                                    <h5 class=""> {{project.processed | number: '.0-0'}} </h5>
-                                    <span> Processed </span>
-                                </div>
-                                <div class="col-3 px-0 ready">
-                                    <h5 class=""> {{project.ready | number: '.0-0'}} </h5>
-                                    <span> Ready </span>
-                                </div>
-                                <div class="col-3 pl-0 rejected">
-                                    <h5 class=""> {{project.rejected | number: '.0-0'}} </h5>
-                                    <span> Rejected </span>
-                                </div>
+                            <div class="col-6 col-sm-4 pr-0 d-flex-center">
+                                <!-- <h6 *ngIf="project.endDate; else noEndDate"> {{project.totalValidationTime | number: '.0-2'}} <br> <span class="text-secondary font-12" style=" color: #575757;">sec  </span></h6> -->
+                                <h6 *ngIf="project.endDate; else noEndDate"> {{project.totalValidationTime}} </h6>
+                                <!-- <span >540h 44m 60s</span> -->
+                                <ng-template #noEndDate>
+                                    <h6>No Data Available</h6>
+                                </ng-template>
                             </div>
-                        </div>
-                        <hr class="mt-4">
-                        <div class="mb-1">
-                            <div class="row">
-                                <div class="col-6 col-sm-2 pr-0 d-flex-center">
-
-                                    <h6 *ngIf="project.startDate; else noStartDate"> {{project.totalValidationCount}}
-                                    </h6>
-                                    <ng-template #noStartDate>
-                                        <h6>No Data Available</h6>
-                                    </ng-template>
-                                </div>
-                                <div class="col-6 col-sm-3 px-0 pl-3 d-flex-center">
-                                    <span class="validation-time">Validation<br>
-                                        <span class="">Count</span>
-                                    </span>
-                                </div>
-                                <div class="col-6 col-sm-4 pr-0 d-flex-center">
-
-                                    <h6 *ngIf="project.endDate; else noEndDate"> {{project.totalValidationTime}} </h6>
-                                    <ng-template #noEndDate>
-                                        <h6>No Data Available</h6>
-                                    </ng-template>
-                                </div>
-                                <div class="col-6 col-sm-3 pl-0 pr-2 d-flex-center">
-                                    <span class="validation-time">Validation<br>
-                                        <span class="">Time</span>
-                                    </span>
-                                </div>
+                            <div class="col-6 col-sm-3 pl-0 pr-2 d-flex-center">
+                                <span  class="validation-time" >Validation<br> 
+                                <span class="" >Time</span>
+                             </span>             
                             </div>
-                        </div>
-                    </div>
-                </mat-card>
-            </div>
+                        </div> 
+                    </div>  
+                </div>         
+            </mat-card>
+        </div>
         </ng-container>
         <ng-template #elseBlock1>
             <div *ngIf="isRecordLoaded" class="card bg-default w-100 h-100-pb30 opacity95">
                 <div class="card-body pb-0 text-center">
                     <h3 class="text-center py-4">
-                        <img class="mb-3" src="../../../../assets/images/No content.png" alt="image"> <br>
-                        {{ enabledProjList.data.length ? enabledProjList.filteredData.length ? '...' : 'No Records Found
-                        !' : 'There are no active projects at this moment.' }}
+                        <img class="mb-3" src="./assets/images/No content.png" alt="image">  <br>
+                        {{ enabledProjList.data.length ? enabledProjList.filteredData.length ? '...' : 'No Records Found !' : 'There are no active projects at this moment.' }}
                     </h3>
                 </div>
             </div>

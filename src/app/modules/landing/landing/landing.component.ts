@@ -5,8 +5,7 @@ import { RequestApiService } from 'src/app/core/request-service/request-api.serv
 import { environment } from 'src/environments/environment';
 import { LogoutWarningDialogComponent } from '../logout-warning-dialog/logout-warning-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
-import { Keepalive } from '@ng-idle/keepalive';
+import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 
 @Component({
   selector: 'app-landing',
@@ -22,13 +21,38 @@ export class LandingComponent implements OnInit {
   userId: any;
   userInfoSubscription: any = null;
 
+  dialogRef: any = null;
+  showDialog: boolean = true;
+
   idleEnd: any = null;
   idleTimeOut: any = null;
   onIdleStart: any = null;
 
   constructor(public router: Router, private apiRequest: RequestApiService,
     private authenticationService: AuthenticationService,
-    private dialog: MatDialog) {
+    private dialog: MatDialog, private idle: Idle) {
+
+    this.idle.setIdle(1);
+    this.idle.setTimeout(1);
+    // this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+    this.idle.onIdleEnd.subscribe((res) => {
+      console.log(res)
+      this.reset();
+    })
+    // this.idleEnd = this.idle.onIdleEnd.subscribe(() => {
+    //   this.reset();
+    // });
+
+    this.idleTimeOut = this.idle.onTimeout.subscribe(() => {
+      this.logout();
+    });
+
+    this.idle.onIdleStart.subscribe(() => {
+      console.log("idle start")
+      this.openDialog();
+    });
+
   }
 
   ngOnInit(): void {
@@ -44,6 +68,28 @@ export class LandingComponent implements OnInit {
       });
   }
 
+  reset() {
+    this.showDialog = true;
+    if (this.dialogRef && this.dialog.openDialogs.length) {
+      this.dialogRef.close();
+    }
+  }
+
+  openDialog() {
+    if (this.showDialog) {
+      this.dialogRef = this.dialog.open(LogoutWarningDialogComponent, { disableClose: true, width: '400px' });
+
+      this.dialogRef.afterClosed().subscribe((result:any) => {
+        if (result) {
+          this.logout();
+        } else {
+          this.reset();
+        }
+      });
+    }
+    this.showDialog = false;
+  }
+
   logout() {
     this.apiRequest.logout()
       .subscribe((res: any) => {
@@ -51,5 +97,17 @@ export class LandingComponent implements OnInit {
       }, (error: any) => {
         this.authenticationService.logout();
       })
+  }
+
+  ngOnDestroy() {
+    this.idle.stop();
+    // console.log('landing page destroyed');
+    if(this.dialogRef && this.dialog.openDialogs.length) {
+      this.dialogRef.close();
+    }
+    this.idleEnd.unsubscribe();
+    this.idleTimeOut.unsubscribe();
+    this.onIdleStart.unsubscribe();
+    this.userInfoSubscription.unsubscribe();
   }
 }

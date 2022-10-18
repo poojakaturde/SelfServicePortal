@@ -15,7 +15,7 @@ export class RoleComponent implements OnInit {
 
   displayedColumns = ['role', 'permissions', 'updated', 'created'];
   dataSource: any = new MatTableDataSource([]);
-  userRoles: any = [];
+  userRoles: any;
   isRecordLoaded: boolean = false;
 
   roleManagementPermssion = {
@@ -36,12 +36,16 @@ export class RoleComponent implements OnInit {
   }
 
   constructor(private snackbar: SnackbarService, private authenticationService: AuthenticationService,
-    private router: Router, private apiRequest: RequestApiService,
+    private apiRequest: RequestApiService,
   ) { }
 
   ngOnInit(): void {
     this.initPermissions();
     this.getAllCreatedRoles();
+    this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string) => {
+      const value: any = data[sortHeaderId];
+      return typeof value === "string" ? value.toLowerCase() : value;
+    };
   }
 
   initPermissions() {

@@ -5,6 +5,14 @@ body {
   height: 100%;
 }
 
+.mat-typography h5 {
+  font-size: 20px;
+}
+
+.mat-typography h6 {
+  font-size: 1rem;
+}
+
 body {
   margin: 0;
   color: #212121;
@@ -21,6 +29,10 @@ body {
 
 .mt-4 {
   margin-top: 1.5rem;
+}
+
+h5 {
+  font-size: 20px;
 }
 
 .toast-success {
@@ -307,3 +319,22 @@ intelli-paginator .mat-mini-fab {
   font-size: 17px;
 }
 
+.processed {
+  color: #86db46;
+}
+
+.audited {
+  color: #26AF54;
+}
+
+.pending {
+  color: #0F4DC9;
+}
+
+.ready {
+  color: #4FBFF9;
+}
+
+.rejected {
+  color: #d12424;
+}

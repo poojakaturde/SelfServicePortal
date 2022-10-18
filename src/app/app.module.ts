@@ -16,8 +16,7 @@ import { RequestApiService } from './core/request-service/request-api.service';
 import { SnackbarService } from './core/snack-bar/snackbar.service';
 import { AuthenticationService } from './core/request-service/auth/authentication.service';
 import { AuthguardService } from './core/request-service/auth-guard/authguard.service';
-import { NgIdleModule } from '@ng-idle/core';
-
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +31,7 @@ import { NgIdleModule } from '@ng-idle/core';
     MaterialModule,
     AuthModule,
     HttpClientModule,
-    NgIdleModule.forRoot(),
+    NgIdleKeepaliveModule.forRoot()
   ],
   providers: [
     RequestApiService,

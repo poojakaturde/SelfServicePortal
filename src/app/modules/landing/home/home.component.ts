@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
   }
 
   navigate(selectedOption: any) {
-    console.log(selectedOption.route)
+ 
     this.router.navigate([selectedOption.route]);
   }
 

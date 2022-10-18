@@ -45,13 +45,16 @@ export class UserManagementComponent implements OnInit {
 
   constructor(private apiRequest: RequestApiService,
     private snackbar: SnackbarService,
-    private router: Router,
     private authenticationService: AuthenticationService,) { }
 
   ngOnInit(): void {
     this.initPermissions()
     this.getUsersList();
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string) => {
+      const value: any = data[sortHeaderId];
+      return typeof value === "string" ? value.toLowerCase() : value;
+    };
     this.showCards = true;
   }
 

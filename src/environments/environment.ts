@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  userSessionTimeOut: 900,
-  userSessionIdleTime: 1800,
+  userSessionTimeOut: 90,
+  userSessionIdleTime: 50,
 };
 
 /*
