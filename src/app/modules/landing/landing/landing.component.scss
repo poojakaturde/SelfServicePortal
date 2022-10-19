@@ -34,6 +34,9 @@ mat-sidenav-container {
     }
 }
 
+.nav-item {
+    width: 35px;
+}
 
 hr {
     margin: 1px;
@@ -79,7 +82,6 @@ hr {
 mat-list-item span {
     margin: 0px 5px;
     font-size: 14px;
-    padding: 0px 10px;
 }
 
 .foregroundColor {

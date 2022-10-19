@@ -74,14 +74,15 @@ export class ProjectsComponent implements OnInit {
 
   }
 
-  // initPermissions() {
-  //   let permissions = this.authenticationService.getPermissions();
-  //   this.projectManagementPermssion = {
-  //    edit: permissions.includes('CREATE_PROJECT') || permissions.includes('UPDATE_PROJECT'),
-  //    changeStatus: permissions.includes('CREATE_PROJECT') || permissions.includes('UPDATE_PROJECT'),
-  //    create: permissions.includes('CREATE_PROJECT')
-  //  }
-  // }
+  initPermissions() {
+    let permission = this.authenticationService.getPermissions();
+    let permissions = Array.from(permission);
+    this.projectManagementPermssion = {
+      edit: permissions.includes('CREATE_PROJECT') || permissions.includes('UPDATE_PROJECT'),
+      changeStatus: permissions.includes('CREATE_PROJECT') || permissions.includes('UPDATE_PROJECT'),
+      create: permissions.includes('CREATE_PROJECT')
+    }
+  }
 
   getCreatedProjects() {
 

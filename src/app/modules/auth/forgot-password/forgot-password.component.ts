@@ -31,6 +31,7 @@ export class ForgotPasswordComponent implements OnInit {
 
     this.apiServ.forgotPassword(reqObj)
       .subscribe(res => {
+        console.log(res)
         if (res) {
           if (res.status === 'S') {
             this.snackbar.open(res.description, '', { type: 'success' });

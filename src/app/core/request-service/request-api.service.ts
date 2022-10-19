@@ -143,13 +143,10 @@ export class RequestApiService {
   //  -------------------------------- API SERVICES FOR PROJECT ---------------------------------//
 
   getAllProjets(userName: any, userRole?: any) {
-
     if (userRole) {
       return this.http.get(this.url + '/admin/project/projectLandingPage')
     }
-
     else {
-
       return this.http.get(this.url + '/admin/project/projectLandingPage?userName=' + userName)
     }
   }

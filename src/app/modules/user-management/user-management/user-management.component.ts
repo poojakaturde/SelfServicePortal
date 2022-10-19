@@ -6,11 +6,14 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
+import { DatePipe } from '@angular/common';
+import { SharedService } from 'src/app/core/services/shared-service/shared.service';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.scss']
+  styleUrls: ['./user-management.component.scss'],
+  providers: [DatePipe]
 })
 export class UserManagementComponent implements OnInit {
 
@@ -46,12 +49,13 @@ export class UserManagementComponent implements OnInit {
   constructor(private apiRequest: RequestApiService,
     private snackbar: SnackbarService,
     private authenticationService: AuthenticationService,
-    private changeDetector: ChangeDetectorRef) { }
+    private changeDetector: ChangeDetectorRef,
+    private datePipe: DatePipe,
+    private sharedService: SharedService) { }
 
   ngOnInit(): void {
     this.initPermissions()
     this.getUsersList();
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string) => {
       const value: any = data[sortHeaderId];
       return typeof value === "string" ? value.toLowerCase() : value;
@@ -87,7 +91,7 @@ export class UserManagementComponent implements OnInit {
             return { ...user };
           })
           let activeUsers: any = [];
-          this.dataSource.data = res.detail.sort();
+          this.dataSource.data = res.detail.sort(this.compare);
           this.dataSource.data = this.dataSource.data.map((x: any) => {
             x.isEnabled = x.status === "enabled" ? true : false
             if (x.isEnabled) {
@@ -96,7 +100,7 @@ export class UserManagementComponent implements OnInit {
             return { ...x }
           })
           this.enabledUserList.data = [...activeUsers];
-          this.enabledUserList.data = this.enabledUserList.data.sort();
+          this.enabledUserList.data = this.enabledUserList.data.sort(this.sharedService.compare);
           if (this.userManagementPermssion.edit || this.userManagementPermssion.changeStatus) {
             this.displayedColumns.push('action');
           }
@@ -112,8 +116,8 @@ export class UserManagementComponent implements OnInit {
   filterUserTableData(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.data = this.dataSource.data.map((users: any) => {
-      // users.created = this.datePipe.transform(users.created, 'MM-dd-yyyy HH:mm:ss');
-      // users.updated = this.datePipe.transform(users.updated, 'MM-dd-yyyy HH:mm:ss');
+      users.created = this.datePipe.transform(users.created, 'MM-dd-yyyy HH:mm:ss');
+      users.updated = this.datePipe.transform(users.updated, 'MM-dd-yyyy HH:mm:ss');
       return { ...users };
     })
     this.dataSource.filterPredicate = function (data: any, filter: any): any {
@@ -127,8 +131,8 @@ export class UserManagementComponent implements OnInit {
     }
     if (this.enabledUserList) {
       this.enabledUserList.data = this.enabledUserList.data.map((user: any) => {
-        // user.created = this.datePipe.transform(user.created, 'MM-dd-yyyy HH:mm:ss');
-        // user.updated = this.datePipe.transform(user.updated, 'MM-dd-yyyy HH:mm:ss');
+        user.created = this.datePipe.transform(user.created, 'MM-dd-yyyy HH:mm:ss');
+        user.updated = this.datePipe.transform(user.updated, 'MM-dd-yyyy HH:mm:ss');
         return { ...user };
       })
       this.enabledUserList.filterPredicate = function (data: any, filter: any): any {
@@ -138,6 +142,16 @@ export class UserManagementComponent implements OnInit {
       }
       this.enabledUserList.filter = filterValue.trim().toLowerCase();
     }
+  }
+
+  compare(a: any, b: any) {
+    if (a.updated > b.updated) {
+      return -1;
+    }
+    if (a.updated < b.updated) {
+      return 1;
+    }
+    return 0;
   }
 
 }

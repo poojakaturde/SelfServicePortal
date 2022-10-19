@@ -18,7 +18,18 @@ export class SharedService {
   getFormName() {
     return this.SSPEnabledFormName;
   }
+
   getProjectName() {
     return this.projectName;
+  }
+
+  compare(a: any, b: any) {
+    if (a.updated > b.updated) {
+      return -1;
+    }
+    if (a.updated < b.updated) {
+      return 1;
+    }
+    return 0;
   }
 }
