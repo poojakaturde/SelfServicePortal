@@ -25,12 +25,13 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
     otp: new FormControl(''),
   });
+  
   constructor(private authenticationService: AuthenticationService, private snackbar: SnackbarService,
     private router: Router, private apiServ: RequestApiService, private route: ActivatedRoute,
     private userDataService: UserDataService) { }
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home/dynamic-form';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || './home/dynamic-form';
     let previousRoute = this.authenticationService.getPreviousNavigation();
     if (previousRoute != '/') {
       window.location.reload();
@@ -92,12 +93,19 @@ export class LoginComponent implements OnInit {
               })
 
               localStorage.setItem('token', res.detail.type + ' ' + res.detail.token);
-
               localStorage.setItem('__UI', userInfo);
 
               this.authenticationService.setUserInfo({ ...reqObj, name: res.detail.name, userId: res.detail.id, activeTheme: res.detail.activeTheme?.signedUrl, photo: res.detail.photo });
               this.authenticationService.setAuthenticationToken(res.detail.type + ' ' + res.detail.token)
-              this.getAssignedProjects();
+              if (res.detail.isPatient) {
+                // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0]));
+                this.authenticationService.setAssignedProjectList(res.detail);
+                let url = './home/application';
+
+                this.routeToPermissibleModule(url);
+              } else {
+                this.getAssignedProjects();
+              }
             }
           }
           else {

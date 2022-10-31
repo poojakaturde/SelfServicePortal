@@ -139,16 +139,16 @@
                                 <div formArrayName="widgetData">
                                     <div
                                         *ngFor="let widget of widgetData(sectionIndex,rowIndex,fieldIndex).controls; let widgetDataIndex=index">
-                                        <div class="row " [formGroupName]="widgetDataIndex" style="margin: 15px;">
+                                        <div class="row " [formGroupName]="widgetDataIndex">
 
-                                            <div class="col-md-5">
+                                            <div class="col-md-3">
                                                 <mat-form-field appearance="outline">
                                                     <mat-label>Option Title</mat-label>
                                                     <input matInput formControlName="title">
                                                 </mat-form-field>
                                             </div>
 
-                                            <div class="col-md-5">
+                                            <div class="col-md-3">
                                                 <mat-form-field appearance="outline">
                                                     <mat-label>Option Value</mat-label>
                                                     <input matInput formControlName="value">

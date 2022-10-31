@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -50,7 +50,7 @@ export class ProjectsComponent implements OnInit {
     this.dataSource.sort = sort;
   }
   constructor(private datePipe: DatePipe, private authenticationService: AuthenticationService, private router: Router,
-    private snackbar: SnackbarService, private apiRequest: RequestApiService, private sharedService: SharedService) { }
+    private snackbar: SnackbarService, private apiRequest: RequestApiService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
 
@@ -72,6 +72,10 @@ export class ProjectsComponent implements OnInit {
       return typeof value === "string" ? value.toLowerCase() : value;
     };
 
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 
   initPermissions() {

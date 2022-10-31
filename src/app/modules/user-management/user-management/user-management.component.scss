@@ -79,12 +79,12 @@ tr.mat-row {
 
 .person-icon {
     vertical-align: middle;
-    font-size: 22px;
+    font-size: 22px !important;
 }
 
 .card-person-icon {
     vertical-align: middle;
-    font-size: 50px;
+    font-size: 50px !important;
 }
 
 .mat-card {
@@ -163,10 +163,6 @@ tr.mat-row {
 .px-4 {
     padding-left: 1.5rem !important;
     padding-right: 1.5rem !important;
-}
-
-.project-name {
-    font-size: 1.25rem;
 }
 
 .pl-3 {

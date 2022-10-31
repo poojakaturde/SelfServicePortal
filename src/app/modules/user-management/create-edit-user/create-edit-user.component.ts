@@ -5,6 +5,7 @@ import { AuthenticationService } from 'src/app/core/request-service/auth/authent
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { PasswordValidator } from 'src/app/core/services/password.validator';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-edit-user',
@@ -40,30 +41,43 @@ export class CreateEditUserComponent implements OnInit {
   checkRole: any = null;
   userRole: any = [];
 
+  currentProjSubscription!: Subscription;
+  userInfoSunscription!: Subscription;
+
   constructor(private formBuilder: FormBuilder,
     private apiRequest: RequestApiService,
     private snackbar: SnackbarService,
     private routes: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService) {
-    this.isCreateUserOperation = true;
+    this.isCreateUserOperation = this.routes.snapshot.params['id'] ? false : true;
     this.createForm();
   }
 
   ngOnInit(): void {
-    this.getSelectedUserDetails();
-    this.fetchCreatedRoles();
-    this.fetchEnabledProjects();
-    // let permissions = this.authenticationService.getPermissions();
-    // if(permissions.includes('CREATE_USER') || (permissions.includes('UPDATE_USER') && !this.isCreateUserOperation)) {
-    //   this.getSelectedUserDetails();
-    //   this.fetchCreatedRoles();
-    //   this.fetchEnabledProjects();
-    // } else {
-    //   this.snackbar.open('User Does Not Have permission', '', { type: 'warning' });
-    //   this.router.navigate(['./home/user-management']);
-    // }
 
+    this.currentProjSubscription = this.authenticationService.selectedProjectOb$
+      .subscribe((currentProj: any) => {
+        if (currentProj && Object.keys(currentProj).length) {
+          this.userRole = currentProj.roles;
+        }
+      });
+
+    this.userInfoSunscription = this.authenticationService.userInfoOb$
+      .subscribe(userData => {
+        this.userInfo = userData;
+      });
+
+    let permission = this.authenticationService.getPermissions();
+    let permissions = Array.from(permission);
+    if (permissions.includes('CREATE_USER') || (permissions.includes('UPDATE_USER') && !this.isCreateUserOperation)) {
+      this.getSelectedUserDetails();
+      this.fetchCreatedRoles();
+      this.fetchEnabledProjects();
+    } else {
+      this.snackbar.open('User Does Not Have permission', '', { type: 'warning' });
+      this.router.navigate(['./home/user']);
+    }
   }
 
   createForm() {
@@ -250,5 +264,8 @@ export class CreateEditUserComponent implements OnInit {
       replace(/\n +/, "\n")
   }
 
+  ngOnDestroy() {
+    this.currentProjSubscription.unsubscribe();
+  }
 
 }

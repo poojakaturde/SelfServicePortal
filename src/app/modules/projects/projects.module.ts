@@ -5,7 +5,7 @@ import { ProjectsRoutingModule } from './projects-routing.module';
 import { ProjectsComponent } from './projects/projects.component';
 import {MaterialModule} from '../Material/material.module';
 import { CreateProjectComponent } from './create-project/create-project.component'
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,6 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     ProjectsRoutingModule,
     MaterialModule,
+    FormsModule,
     ReactiveFormsModule
   ]
 })

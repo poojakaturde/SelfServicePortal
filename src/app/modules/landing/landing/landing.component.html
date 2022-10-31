@@ -15,7 +15,7 @@
                 #rla="routerLinkActive" [routerLink]="icons.route">
                 <img class="img-fluid" matTooltip="{{!isExpanded ? icons.name : ''}}" [matTooltipPosition]="'right'"
                     src="{{rla.isActive ? icons.act_icon : icons.blk_icon}}" alt="icons.name">
-                <span> {{isExpanded ? icons.name : ''}} </span>
+                <span class="ml-2"> {{isExpanded ? icons.name : ''}} </span>
             </mat-list-item>
 
             <button (click)="isExpanded = !isExpanded" mat-mini-fab

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
@@ -31,19 +31,17 @@ export class LandingComponent implements OnInit {
 
   constructor(public router: Router, private apiRequest: RequestApiService,
     private authenticationService: AuthenticationService,
-    private dialog: MatDialog, private idle: Idle) {
+    private dialog: MatDialog, private idle: Idle,
+    private changeDetector: ChangeDetectorRef) {
 
     this.idle.setIdle(1);
     this.idle.setTimeout(1);
-    // this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     this.idle.onIdleEnd.subscribe((res) => {
       console.log(res)
       this.reset();
     })
-    // this.idleEnd = this.idle.onIdleEnd.subscribe(() => {
-    //   this.reset();
-    // });
 
     this.idleTimeOut = this.idle.onTimeout.subscribe(() => {
       this.logout();
@@ -67,6 +65,10 @@ export class LandingComponent implements OnInit {
           this.photoUrl = userData.photo;
         }
       });
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 
   reset() {

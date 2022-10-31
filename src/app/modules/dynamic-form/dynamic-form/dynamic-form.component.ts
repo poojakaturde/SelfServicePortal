@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { Sort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
@@ -15,7 +15,17 @@ export class DynamicFormComponent implements OnInit {
 
   displayedColumns = ['name', 'createdBy', 'status', 'created', 'updated', 'action'];
   dataSource: any = new MatTableDataSource([]);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  @ViewChild(MatPaginator, { static: false })
+  set paginator(value: MatPaginator) {
+    if (this.dataSource) {
+      this.dataSource.paginator = value;
+    }
+  }
+
+  @ViewChild(MatSort, { static: false }) set content(sort: MatSort) {
+    this.dataSource.sort = sort;
+  }
 
   formList: any;
   editFormData: any;
@@ -38,12 +48,15 @@ export class DynamicFormComponent implements OnInit {
     sortingOrder: true,
   }
 
-  constructor(private router: Router, private apiRequest: RequestApiService, private snackbar: SnackbarService,) {
+  constructor(private apiRequest: RequestApiService, private snackbar: SnackbarService,) {
     this.getFormList();
-
   }
 
   ngOnInit(): void {
+    this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string) => {
+      const value: any = data[sortHeaderId];
+      return typeof value === "string" ? value.toLowerCase() : value;
+    };
 
   }
 
@@ -106,9 +119,7 @@ export class DynamicFormComponent implements OnInit {
     this.apiRequest.getDynamicForms()
       .subscribe((res: any) => {
         if (res && res.detail && res.detail.length) {
-          this.formList = res.detail;
-          this.dataSource = new MatTableDataSource(this.formList);
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.data = res.detail.sort();
         }
       }, error => {
         this.snackbar.open('Failed To Fetch the Form List ...!', '', { type: 'warning' });
