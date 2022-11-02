@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
             this.checkOTPRecived = true;
           } else if (res && res.responseCode == 'SU_DI_202' && res.description == 'Credential are verified , connect to reset password') {
             this.userDataService.setUserInfo(res);
-            this.router.navigate(['./confirm-password']);
+            this.router.navigate(['./reset-password']);
           } else if (res && res.responseCode == 'SU_DI_200' && res.description == 'Logged in successfully') {
             if (res.responseCode === 'SU_DI_200') {
               const userInfo = JSON.stringify({
@@ -120,7 +120,7 @@ export class LoginComponent implements OnInit {
       this.apiServ.login(reqObj)
         .subscribe((res: any) => {
           if (res) {
-
+            console.log(res)
             if (res.responseCode === 'SU_DI_200') {
               const userInfo = JSON.stringify({
                 "userName": res.detail.username,
@@ -135,7 +135,8 @@ export class LoginComponent implements OnInit {
               this.authenticationService.setAuthenticationToken(res.detail.type + ' ' + res.detail.token);
               if (res.detail.isPatient) {
                 // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0]));
-                this.authenticationService.setAssignedProjectList(res.detail);
+                // this.authenticationService.setAssignedProjectList(res.detail);
+                this.getAssignedProjects();
                 let url = './home/application';
 
                 this.routeToPermissibleModule(url);
@@ -145,7 +146,7 @@ export class LoginComponent implements OnInit {
 
             } else if (res.responseCode === 'SU_DI_202') {
               this.userDataService.setUserInfo(res);
-              this.router.navigate(['./confirm-password']);
+              this.router.navigate(['./reset-password']);
             } else {
               this.snackbar.open(res.description, '', { type: 'warning' });
             }
@@ -163,11 +164,11 @@ export class LoginComponent implements OnInit {
   getAssignedProjects() {
     this.apiServ.getAssignedProject(this.form.value.userName)
       .subscribe((res: any) => {
+        console.log(res)
         if (res && res.detail && res.detail.length) {
           this.authenticationService.setAssignedProjectList(res.detail);
         }
         let routeLink = res.detail && res.detail.length ? this.returnUrl : '/home';
-        console.log(routeLink)
         this.routeToPermissibleModule(routeLink);
 
       }, error => {

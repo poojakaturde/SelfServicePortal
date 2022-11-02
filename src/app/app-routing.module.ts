@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthguardService } from './core/request-service/auth-guard/authguard.service';
 import { ForgotPasswordComponent } from './modules/auth/forgot-password/forgot-password.component';
 import { LoginComponent } from './modules/auth/login/login.component';
+import { ResetPasswordComponent } from './modules/auth/reset-password/reset-password.component';
 import { SignupComponent } from './modules/auth/signup/signup.component';
 import { HomeComponent } from './modules/landing/home/home.component';
 import { LandingComponent } from './modules/landing/landing/landing.component';
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
   {
     path: 'home',
     canActivate: [AuthguardService],

@@ -35,7 +35,6 @@ export class ForgotPasswordComponent implements OnInit {
         if (res) {
           if (res.status === 'S') {
             this.snackbar.open(res.description, '', { type: 'success' });
-            this.router.navigate(['./login']);
           } else if (res.responseCode === 'EX_DI_406') {
             this.snackbar.open(res.description, '', { type: 'warning' })
             this.router.navigate(['./login']);
