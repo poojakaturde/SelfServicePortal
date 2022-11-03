@@ -40,7 +40,7 @@ export class CreateProjectComponent implements OnInit {
   
   attrListForInmarReturns: any[] = []
   isEmailvalid:boolean =true;
-
+  panelOpenState = false;
   attributeListChange:any = [];
   dataSourceForApi: any = new MatTableDataSource([]);
   SystemVariables : any = {};

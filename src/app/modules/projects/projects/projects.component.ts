@@ -172,6 +172,7 @@ export class ProjectsComponent implements OnInit {
   toggleCardView(value: any) {
     this.showCards = value;
   }
+ 
 
   ngOnDestroy() {
     if (this.userInfoSunscription) {

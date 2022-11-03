@@ -91,7 +91,7 @@ export class RequestApiService {
   }
 
   searchFilter(obj: any) {
-    return this.http.get(this.url + "/dynamicform/search_criteria?landingPage=submittedForm" + obj)
+    return this.http.post(this.url + "/dynamicform/search_criteria?landingPage=submittedForm" ,obj)
   }
 
 

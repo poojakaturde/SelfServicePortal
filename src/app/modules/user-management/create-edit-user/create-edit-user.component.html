@@ -4,7 +4,7 @@
             <strong class="primary-font-color">{{isCreateUserOperation ? 'Create User' : 'Edit User'}}</strong>
             <button mat-stroked-button color="accent" class="float-right ml-2 button-cls"
                 [routerLink]="['/home/user']">Cancel</button>
-            <button (click)="createUpdateUser()" mat-raised-button color="primary" class="float-right button-cls">{{
+            <button (click)="createUpdateUser()" mat-raised-button color="primary" class="float-right button-cls"  [routerLink]="['/home/user']">{{
                 isCreateUserOperation ? 'Create' : 'Update' }}</button>
         </h5>
         <mat-card class="border rounded my-3">
@@ -45,6 +45,7 @@
                         </section>
                     </div>
 
+              
                     <div *ngIf="isCreateUserOperation && this.userRole.includes('Platform Admin')"
                         class="col-sm-3 col-md-2 col-lg-2">
                         <mat-label class="">OTP Verification</mat-label>
@@ -80,6 +81,7 @@
                             <input matInput type="text" autocomplete="off" formControlName="updated">
                         </mat-form-field>
                     </div>
+                    
                     <div class="col-sm-3 col-md-2 col-lg-2" *ngIf="!isCreateUserOperation">
                         <mat-label class="">Active User</mat-label>
                         <section class="example-section ">

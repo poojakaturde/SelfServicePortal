@@ -4,6 +4,7 @@
             <h6 class="mt-3 primary-font-color"
                 style="color: #e87033;font-weight: 500;line-height: 1.2;font-size: 1rem;">List
                 of Applications</h6>
+                <mat-divider style="width: 18%;"></mat-divider>
         </div>
 
         <div class="col-lg-2 col-md-3 col-sm-3 col-7 pt-3 ml-auto font-color">
@@ -22,7 +23,7 @@
                     </mat-icon>
                     <span class="ml-2"
                         [ngClass]="{'primary-font-color' : filter.expanded , 'text-secondary' : !filter.expanded}">
-                        Filter </span>
+                        Filter </span>&nbsp;<i class="fa fa-filter primary-font-color mr-2"></i>
                 </mat-panel-title>
                 <mat-panel-description>
                     <span class="invisible">Processing Time Taken By The Dynamic Forms</span>
@@ -94,7 +95,7 @@
         <div class="col-sm-12">
             <div class="example-container mat-elevation-z0 documentTable">
                 <div class="mat-elevation-z8">
-                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+                    <table  matSort mat-table [dataSource]="dataSource"  (matSortChange)="sortData($event)">
 
                         <ng-container matColumnDef="status">
                             <b>

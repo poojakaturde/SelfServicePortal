@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path:'create-project',
     component:CreateProjectComponent
+  },
+  {
+    path:'edit-project/:id',
+    component:CreateProjectComponent
   }
 ];
 

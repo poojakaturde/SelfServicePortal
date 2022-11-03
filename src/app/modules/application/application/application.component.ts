@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog, } from '@angular/material/dialog';
-import { Sort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
@@ -49,11 +49,16 @@ export class ApplicationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string) => {
+      const value: any = data[sortHeaderId];
+      return typeof value === "string" ? value.toLowerCase() : value;
+    };
     this.specificuserpatient();
+
   }
- 
+
   // calling api for all submitted forms
- 
+
   specificuserpatient() {
     if (this.username) {
       this.apiRequest.getPatientForms(this.username).subscribe((res: any) => {
@@ -123,7 +128,7 @@ export class ApplicationComponent implements OnInit {
       this.tableFetchedData = res;
 
       this.dataSource.data = this.tableFetchedData.detail.submittedForms;
-      this.totalDocCount = this.tableFetchedData.detail.totalDocument;
+      this.totalDocCount = this.tableFetchedData.detail.totalPages;
       this.pageIndex = this.tableFetchedData.detail.currentPage;
     })
   }
@@ -159,8 +164,8 @@ export class ApplicationComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(ProjectListDialogComponent,{
-      width:'35%'
+    const dialogRef = this.dialog.open(ProjectListDialogComponent, {
+      width: '35%'
     },);
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
