@@ -1,0 +1,15 @@
+::ng-deep .primary-tooltip {
+    margin-top: -10px !important;
+}
+
+.mat-column-name {
+    flex: 0 0 25% !important;
+    width: 25% !important;
+    word-break: break-all;
+    padding-right: 2%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    padding-top: 1%;
+}

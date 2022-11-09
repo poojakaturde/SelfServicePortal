@@ -1,0 +1,101 @@
+<mat-expansion-panel class="mb-3" *ngIf="true" [expanded]="step === 6" (opened)="setStep.emit(6)" hideToggle="true"
+    #sourceTarget>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon
+                [ngClass]="{'primary-font-color' : sourceTarget.expanded , 'text-secondary' : !sourceTarget.expanded}">
+                {{sourceTarget.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : sourceTarget.expanded , 'text-secondary' : !sourceTarget.expanded}">
+                Document Ingestion Channels </span>
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form [formGroup]="sourceChanelForm1" *ngIf="isSourceavailable" autocomplete="off">
+        <div class="source-target-container">
+            <div class="row">
+                <div class="col-md-3">
+                    <mat-label>Channel Type</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field" style="font-size: 12px;">
+                        <span matPrefix class="sourceChanelImg"><img
+                                [src]="sourceImgObj[sourceChanelForm1.value.sourceChannel]" height="20"
+                                width="20"></span>
+                        <mat-select id="testa1" [ngClass]="{'text-secondary': ! isCreateProjectOperation }"
+                            [disabled]="! isCreateProjectOperation " formControlName="sourceChannel"
+                            placeholder="{{sourceChanelForm1.value.sourceChannel}}"
+                            (valueChange)="sourceChanelChange($event)">
+                            <mat-option *ngFor="let src of sourceTypeList" (click)="srcImagePath = sourceImgObj[src]"
+                                [value]="src">
+                                <img [src]="sourceImgObj[src]" height="20" width="20" class="mr-2"> {{ src }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-3" *ngIf="sourceChanelForm1.value.sourceChannel !== 'GCP Bucket (Default)'">
+                    <mat-label>Channel Name</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field" style="font-size: 12px;">
+                        <input matInput type="text" autocomplete="off"
+                            (keyup)="validateChannelForm(); sourceDataChanged($event.target,'channelName')"
+                            formControlName="name">
+                        <!-- <mat-hint align="end">{{project.value.length}} / 75</mat-hint>    -->
+                        <mat-error>{{channelErrorMsg}} </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-3 pt-2">
+                    <mat-slide-toggle formControlName="status" *ngIf="false" class="pt-4" color="primary">
+                    </mat-slide-toggle>
+                </div>
+            </div>
+
+            <div class="row" formGroupName="details">
+                <div class="col-md-3"
+                    *ngFor="let f of sourceList[sourceChanelForm1.value.sourceChannel]; let i as index;">
+                    <mat-label>{{f.label}}</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field" style="font-size: 12px;">
+                        <input id="{{f.fieldId}}" autocomplete="off" *ngIf="f.type === 'file'" matInput
+                            type="{{f.type}}"
+                            (change)="onSourceTargetFileUpload(i,$event.target);sourceDataChanged($event.target,f.fieldName)"
+                            accept=".json">
+                        <input id="{{f.fieldId}}" autocomplete="off" *ngIf="f.type !== 'file'"
+                            (keyup)="sourceDataChanged($event.target,f.fieldName)" matInput
+                            type="{{showPassword ? f.type : 'text'}}" formControlName="{{f.fieldName}}">
+                        <mat-icon class="pwd_eyeicon" style="cursor: pointer;" *ngIf="f.type == 'password'" matSuffix
+                            (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}
+                        </mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="sourceChanelForm1.value.sourceChannel !== 'GCP Bucket (Default)'">
+                <div class="pl-2">
+                    <button mat-raised-button color="primary" data-toggle="modal" data-target="#TestConnectionModal"
+                        class="ml-2" (click)="isSourceTestVisible=false; SourceTestMessage = ''; onTestConnection()">
+                        Test Connection
+                    </button>
+                </div>
+            </div>
+            <div [ngClass]="{'invisible': !isSourceTestVisible }">
+                <div class="modal fade" id="TestConnectionModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document" style="width:auto ;">
+                        <div class="modal-content text-center">
+                            <div class="modal-body p-4">
+                                <div class="sourceMessage">
+                                    {{SourceTestMessage}}
+                                </div>
+                                <div class="mt-2">
+                                    <button mat-raised-button class="float-right" color="primary" class="ml-2"
+                                        data-dismiss="modal">ok</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</mat-expansion-panel>

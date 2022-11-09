@@ -1,0 +1,93 @@
+<mat-expansion-panel class="mb-3" [expanded]="step === 7" (opened)="setStep.emit(7)" hideToggle="true" #apiConfig>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon [ngClass]="{'primary-font-color' : apiConfig.expanded , 'text-secondary' : !apiConfig.expanded}">
+                {{apiConfig.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : apiConfig.expanded , 'text-secondary' : !apiConfig.expanded}">API
+                Configuration</span>
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- Table View-->
+    <div *ngIf="dataSourceForApi && dataSourceForApi.data.length; else elseApiConfigBlock">
+        <div class="example-container mat-elevation-z0 documentTable">
+            <table mat-table [dataSource]="dataSourceForApi">
+
+                <ng-container matColumnDef="apiName">
+                    <th class="font-14px" mat-header-cell *matHeaderCellDef>API Name </th>
+                    <td mat-cell *matCellDef="let element" matTooltipClass="primary-tooltip" #el
+                        [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.apiName : ''">
+                        <span matTooltipPosition="below">
+                            {{ element.apiName }} </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="endPoint">
+                    <th class="font-14px" mat-header-cell *matHeaderCellDef> End Point </th>
+                    <td mat-cell *matCellDef="let element" matTooltipClass="primary-tooltip" #el
+                        [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.endPoint : ''">
+                        <span matTooltipPosition="below">
+                            {{ element.endPoint }} </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="createdDate">
+                    <th class="font-14px" mat-header-cell *matHeaderCellDef> Created </th>
+                    <td mat-cell *matCellDef="let element"> {{element.createdDate | date: "MM-dd-yyyy HH:mm:ss"}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="updatedDate">
+                    <th class="font-14px" mat-header-cell *matHeaderCellDef> Updated </th>
+                    <td mat-cell *matCellDef="let element"> {{element.updatedDate | date: "MM-dd-yyyy HH:mm:ss" }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th class="font-14px" mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let element; let i = index;">
+
+                        <mat-slide-toggle *ngIf="apiPermission.update" [(ngModel)]="element.isEnabled"
+                            (change)="onApiStatusChange(i,$event,element)" (click)="$event.stopPropagation()"
+                            color="primary"></mat-slide-toggle> &nbsp;&nbsp;
+
+                        <button class="outline-none foregroundColor" mat-mini-fab
+                            *ngIf="apiPermission.view || apiPermission.update"
+                            (click)="openConfigDialog('Update',element,i); $event.stopPropagation();">
+                            <mat-icon>create</mat-icon>
+                        </button>&nbsp;&nbsp;
+
+                        <button mat-mini-fab class="foregroundColor"
+                            (click)="openConfigDialog('Delete',element,i); $event.stopPropagation();">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsForAPIs; sticky:true;"
+                    class="table-list-header secondary-background"></tr>
+                <tr mat-row *matRowDef="let row; ; let rowIndex=index; columns: displayedColumnsForAPIs;"
+                    (click)="openConfigDialog('Update',row,rowIndex)"></tr>
+            </table>
+
+        </div>
+    </div>
+    <ng-template #elseApiConfigBlock>
+        <div class="border rounded">
+            <h5 class="text-center text-secondary my-4"> {{ apiPermission.update ? 'Please add API Configurations.' :
+                'You do not have permissions to add an API.' }}</h5>
+        </div>
+    </ng-template>
+
+    <div *ngIf="apiPermission.update" class="row">
+        <div class="col-sm-9 py-2">
+            <button mat-raised-button color="primary" (click)="openConfigDialog('Add',{},0)">
+                Create API
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+        </div>
+    </div>
+</mat-expansion-panel>

@@ -1,0 +1,103 @@
+<mat-expansion-panel class="mb-3" [expanded]="step === 4" (opened)="setStep.emit(4)" hideToggle="true" #roles>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon [ngClass]="{'primary-font-color' : roles.expanded , 'text-secondary' : !roles.expanded}">
+                {{roles.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : roles.expanded , 'text-secondary' : !roles.expanded}">Roles</span>
+
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="container-fluid rounded greybg roles">
+        <div class="row">
+            <div class="col-md-2 d-flex justify-content-start align-items-center">
+                <div class="p-2"> Roles </div>
+            </div>
+            <div class="col-md-10 d-flex align-items-center">
+                <div class="p-2"> Users </div>
+            </div>
+        </div>
+
+        <div *ngFor="let rolesWithUsers of selectedProjectInfo.roles; let i = index">
+            <div class="row">
+                <div class="col-sm-2 mt-2 white_bg d-flex pt-3 pointer" (click)="showHideUsers(i)">
+                    <i class="fa fa-id-card primary-font-color mr-2" aria-hidden="true"></i>
+                    {{ rolesWithUsers.role }} <span class="ml-1"> ({{rolesWithUsers.users.length }}) </span>
+                </div>
+                <div class="col-sm-9 mt-2 white_bg py-2 px-0 ">
+                    <div class="row">
+                        <div class="col-sm-10 d-flex align-items-center pt-1 pointer" (click)="showHideUsers(i)">
+                            <mat-chip-list maxLength="3" [ngClass]="{'limitTextHeight': !showAssignedUsers[i]}"
+                                aria-label="roles">
+                                <mat-chip *ngFor="let assignedUser of rolesWithUsers.users; let j = index" #el
+                                    [matTooltip]="(el.scrollWidth > el.clientWidth) ? assignedUser : ''">
+                                    {{assignedUser}}
+                                    <mat-icon class="position" (click)="removeRole(i, assignedUser)" matChipRemove>
+                                        cancel</mat-icon>
+                                </mat-chip>
+                            </mat-chip-list>
+                        </div>
+                        <div class="col-sm-1 px-0 d-flex pt-2 pointer" (click)="showHideUsers(i)">
+                            <span class="text-more" *ngIf="rolesWithUsers.users.length >=5">
+                                {{ showAssignedUsers[i] ? 'Collapse': 'More' }}
+                            </span>
+                        </div>
+                        <div class="col-sm-1 d-flex " (click)="search.value=''; search.focus()">
+                            <button (click)="openUserListDP(userListDP, i)" mat-icon-button class="vdisabled-font-color"
+                                [ngClass]="{'primary-font-color' : rolesWithUsers.isEnabled }">
+                                <mat-icon color="primary" class="text-center">add_circle_outline</mat-icon>
+                            </button>
+                            <mat-select color="primary" class="hidedropDown" panelClass="over_riderMatSelect"
+                                [(ngModel)]="rolesWithUsers.users" #userListDP multiple>
+                                <div class="menuSmart_Search">
+                                    <input class="p-2 theme_color" placeholder="Search"
+                                        (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation();"
+                                        (keyup)="search.value.length === 0 ? search.value='': '' " #search>
+                                </div>
+                                <div *ngFor="let userName of userList"
+                                    [ngClass]="userName.toLowerCase( ).includes(search.value.toLowerCase( )) ? '' : 'd-none'">
+                                    <mat-option #el [matTooltip]="userName.length > 24 ? userName : ''"
+                                        [value]="userName"> {{ userName }}
+                                    </mat-option>
+                                </div>
+                                <div *ngIf="permissionList.length" class="text-center text-secondary p-2">
+                                    {{getUserList(search.value).length === 0 ? 'No Records Found !' : ''}}
+                                </div>
+                            </mat-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1 mt-2 white_bg d-flex pt-3 ">
+                    <mat-slide-toggle color="primary" [(ngModel)]="rolesWithUsers.isEnabled"></mat-slide-toggle>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9 py-2">
+            <button [disabled]="selectedRoles.length >= roleList.length" mat-raised-button color="primary"
+                [matMenuTriggerFor]="roleMenu" (click)="search.value=''; search.focus()">
+                Add Role
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+            <mat-menu #roleMenu="matMenu" class="customize" xPosition="after">
+                <div class="menuSmart_Search">
+                    <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                        autocomplete="off" (keydown)="$event.stopPropagation();"
+                        (keyup)="search.value.length === 0 ? search.value='': '' " #search>
+                </div>
+                <div *ngFor="let role of getpermissionList(search.value)">
+                    <button (click)="addRole(role)" mat-menu-item>{{ role }}</button>
+                </div>
+                <div *ngIf="getpermissionList.length" class="text-center text-secondary p-2">
+                    {{getpermissionList(search.value).length === 0 ? 'No Records Found !' : ''}}
+                </div>
+            </mat-menu>
+        </div>
+    </div>
+</mat-expansion-panel>

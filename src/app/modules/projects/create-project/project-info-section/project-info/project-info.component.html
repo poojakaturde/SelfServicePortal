@@ -1,0 +1,133 @@
+<mat-card class="border rounded p-3 mb-3 create_project">
+    <form [formGroup]="projectInfoForm" autocomplete="off">
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <mat-label>Project Name</mat-label>
+                <mat-form-field appearance="outline" class="example-form-field">
+                    <input maxlength="75" matInput autocomplete="off"
+                        (keyup)="sourceDataChanged($event.target,'projectName')"
+                        [ngClass]="{'disabled-project': isProjectReadOnly}" [readOnly]="isProjectReadOnly" type="text"
+                        #project formControlName="project" required (blur)="trim($event.target)">
+                    <mat-error>{{projectErrorMsg}}</mat-error>
+                    <mat-hint align="end">{{project.value.length}} / 75</mat-hint>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <mat-label>Lead</mat-label>
+                <mat-form-field appearance="outline" class="example-form-field">
+
+                    <mat-select formControlName="lead" class="select_panel" (click)="search.value=''; search.focus()">
+                        <div class="menuSmart_Search">
+                            <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                                (keydown)="$event.stopPropagation();"
+                                (keyup)="search.value.length === 0 ? search.value='': '' " #search>
+                        </div>
+                        <div *ngFor="let userName of getuserList(search.value)">
+                            <mat-option [value]="userName"> {{ userName }} </mat-option>
+                        </div>
+                        <div *ngIf="getuserList.length" class="text-center text-secondary p-2">
+                            {{getuserList(search.value).length === 0 ? 'No Records Found !' : ''}}
+                        </div>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <mat-label>Start Date</mat-label>
+                <mat-form-field color="primary" appearance="outline">
+                    <input formControlName="startDate" autocomplete="off" matInput [matDatepicker]="startDate">
+                    <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                    <mat-datepicker #startDate color="primary"></mat-datepicker>
+                    <mat-error *ngIf="projectInfoForm.controls['startDate'].hasError('required')">MM/DD/YYYY</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <mat-label>End Date</mat-label>
+                <mat-form-field color="primary" appearance="outline">
+                    <input formControlName="endDate" autocomplete="off" matInput [matDatepicker]="endDate"
+                        [min]="minDate" [disabled]="projectInfoForm.controls['startDate'].invalid">
+                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                    <mat-datepicker #endDate color="primary"></mat-datepicker>
+                    <mat-error *ngIf="projectInfoForm.controls['endDate'].hasError('required')">MM/DD/YYYY</mat-error>
+                    <mat-error *ngIf="!projectInfoForm.controls['endDate'].hasError('required'|| 'minDate' )">End date cannot
+                        be less
+                        than Start Date</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+                        <mat-label> Document Structure </mat-label>
+                        <mat-form-field appearance="outline">
+                            <mat-select formControlName="documentStructure" (valueChange)="onDocumentStructureChange()">
+                                <mat-option *ngFor="let docType of docTypeList" [value]="docType"> {{ docType }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="projectInfoForm?.controls?.processingEngine" class="col-sm-6 col-md-4 col-lg-3">
+                        <mat-label
+                            [ngClass]="{'disabled-font-color':projectInfoForm.controls['documentStructure'].value !== 'Structured'}">
+                            Processing Engine </mat-label>
+                        <mat-form-field appearance="outline">
+                            <mat-select formControlName="processingEngine"
+                                [disabled]="projectInfoForm.controls['documentStructure'].value !== 'Structured'">
+                                <mat-option class="customPanel" value="NN High"> NN High </mat-option>
+                                <mat-option value="NN Low"> NN Low </mat-option>
+                                <mat-option value="Brute Force"> Brute Force </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+                        <div class="py-3 mt-3">
+                            <mat-label>&nbsp;</mat-label>
+                            <mat-slide-toggle color="primary" formControlName="status"> Status </mat-slide-toggle>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-3 ">
+                        <div class="py-3 mt-3">
+                            <mat-label>&nbsp;</mat-label>
+                            <mat-slide-toggle color="primary" formControlName="autoAssignment"> Document Auto-Assignment
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-3"
+                [hidden]="projectInfoForm.controls['documentStructure'].value === 'Medical Chart'">
+                <mat-label>&nbsp;</mat-label>
+                <div class="py-3">
+                    <mat-slide-toggle (change)="addRemoveScoreCtrol()" formControlName="staightThroughProcessing"
+                        color="primary">
+                        Straight Through Process</mat-slide-toggle>
+                </div>
+            </div>
+
+            <div *ngIf="projectInfoForm.controls['score']" class="col-sm-6 col-md-4 col-lg-3"
+                [hidden]="projectInfoForm.controls['documentStructure'].value === 'Medical Chart'">
+                <mat-label [ngClass]="{'disabled-font-color':!projectInfoForm.value.staightThroughProcessing}">Document
+                    Score
+                    (0-100)</mat-label>
+                <mat-form-field appearance="outline" class="example-form-field">
+                    <input type="number" autocomplete="off" matInput min="0" max="100"
+                        (keyup)="setDocumentScore($event.target)" formControlName="score"
+                        [readonly]="!projectInfoForm.value.staightThroughProcessing">
+                    <mat-error>Number between 0-100</mat-error>
+                </mat-form-field>
+            </div>
+            <div *ngIf="projectInfoForm.controls['updated']" class="col-sm-6 col-md-4 col-lg-3">
+                <mat-label>Updated</mat-label>
+                <mat-form-field color="primary" appearance="outline">
+                    <input formControlName="updated" autocomplete="off" matInput>
+                </mat-form-field>
+            </div>
+            <div *ngIf="projectInfoForm.controls['created']" class="col-sm-6 col-md-4 col-lg-3">
+                <mat-label>Created</mat-label>
+                <mat-form-field color="primary" appearance="outline">
+                    <input formControlName="created" autocomplete="off" matInput>
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-card>

@@ -32,7 +32,7 @@
             <div class="row user-info-container">
                 <div class="col-sm-6 col-md-4 col-lg-4">
                     <mat-label>Project Name</mat-label>
-                    <mat-form-field appearance="outline" class="example-form-field" >
+                    <mat-form-field appearance="outline" class="example-form-field">
                         <input matInput type="text" autocomplete="off" [(ngModel)]="tableData.projectName">
                     </mat-form-field>
                 </div>
@@ -92,78 +92,70 @@
 
     <div class="row mb-3" *ngIf="dataSource.filteredData.length !== 0; else elseBlock">
         <div class="col-sm-12">
-            <div class="example-container mat-elevation-z0 documentTable">
-                <div class="mat-elevation-z8">
-                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+            <div class="example-container tableScroll mat-elevation-z0 documentTable">
+                <table mat-table id="matTable" [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
 
-                        <ng-container matColumnDef="status">
-                            <b>
-                                <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-                            </b>
-                            <td mat-cell *matCellDef="let element" class="text"> {{element.status}} </td>
-                        </ng-container>
+                    <ng-container matColumnDef="status">
+                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                        <td mat-cell *matCellDef="let element" class="text"> {{element.status}} </td>
+                    </ng-container>
 
-                        <ng-container matColumnDef="projectName">
-                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Project Name </th>
+                    <ng-container matColumnDef="projectName">
+                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Project Name </th>
 
-                            <td mat-cell *matCellDef="let element">
-                                <i class="fa fa-newspaper-o primary-font-color mr-2" aria-hidden="true"></i>
-                                <span matTooltipPosition="below"> {{ element.projectName }} </span>
-                            </td>
-                        </ng-container>
+                        <td mat-cell *matCellDef="let element">
+                            <i class="fa fa-newspaper-o primary-font-color mr-2" aria-hidden="true"></i>
+                            <span matTooltipPosition="below"> {{ element.projectName }} </span>
+                        </td>
+                    </ng-container>
 
-                        <ng-container matColumnDef="formName">
-                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Form Name </th>
-                            <td mat-cell *matCellDef="let element">
+                    <ng-container matColumnDef="formName">
+                        <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Form Name </th>
+                        <td mat-cell *matCellDef="let element">
 
-                                <span matTooltipPosition="below"> {{ element.formName }} </span>
-                            </td>
-                        </ng-container>
+                            <span matTooltipPosition="below"> {{ element.formName }} </span>
+                        </td>
+                    </ng-container>
 
+                    <ng-container matColumnDef="submittedBy">
+                        <b>
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Submitted By
+                            </th>
+                        </b>
+                        <td mat-cell *matCellDef="let element"> {{element.submittedBy}} </td>
+                    </ng-container>
 
+                    <ng-container matColumnDef="submittedOn">
+                        <b>
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Submitted On
+                            </th>
+                        </b>
+                        <td mat-cell *matCellDef="let element"> {{element.submittedOn | date : 'longDate'}} </td>
+                    </ng-container>
 
-                        <ng-container matColumnDef="submittedBy">
-                            <b>
-                                <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Submitted By
-                                </th>
-                            </b>
-                            <td mat-cell *matCellDef="let element"> {{element.submittedBy}} </td>
-                        </ng-container>
+                    <ng-container matColumnDef="action">
+                        <b>
+                            <th class="font-14px" mat-header-cell *matHeaderCellDef> Action </th>
+                        </b>
+                        <td mat-cell *matCellDef="let element let i = index;">
+                            <button class="outline-none foregroundColor" mat-mini-fab aria-label="edit role details">
+                                <mat-icon [routerLink]="['./view-form', element.id]">visibility</mat-icon>
+                            </button>&nbsp;
 
-                        <ng-container matColumnDef="submittedOn">
-                            <b>
-                                <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header>Submitted On
-                                </th>
-                            </b>
-                            <td mat-cell *matCellDef="let element"> {{element.submittedOn | date : 'longDate'}} </td>
-                        </ng-container>
+                            <button class="outline-none foregroundColor" mat-mini-fab aria-label="edit role details"
+                                (click)="deleteForm(element)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
 
-                        <ng-container matColumnDef="action">
-                            <b>
-                                <th class="font-14px" mat-header-cell *matHeaderCellDef> Action </th>
-                            </b>
-                            <td mat-cell *matCellDef="let element let i = index;">
-                                <button class="outline-none foregroundColor" mat-mini-fab
-                                    aria-label="edit role details">
-                                    <mat-icon [routerLink]="['./view-form', element.id]">visibility</mat-icon>
-                                </button>&nbsp;
-
-                                <button class="outline-none foregroundColor" mat-mini-fab aria-label="edit role details"
-                                    (click)="deleteForm(element)">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </td>
-                        </ng-container>
-
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
-
-                    <mat-paginator [pageSize]="tableData.size" [pageIndex]="pageIndex"
-                        [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons (page)="pageSizeChange($event)">
-                    </mat-paginator>
-                </div>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
             </div>
+            <mat-paginator [pageSize]="tableData.size" [pageIndex]="pageIndex" [length]="totalCount"
+                [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons (page)="pageSizeChange($event)">
+            </mat-paginator>
         </div>
     </div>
 

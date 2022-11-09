@@ -1,0 +1,136 @@
+<div [hidden]="action == 'Delete'" class="modal-dialog modal-lg modal-dialog-centered m-0 p-0">
+    <form [formGroup]="EditChannel" autocomplete="off">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <span class="primary-font-color">
+                        <i class="fa fa-globe"></i>
+                        Target Channel
+                    </span>
+                </h5>
+            </div>
+            <div class="modal-body p-3 channelBodyModal">
+
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 font-12">
+                        <mat-label>Channel Type</mat-label>
+                        <mat-form-field appearance="outline">
+                            <mat-select name="channelType" formControlName="channelType"
+                                (selectionChange)="onChannelTypeChange()" [(ngModel)]="channel_data.channelType">
+                                <mat-option value="POST Server"> POST Server </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="EditChannel.controls['channelType'].hasError('required')">Channel Type cannot
+                                be empty.</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-6 col-md-3 font-12">
+                        <mat-label>Channel Name</mat-label>
+                        <mat-form-field appearance="outline">
+                            <input autocomplete="off" formControlName="channelName" matInput
+                                (blur)="trim($event.target)" type="text">
+                            <mat-error *ngIf="EditChannel.controls['channelName'].hasError('required')">Name cannot be empty.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-6 col-md-2 font-12">
+                        <mat-label>Method Type</mat-label>
+                        <mat-form-field appearance="outline">
+                            <mat-select name="fieldType" formControlName="methodType">
+                                <mat-option *ngFor="let methodType of methodTypeField" [value]="methodType">
+                                    {{methodType}}</mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="EditChannel.controls['methodType'].hasError('required')">Cannot be empty.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 font-12">
+                        <mat-label>End Point</mat-label>
+                        <mat-form-field class="mb-2" appearance="outline">
+                            <input matInput autocomplete="off" formControlName="endPoint"
+                                (input)="showTestConButton = false" (blur)="trims($event.target)" type="text">
+                            <mat-error *ngIf="EditChannel.controls['endPoint'].hasError('required')">Endpoint cannot be
+                                empty.</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <mat-tab-group mat-stretch-tabs dynamicHeight>
+
+                    <!-------------------- Header request section -------------------->
+
+                    <mat-tab label="Header">
+                        <div class="col-sm-6 col-md-4 font-12">
+                            <mat-label>Secret Key</mat-label>
+                            <mat-form-field class="mb-2" appearance="outline">
+                                <input matInput autocomplete="off" formControlName="secretKey"
+                                    [(ngModel)]="channel_data.secretKey" type="password">
+                                <mat-error *ngIf="EditChannel.controls['secretKey'].hasError('required')">Secret Key cannot
+                                    be empty.</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </mat-tab>
+
+                    <!-------------------- Body request section -------------------->
+
+                    <mat-tab label="Body">
+                        <input matInput autocomplete="off" readonly type="text" value="[ ]">
+                    </mat-tab>
+
+                </mat-tab-group>
+
+                <div class="expandBody">
+
+                    <as-split direction="horizontal">
+                        <as-split-area divider.configSection="40">
+                            <as-split direction="vertical">
+                                <as-split-area>
+                                    <p></p>
+                                </as-split-area>
+                                <as-split-area [minSize]="15">
+                                    <div matTooltip="Expand from here">
+                                        <h6>Response</h6>
+                                    </div>
+                                    <pre>{{ ResBody | json }}</pre>
+                                </as-split-area>
+                            </as-split>
+                        </as-split-area>
+                    </as-split>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button mat-raised-button class="mr-2 btn-secondary" data-dismiss="modal" color="primary"
+                    (click)="onChannelTestConnection()">
+                    Test Connection
+                </button>
+
+                <button mat-raised-button [disabled]="!showTestConButton" class="mr-2 btn-secondary"
+                    (click)="doAction()" data-dismiss="modal" color="primary">{{action}}
+                </button>
+
+                <button mat-stroked-button color="accent" class="mr-2 btn-secondary" (click)="closeDialog()"
+                    data-dismiss="modal">Cancel</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<div [hidden]="action !== 'Delete'" class="modal-dialog modal-lg modal-dialog-centered m-0 p-0">
+    <div class="modal-content">
+        <div class="modal-body p-5">
+            <h5> Do you want to delete {{channel_data.channelName}} ?</h5>
+        </div>
+        <div class="modal-footer">
+            <button mat-raised-button class="mr-2 btn-secondary" (click)="doAction()" data-dismiss="modal"
+                color="primary">Confirm</button>
+            <button mat-stroked-button color="accent" class="mr-2 btn-secondary" (click)="closeDialog()"
+                data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>

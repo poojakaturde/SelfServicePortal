@@ -23,7 +23,7 @@ export class ApplicationComponent implements OnInit {
   tableFetchedData: any;
   pageSize: any;
   pageIndex: any;
-  totalDocCount: any;
+  totalCount: any;
   specific: any;
 
   tableData: any = {
@@ -39,28 +39,25 @@ export class ApplicationComponent implements OnInit {
     sortingOrder: false
   }
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   constructor(private apiRequest: RequestApiService, private snackbar: SnackbarService,
     private dialog: MatDialog, private router: Router) {
     const UI = JSON.parse(localStorage.getItem('__UI')!);
     this.username = UI.userName;
-    this.specificuserpatient();
+    this.fetchTableData();
   }
 
   ngOnInit(): void {
-    this.specificuserpatient();
   }
- 
+
   // calling api for all submitted forms
- 
+
   specificuserpatient() {
     if (this.username) {
       this.apiRequest.getPatientForms(this.username).subscribe((res: any) => {
         if (res && res.detail && res.detail.length) {
           this.FormList = res.detail;
           this.dataSource = new MatTableDataSource(this.FormList);
-          this.dataSource.paginator = this.paginator;
+          // this.dataSource.paginator = this.paginator;
         }
       })
     }
@@ -69,7 +66,7 @@ export class ApplicationComponent implements OnInit {
         if (res && res.detail && res.detail.length) {
           this.FormList = res.detail;
           this.dataSource = new MatTableDataSource(this.FormList);
-          this.dataSource.paginator = this.paginator;
+          // this.dataSource.paginator = this.paginator;
         }
       }, error => {
         this.snackbar.open('Failed To Fetch the Form List ..!', '', { type: 'warning' });
@@ -120,11 +117,15 @@ export class ApplicationComponent implements OnInit {
 
   fetchTableData() {
     this.apiRequest.searchFilter(this.tableData).subscribe((res: any) => {
-      this.tableFetchedData = res;
-
-      this.dataSource.data = this.tableFetchedData.detail.submittedForms;
-      this.totalDocCount = this.tableFetchedData.detail.totalDocument;
-      this.pageIndex = this.tableFetchedData.detail.currentPage;
+      if (res && res.detail) {
+        this.tableFetchedData = res;
+        this.dataSource.data = this.tableFetchedData.detail.submittedForms;
+        this.totalCount = this.tableFetchedData.detail.totalDynamicForms;
+        this.pageIndex = this.tableFetchedData.detail.currentPage;
+      } else {
+        this.dataSource.data = [];
+        this.totalCount = null;
+      }
     })
   }
 
@@ -132,6 +133,8 @@ export class ApplicationComponent implements OnInit {
     this.tableData.size = tableFilter.pageSize;
     this.tableData.page = tableFilter.pageIndex;
     this.fetchTableData();
+    const matTable: any = document.getElementById('matTable');
+    matTable.scrollIntoView();
   }
 
   clearFilter(filterBy: any) {
@@ -159,8 +162,8 @@ export class ApplicationComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(ProjectListDialogComponent,{
-      width:'35%'
+    const dialogRef = this.dialog.open(ProjectListDialogComponent, {
+      width: '35%'
     },);
 
     dialogRef.afterClosed().subscribe((result: boolean) => {

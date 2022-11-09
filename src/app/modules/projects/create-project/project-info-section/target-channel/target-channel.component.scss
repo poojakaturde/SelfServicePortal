@@ -1,0 +1,59 @@
+.table-container {
+    height: 400px;
+    overflow: auto;
+}
+
+mat-header-cell,
+mat-cell {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.example-container {
+    overflow: overlay;
+    width: 100%;
+    // min-height: 280px;
+}
+
+.mat-table {
+    max-height: calc(100vh - 195px) !important;
+    table-layout: fixed;
+}
+
+tr.mat-row {
+    cursor: pointer;
+}
+
+::ng-deep .primary-tooltip {
+    margin-top: -10px !important;
+}
+
+.mat-column-channelName,
+.mat-column-channelType,
+.mat-column-endPoint {
+    flex: 0 0 19% !important;
+    width: 19% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    padding-right: 2% !important;
+}
+
+.mat-column-updatedDate,
+.mat-column-createdDate {
+    flex: 0 0 15% !important;
+    width: 15% !important;
+}
+
+.mat-column-action {
+    flex: 0 0 15% !important;
+    width: 15% !important;
+    word-break: break-all;
+}

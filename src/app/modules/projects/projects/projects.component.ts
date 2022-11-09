@@ -1,19 +1,17 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
 import { Router } from '@angular/router';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
-import { SharedService } from 'src/app/core/services/shared-service/shared.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss'],
-  providers: [DatePipe]
+  styleUrls: ['./projects.component.scss']
 })
 
 export class ProjectsComponent implements OnInit {
@@ -49,7 +47,7 @@ export class ProjectsComponent implements OnInit {
   @ViewChild(MatSort, { static: false }) set content(sort: MatSort) {
     this.dataSource.sort = sort;
   }
-  constructor(private datePipe: DatePipe, private authenticationService: AuthenticationService, private router: Router,
+  constructor(private authenticationService: AuthenticationService, private router: Router,
     private snackbar: SnackbarService, private apiRequest: RequestApiService, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -144,9 +142,9 @@ export class ProjectsComponent implements OnInit {
   filterUserTableData(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.data = this.dataSource.data.map((x: any) => {
-      x.startDate = this.datePipe.transform(x.startDate, 'MM-dd-yyyy');
-      x.endDate = this.datePipe.transform(x.endDate, 'MM-dd-yyyy');
-      x.updated = this.datePipe.transform(x.updated, 'MM-dd-yyyy HH:mm:ss');
+      // x.startDate = this.datePipe.transform(x.startDate, 'MM-dd-yyyy');
+      // x.endDate = this.datePipe.transform(x.endDate, 'MM-dd-yyyy');
+      // x.updated = this.datePipe.transform(x.updated, 'MM-dd-yyyy HH:mm:ss');
       return { ...x };
     })
     this.dataSource.filterPredicate = function (data: any, filter: any): any {
@@ -178,11 +176,6 @@ export class ProjectsComponent implements OnInit {
       this.userInfoSunscription.unsubscribe();
     }
   }
-
-
-
-
-
 
 }
 

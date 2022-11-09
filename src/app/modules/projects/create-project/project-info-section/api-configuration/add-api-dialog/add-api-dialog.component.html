@@ -1,0 +1,250 @@
+<div [hidden]="action == 'Delete'" class="modal-dialog modal-lg modal-dialog-centered m-0 p-0">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+                <span class="primary-font-color">
+                    <i class="fa fa-connectdevelop"></i>
+                    API Configuration
+                </span>
+            </h5>
+        </div>
+        <div class="modal-body p-3 apiBodyModal">
+
+            <div class="row">
+                <div class="col-sm-6 col-md-4 font-12">
+                    <mat-label>API Name</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field">
+                        <input autocomplete="off" matInput (blur)="trim($event.target)" [(ngModel)]="api_data.apiName"
+                            type="text">
+                    </mat-form-field>
+                    <div *ngIf="!api_data.apiName" class="text-danger errorMsg error-msg-pos small">Please enter an API
+                        name.</div>
+                </div>
+
+                <div class="col-sm-6 col-md-2 font-12">
+                    <mat-label>Method Type</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field">
+                        <mat-select name="fieldType" [(ngModel)]="api_data.methodType">
+                            <mat-option *ngFor="let methodType of methodTypeField" [value]="methodType">{{methodType}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div *ngIf="!api_data.methodType" class="text-danger errorMsg error-msg-pos small">Please select a
+                        method.</div>
+                </div>
+
+                <div class="col-sm-6 col-md-6 font-12">
+                    <mat-label>End Point</mat-label>
+                    <mat-form-field appearance="outline" class="example-form-field">
+                        <input matInput autocomplete="off" (blur)="trims($event.target)" [(ngModel)]="api_data.endPoint"
+                            type="text">
+                    </mat-form-field>
+                    <div *ngIf="!api_data.endPoint" class="text-danger errorMsg error-msg-pos small">Please enter an end
+                        point URL.</div>
+                </div>
+
+            </div>
+
+            <mat-tab-group mat-stretch-tabs dynamicHeight>
+                <!-------------------- Param section -------------------->
+
+                <mat-tab label="Param">
+                    <div class="pt-2 pb-2" *ngIf="api_data.params?.length < 1">
+                        <button mat-raised-button
+                            [disabled]="!api_data.apiName || !api_data.endPoint || !api_data.methodType" color="primary"
+                            (click)="addParamField()">
+                            Add Field
+                        </button>
+                    </div>
+                    <div class="customContainer">
+                        <div class="row pt-1" *ngFor="let param of api_data.params ; let i = index">
+                            <div class="ml-3 mt-4 mr-4" *ngIf="i == 0">
+                                <button mat-raised-button color="primary" (click)="addParamField()">
+                                    Add Field
+                                </button>
+                            </div>
+                            <div [ngStyle]="{'margin-left': i==0 ? '0%': '17%' }" class="col-sm-6 col-md-4 font-12">
+                                <mat-label *ngIf="i == 0"> Key </mat-label>
+                                <mat-form-field appearance="outline" class="example-form-field">
+                                    <input matInput autocomplete="off" type="text" name="fieldName-{{i}}"
+                                        [(ngModel)]="param.key">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 font-12">
+                                <mat-label *ngIf="i == 0">Value</mat-label>
+                                <mat-form-field appearance="outline" class="example-form-field">
+                                    <input name="field1-{{i}}" autocomplete="off"
+                                        (blur)="param.value=(param.value).trim()" [(ngModel)]="param.value" matInput
+                                        type="text">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="pl-3" [ngStyle]="{'margin-top': i==0 ? '25px': '6px' }">
+                                <button mat-mini-fab class="ml-3 foregroundColor" (click)="removeParamField(i)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+
+                <!-------------------- Header section -------------------->
+
+                <mat-tab label="Header">
+                    <div class="pt-2 pb-2" *ngIf="api_data.headers?.length < 1">
+                        <button mat-raised-button
+                            [disabled]="!api_data.apiName || !api_data.endPoint || !api_data.methodType" color="primary"
+                            (click)="addHeaderField()">
+                            Add Field
+                        </button>
+                    </div>
+                    <div class="customContainer">
+                        <div class="row pt-1" *ngFor="let header of api_data.headers ; let j = index">
+                            <div class="ml-3 mt-4 mr-4" *ngIf="j == 0">
+                                <button mat-raised-button color="primary" (click)="addHeaderField()">
+                                    Add Field
+                                </button>
+                            </div>
+                            <div [ngStyle]="{'margin-left': j==0 ? '0%': '17%' }" class="col-sm-6 col-md-4 font-12">
+                                <mat-label *ngIf="j == 0"> Key </mat-label>
+                                <mat-form-field appearance="outline" class="example-form-field">
+                                    <input matInput type="text" name="key-{{j}}" autocomplete="off"
+                                        [(ngModel)]="header.key">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 font-12">
+                                <mat-label *ngIf="j == 0">Value</mat-label>
+                                <mat-form-field appearance="outline" class="example-form-field">
+                                    <input name="field1-{{j}}" (blur)="header.value=(header.value).trim()"
+                                        autocomplete="off" [(ngModel)]="header.value" matInput type="text">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="pl-3" [ngStyle]="{'margin-top': j==0 ? '25px': '6px' }">
+                                <button mat-mini-fab class="ml-3 foregroundColor" (click)="removeHeaderField(j)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </mat-tab>
+
+                <!-------------------- Body request section -------------------->
+
+                <mat-tab label="Body" [disabled]="api_data.methodType=='GET' || api_data.methodType=='DELETE'">
+                    <div class="pt-2 pb-2" *ngIf="api_data.body?.length < 1">
+                        <button mat-raised-button
+                            [disabled]="!api_data.apiName || !api_data.endPoint || !api_data.methodType" color="primary"
+                            (click)="addBodyField()">
+                            Add Field
+                        </button>
+                    </div>
+                    <div class="customContainer">
+                        <div class="row pt-1" *ngFor="let reqBody of api_data.body; let k = index">
+                            <div class="ml-3 mt-4 mr-1" *ngIf="k == 0">
+                                <button mat-raised-button color="primary" (click)="addBodyField()">
+                                    Add Field
+                                </button>
+                            </div>
+                            <div [ngStyle]="{'margin-left': k==0 ? '0%': '14%' }" class="col-sm-6 col-md-3 font-12">
+                                <mat-label *ngIf="k == 0">Key </mat-label>
+                                <mat-form-field appearance="outline" class="example-form-field">
+                                    <input matInput autocomplete="off" type="text" name="fieldName-{{k}}"
+                                        [(ngModel)]="reqBody.fieldName">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-6 col-md-2 font-12">
+                                <mat-label *ngIf="k == 0">Field Type</mat-label>
+                                <mat-form-field appearance="outline" class="example-form-field">
+                                    <mat-select name="fieldType-{{k}}" [(ngModel)]="reqBody.type">
+                                        <mat-option *ngFor="let type of typeField" [value]="type">{{type}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-sm-6 col-md-4 font-12">
+                                <div *ngIf="reqBody.type">
+                                    <mat-label *ngIf="k == 0">Value</mat-label>
+                                    <mat-form-field appearance="outline" class="example-form-field">
+                                        <input name="field1-{{k}}" autocomplete="off" *ngIf="reqBody.type === 'text'"
+                                            [(ngModel)]="reqBody.value" matInput type="text">
+                                        <input name="field2-{{k}}" autocomplete="off" *ngIf="reqBody.type === 'number'"
+                                            [(ngModel)]="reqBody.value" matInput type="number">
+                                        <input name="field3-{{k}}" autocomplete="off"
+                                            *ngIf="reqBody.type === 'password'" [(ngModel)]="reqBody.value" matInput
+                                            type="password">
+                                        <input name="field4-{{k}}" autocomplete="off" *ngIf="reqBody.type === 'file'"
+                                            #fileInput (change)="onFileUpload($event.target)" matInput
+                                            type="file">
+                                        <input name="field5-{{k}}" autocomplete="off" *ngIf="reqBody.type === 'email'"
+                                            [(ngModel)]="reqBody.value" matInput type="email">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div [ngStyle]="{'margin-top': k==0 ? '25px': '6px' }">
+                                <button mat-mini-fab class="ml-3 foregroundColor" (click)="removeBodyField(k)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+
+            <div class="expandBody">
+
+                <as-split direction="horizontal">
+                    <as-split-area divider.configSection="40">
+                        <as-split direction="vertical">
+                            <as-split-area>
+                                <p></p>
+                            </as-split-area>
+                            <as-split-area [minSize]="15">
+                                <div matTooltip="Expand from here">
+                                    <h6>Response</h6>
+                                </div>
+                                <pre>{{ ResBody | json }}</pre>
+                            </as-split-area>
+                        </as-split>
+                    </as-split-area>
+                </as-split>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button mat-raised-button class="mr-2 btn-secondary" data-dismiss="modal" color="primary"
+                [disabled]="!api_data.apiName || !api_data.methodType || !api_data.endPoint"
+                (click)="onApiTestConnection()">
+                Test Connection
+            </button>
+
+            <button mat-raised-button
+                [disabled]="!api_data.apiName || !api_data.methodType || !api_data.endPoint || !apiPermission.update"
+                class="mr-2 btn-secondary" (click)="doAction()" data-dismiss="modal" color="primary">{{action}}
+            </button>
+
+            <button mat-stroked-button color="accent" class="mr-2 btn-secondary" (click)="closeDialog()"
+                data-dismiss="modal">Cancel</button>
+        </div>
+
+    </div>
+</div>
+
+<div [hidden]="action != 'Delete'" class="modal-dialog modal-lg modal-dialog-centered m-0 p-0">
+    <div class="modal-content">
+        <div class="modal-body p-5">
+            <h5> Do you want to delete {{api_data.apiName}} ?</h5>
+        </div>
+        <div class="modal-footer">
+            <button mat-raised-button class="mr-2 btn-secondary" (click)="doAction()" data-dismiss="modal"
+                color="primary">Confirm</button>
+            <button mat-stroked-button color="accent" class="mr-2 btn-secondary" (click)="closeDialog()"
+                data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>

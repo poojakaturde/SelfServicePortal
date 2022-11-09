@@ -1,0 +1,20 @@
+.customContainer {
+    max-height: 160px;
+    overflow: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+}
+
+.apiBodyModal {
+    max-height: 520px !important;
+    overflow: auto;
+}
+
+.errorMsg {
+    margin-top: -20px;
+}
+
+.expandBody {
+    height: 20vh;
+    overflow: auto;
+}

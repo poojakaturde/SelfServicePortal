@@ -1,0 +1,94 @@
+<mat-expansion-panel [expanded]="step === 1" (opened)="setStep.emit(1)" hideToggle #variableSection>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon
+                [ngClass]="{'primary-font-color' : variableSection.expanded , 'text-secondary' : !variableSection.expanded}">
+                {{variableSection.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : variableSection.expanded , 'text-secondary' : !variableSection.expanded}">
+                Variables</span>
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="">
+        <div *ngIf="dataSourceForVariables.data.length; else elseVariablesBlock">
+            <mat-table mat-table [dataSource]="dataSourceForVariables" class="mat-elevation-z8 h-25">
+                <ng-container matColumnDef="attributeName">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="dataType">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Validation </mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"> {{element.validationType}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="validation">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Value </mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element"> {{element.value}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px pl-3"> Action </mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element; let i = index" class="text-center pl-3">
+                        <button mat-mini-fab class="foregroundColor" (click)="deleteVariable(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsForTestVariable;sticky:true;"
+                    class="table-list-header secondary-background"></mat-header-row>
+                <mat-row mat-row *matRowDef="let row; columns: displayedColumnsForTestVariable;">{{row.attributeName}}
+                </mat-row>
+            </mat-table>
+        </div>
+        <ng-template #elseVariablesBlock>
+            <div class="border rounded">
+                <h5 class="text-center text-secondary my-4"> Please Add Variables ...</h5>
+            </div>
+        </ng-template>
+        <button [disabled]="false" style="width: 150px;" class="mt-1" mat-raised-button color="primary"
+            data-toggle="modal" data-target="#exampleModal" (click)="setfocus()">
+            Add Variable
+            <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <div class="modal fade" id="exampleModal">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 580px; min-width: 100px;">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div>
+                            <mat-form-field appearance="outline" style="font-size: 11px;">
+                                <mat-label>Variable name</mat-label>
+                                <input matInput [(ngModel)]="variablesForm.name" #variableName id="variableName"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field appearance="outline" style="font-size: 11px;">
+                                <mat-label>Validation Type</mat-label>
+                                <mat-select [(ngModel)]="variablesForm.validationType" #validationType
+                                    id="validationType" aria-label="Default select example ">
+                                    <mat-option *ngFor="let item of operatorListByValidation | keyvalue"
+                                        value="{{item.key}}">{{item.key}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div>
+                            <mat-form-field appearance="outline" style="font-size: 11px;">
+                                <mat-label>Default Value</mat-label>
+                                <input matInput #VariableValue [(ngModel)]="variablesForm.value" id="VariableValue"
+                                    autocomplete="off">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button mat-stroked-button color="accent" class="ml-2" data-dismiss="modal">Cancel</button>
+                        <button mat-raised-button [disabled]="!(variableName.value && validationType.value)"
+                            class="ml-2" color="primary" (click)=" addVariable(variablesForm)">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-expansion-panel>

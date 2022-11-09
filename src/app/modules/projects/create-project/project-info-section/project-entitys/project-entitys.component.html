@@ -1,0 +1,73 @@
+<mat-expansion-panel class="mb-3" *ngIf="projectInfoForm.controls['documentStructure'].value === 'Medical Chart'"
+    [expanded]="step === 3" (opened)="setStep.emit(3)" hideToggle="true" #entity>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon [ngClass]="{'primary-font-color' : entity.expanded , 'text-secondary' : !entity.expanded}">
+                {{entity.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : entity.expanded , 'text-secondary' : !entity.expanded}">Entity</span>
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div *ngIf="dataSource.data.length; else elseEntityBlock">
+        <mat-table mat-table [dataSource]="dataSource" class="mat-elevation-z8 h-25">
+
+            <ng-container matColumnDef="attributeName">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Field Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dataType">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Data type </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.dataType}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="validation">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Validation </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.validationType}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px pl-3"> Action </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element; let i = index" class="text-center pl-3">
+                    <button mat-mini-fab class="foregroundColor" (click)="deleteAttribute(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"
+                class="table-list-header secondary-background"></mat-header-row>
+            <mat-row mat-row *matRowDef="let row; columns: displayedColumns;">{{row.attributeName}}</mat-row>
+        </mat-table>
+    </div>
+    <div *ngIf="projectInfoForm.controls['documentStructure'].value === 'Medical Chart'" class="py-2 ">
+        <button [disabled]="dataSource.data.length >= attributeListRCM.length" mat-raised-button color="primary"
+            [matMenuTriggerFor]="fieldOptions" (click)="search.value=''; search.focus()">
+            Add Entity
+            <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <mat-menu #fieldOptions="matMenu" class="customize" xPosition="after">
+            <div class="menuSmart_Search">
+                <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation();" autocomplete="off"
+                    (keyup)="search.value.length === 0 ? search.value='': '' " #search>
+            </div>
+            <div *ngFor="let attribute of getattributeListRCM(search.value)">
+                <button (click)="addFields(attribute)" mat-menu-item>
+                    {{ attribute.name }}</button>
+            </div>
+            <div *ngIf="getattributeListRCM.length" class="text-center text-secondary p-2">
+                {{getattributeListRCM(search.value).length === 0 ? 'No Records Found !' : ''}}
+            </div>
+        </mat-menu>
+    </div>
+
+    <ng-template #elseEntityBlock>
+        <div class="border rounded">
+            <h5 class="text-center text-secondary my-4"> Please Add Entity ...</h5>
+        </div>
+    </ng-template>
+</mat-expansion-panel>

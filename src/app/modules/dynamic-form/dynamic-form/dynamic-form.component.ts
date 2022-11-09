@@ -16,24 +16,13 @@ export class DynamicFormComponent implements OnInit {
   displayedColumns = ['name', 'createdBy', 'status', 'created', 'updated', 'action'];
   dataSource: any = new MatTableDataSource([]);
 
-  @ViewChild(MatPaginator, { static: false })
-  set paginator(value: MatPaginator) {
-    if (this.dataSource) {
-      this.dataSource.paginator = value;
-    }
-  }
-
-  @ViewChild(MatSort, { static: false }) set content(sort: MatSort) {
-    this.dataSource.sort = sort;
-  }
-
   formList: any;
   editFormData: any;
   changedStatus: any;
   pageSize: any;
   pageIndex: any;
-  totalDocCount: any;
   tableFetchedData: any;
+  totalCount: any;
   statusList: string[] = ['enabled', 'disabled'];
 
   tableData: any = {
@@ -49,16 +38,10 @@ export class DynamicFormComponent implements OnInit {
   }
 
   constructor(private apiRequest: RequestApiService, private snackbar: SnackbarService,) {
-    this.getFormList();
+    this.fetchTableData();
   }
 
-  ngOnInit(): void {
-    this.dataSource.sortingDataAccessor = (data: any, sortHeaderId: string) => {
-      const value: any = data[sortHeaderId];
-      return typeof value === "string" ? value.toLowerCase() : value;
-    };
-
-  }
+  ngOnInit(): void { }
 
   searchByFilter(searchFilter: any) {
     const obj = {
@@ -77,12 +60,15 @@ export class DynamicFormComponent implements OnInit {
 
   fetchTableData() {
 
-    this.apiRequest.searchTableData(this.tableData).subscribe(res => {
+    this.apiRequest.searchTableData(this.tableData).subscribe((res: any) => {
       if (res && res.detail) {
         this.tableFetchedData = res;
         this.dataSource.data = this.tableFetchedData.detail.dynamicForms;
-        this.totalDocCount = this.tableFetchedData.detail.totalPages;
+        this.totalCount = this.tableFetchedData.detail.totalDynamicForms;
         this.pageIndex = this.tableFetchedData.detail.currentPage;
+      } else {
+        this.dataSource.data = [];
+        this.totalCount = null;
       }
     }, error => {
       this.snackbar.open('Failed To Fetch the Filtered Form List ...!', '', { type: 'warning' });
@@ -114,18 +100,6 @@ export class DynamicFormComponent implements OnInit {
     this.fetchTableData();
   }
 
-
-  getFormList() {
-    this.apiRequest.getDynamicForms()
-      .subscribe((res: any) => {
-        if (res && res.detail && res.detail.length) {
-          this.dataSource.data = res.detail.sort();
-        }
-      }, error => {
-        this.snackbar.open('Failed To Fetch the Form List ...!', '', { type: 'warning' });
-      })
-  }
-
   changeStatus(data: any) {
     if (data.status == 'enabled') {
       this.changedStatus = 'disabled';
@@ -143,6 +117,8 @@ export class DynamicFormComponent implements OnInit {
     this.tableData.size = tableFilter.pageSize;
     this.tableData.page = tableFilter.pageIndex;
     this.fetchTableData();
+    const matTable: any = document.getElementById('matTable');
+    matTable.scrollIntoView();
   }
 
   private formatDate(dateObj: any) {

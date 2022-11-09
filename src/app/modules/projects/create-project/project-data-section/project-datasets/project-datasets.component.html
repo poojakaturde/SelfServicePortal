@@ -1,0 +1,111 @@
+<mat-expansion-panel *ngIf="true" class="mb-3" [expanded]="step === 5" (opened)="setStep.emit(5)" hideToggle="true"
+    #dataset>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon [ngClass]="{'primary-font-color' : dataset.expanded , 'text-secondary' : !dataset.expanded}">
+                {{dataset.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : dataset.expanded , 'text-secondary' : !dataset.expanded}">Datasets</span>
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- Table View-->
+    <div *ngIf="dataSourceForDatasets.data.length; else elseDatasetBlock">
+        <mat-table mat-table [dataSource]="dataSourceForDatasets" class="mat-elevation-z8 h-25">
+
+            <ng-container matColumnDef="name">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Dataset Name </mat-header-cell>
+                <mat-cell matTooltipClass="primary-tooltip" #el
+                    [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.datasetName : ''"
+                    *matCellDef="let element">
+                    <span matTooltipPosition="below"> {{element.datasetName}} </span>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pages">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Category Name </mat-header-cell>
+                <mat-cell matTooltipClass="primary-tooltip" #el
+                    [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.categoryName : ''"
+                    *matCellDef="let element">
+                    <span matTooltipPosition="below"> {{element.categoryName}} </span>
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="trained">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> File Name </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.datasetFile}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="created">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px" [hidden]="true"> Created
+                </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element" [hidden]="true"> {{element.created | date: "MM-dd-yyyy
+                    HH:mm:ss"}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="updated">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Updated </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.updated | date: "MM-dd-yyyy HH:mm:ss"}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Action </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element; let i = index" class="text-center">
+                    <mat-slide-toggle [checked]="element.status=='enabled'" (change)="onDatasetsStatusChange(i,$event)"
+                        color="primary"></mat-slide-toggle>&nbsp;&nbsp;
+                    <button mat-mini-fab class="foregroundColor" (click)="toDeleteDatasets(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsForTemplates;sticky:true;"
+                class="table-list-header secondary-background"></mat-header-row>
+            <mat-row mat-row *matRowDef="let row; columns: displayedColumnsForTemplates;">{{row.attributeName}}
+            </mat-row>
+        </mat-table>
+    </div>
+    <ng-template #elseDatasetBlock>
+        <div class="border rounded">
+            <h5 class="text-center text-secondary my-4"> Please Add Dataset ...</h5>
+        </div>
+    </ng-template>
+    <div class="row">
+        <div class="col-sm-9 py-2">
+            <button [disabled]="dataSourceForDatasets.data.length >= datasetList.length" mat-raised-button
+                color="primary" [matMenuTriggerFor]="main_menu" (click)="search.value=''; search.focus()">
+                Add Dataset
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+            <mat-menu #main_menu="matMenu" class="customize">
+                <div class="menuSmart_Search">
+                    <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation();" autocomplete="off"
+                        (keyup)="search.value.length === 0 ? search.value='': '' " #search>
+                </div>
+                <ng-container *ngFor="let category of getcategoryList(search.value)">
+                    <button mat-menu-item [matMenuTriggerFor]="sub_menu"
+                        [disabled]="categoryLists[category].used === categoryLists[category].present"
+                        (mouseover)="selectedCategory = category"> {{ category }} </button>
+                    <mat-menu #sub_menu="matMenu" class="customize">
+                        <div *ngFor="let dataset of datasetList   ; let i = index">
+                            <button *ngIf="dataset.categoryName === selectedCategory"
+                                [disabled]="addedObj[dataset.categoryName+'-'+dataset.datasetName]"
+                                (click)="addSelectedDatasetsList(dataset)" mat-menu-item>
+                                {{ dataset.datasetName }}
+                            </button>
+                        </div>
+                    </mat-menu>
+                </ng-container>
+                <div *ngIf="getcategoryList.length" class="text-center text-secondary p-2">
+                    {{getcategoryList(search.value).length === 0 ? 'No Records Found !' : ''}}
+                </div>
+            </mat-menu>
+        </div>
+    </div>
+</mat-expansion-panel>

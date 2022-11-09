@@ -18,6 +18,12 @@
                 <span class="ml-2"> {{isExpanded ? icons.name : ''}} </span>
             </mat-list-item>
 
+            <mat-list-item [routerLinkActive]="['active']" #rla="routerLinkActive" [routerLink]="['/home/application']">
+                <img class="img-fluid" matTooltip="{{!isExpanded ? 'Application' : ''}}" [matTooltipPosition]="'right'"
+                src="../../../../assets/icons/Icons_Application.svg" alt="Application">
+                <span class="ml-2"> {{isExpanded ? 'Application' : ''}} </span>
+            </mat-list-item>
+
             <button (click)="isExpanded = !isExpanded" mat-mini-fab
                 class="outline-none btn-collapse-icon foregroundColor" aria-label="open close sidebav button">
                 <mat-icon> {{isExpanded ? 'keyboard_arrow_left' : 'keyboard_arrow_right'}} </mat-icon>

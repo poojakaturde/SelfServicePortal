@@ -91,7 +91,7 @@ export class RequestApiService {
   }
 
   searchFilter(obj: any) {
-    return this.http.get(this.url + "/dynamicform/search_criteria?landingPage=submittedForm" + obj)
+    return this.http.post(this.url + "/dynamicform/search_criteria?landingPage=submittedForm", obj)
   }
 
 
@@ -200,4 +200,30 @@ export class RequestApiService {
     return this.http.get(this.url + "/permission")
   }
 
+
+  getSourceList() {
+    return this.http.get(this.url + "/channel/src")
+  }
+
+  testSourceConnection(channel: any, obj: any) {
+    return this.http.get(this.url + "/channel/" + channel, obj)
+  }
+
+  testSourceConnection1(channel: any, obj: any, file: any) {
+
+    const fd = new FormData();
+    fd.append('multipartFile', file, file.name);
+    fd.append('gdriveModel', new Blob([
+      JSON.stringify(
+        obj
+      )], {
+      type: "application/json"
+    }));
+
+    return this.http.post(this.url + "/channel/" + channel, fd)
+  }
+
+  testTargetChannelConnection(reqObj: any) {
+    return this.http.post(this.url + '/api/data/testTargetChannelConnection', reqObj)
+  }
 }

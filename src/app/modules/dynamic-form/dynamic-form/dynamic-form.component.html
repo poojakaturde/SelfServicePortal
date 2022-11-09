@@ -74,8 +74,8 @@
 
     <div class="row mb-3" *ngIf="dataSource.filteredData.length !== 0; else elseBlock">
         <div class="col-sm-12">
-            <div class="example-container mat-elevation-z0 documentTable">
-                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+            <div class="example-container tableScroll mat-elevation-z0 documentTable">
+                <table mat-table id="matTable" [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
 
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Form Name </th>
@@ -100,7 +100,8 @@
                             </span>
                             <span *ngIf="element.status == 'disabled'">
                                 <mat-slide-toggle color="primary" checked="false"
-                                    (toggleChange)="changeStatus(element)"></mat-slide-toggle>
+                                    (toggleChange)="changeStatus(element)">
+                                </mat-slide-toggle>
                             </span>
                         </td>
                     </ng-container>
@@ -135,13 +136,13 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-
-                <mat-paginator [pageSize]="tableData.size" [pageIndex]="pageIndex"
-                    [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons (page)="pageSizeChange($event)">
-                </mat-paginator>
             </div>
+            <mat-paginator [pageSize]="tableData.size" [pageIndex]="pageIndex" [length]="totalCount"
+                [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons (page)="pageSizeChange($event)">
+            </mat-paginator>
         </div>
     </div>
+
     <ng-template #elseBlock>
         <div class="card bg-default h-100-pb30 opacity95">
             <div class="card-body pb-0 text-center">

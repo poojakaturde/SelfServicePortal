@@ -1,0 +1,89 @@
+<mat-expansion-panel class="mb-3" *ngIf="projectInfoForm.controls['documentStructure'].value === 'Structured'"
+    [expanded]="step === 1" (opened)="setStep.emit(1)" hideToggle="true" #templates>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon [ngClass]="{'primary-font-color' : templates.expanded , 'text-secondary' : !templates.expanded}">
+                {{templates.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : templates.expanded , 'text-secondary' : !templates.expanded}">Templates</span>
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- Table View-->
+    <div *ngIf="dataSourceForTemplates.data && dataSourceForTemplates.data.length; else elseTemplateBlock">
+        <mat-table mat-table [dataSource]="dataSourceForTemplates" class="mat-elevation-z8 h-25">
+            <ng-container matColumnDef="name">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Name </mat-header-cell>
+                <mat-cell matTooltipClass="primary-tooltip" #el
+                    [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.name : ''" *matCellDef="let element">
+                    <span matTooltipPosition="below"> {{element.name}} </span>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="pages">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Pages </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.pageCount}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="trained">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Training </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.trained=="yes"?'Completed':'Not Completed'}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="created">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Created </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.created | date: "MM-dd-yyyy HH:mm:ss"}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="updated">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Updated </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.updated | date: "MM-dd-yyyy HH:mm:ss"}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Action </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element; let i = index" class="text-center">
+                    <mat-slide-toggle [checked]="element.status=='enabled'" (change)="onTemplateStatusChange(i,$event)"
+                        color="primary"></mat-slide-toggle> &nbsp;&nbsp;
+                    <button mat-mini-fab class="foregroundColor" (click)="toDeleteTemplate(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumnsForTemplates;sticky:true;"
+                class="table-list-header secondary-background"></mat-header-row>
+            <mat-row mat-row *matRowDef="let row; columns: displayedColumnsForTemplates;">{{row.attributeName}}
+            </mat-row>
+        </mat-table>
+    </div>
+    <ng-template #elseTemplateBlock>
+        <div class="border rounded">
+            <h5 class="text-center text-secondary my-4"> Please Add Template ...</h5>
+        </div>
+    </ng-template>
+    <div class="row">
+        <div class="col-sm-9 py-2">
+            <button [disabled]="dataSourceForTemplates.data.length >= templateList.length" mat-raised-button
+                color="primary" (click)="search.value=''; search.focus()" [matMenuTriggerFor]="selectedTemplateMenu">
+                Add Template
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+            <mat-menu #selectedTemplateMenu="matMenu" class="customize" xPosition="after">
+                <div class="menuSmart_Search">
+                    <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation();" (keyup)="search.value.length === 0 ? search.value='': '' "
+                        #search>
+                </div>
+                <div *ngFor="let template of gettemplateList(search.value)">
+                    <button (click)="addSelectedTemleteList(template)" mat-menu-item>{{ template.name }}</button>
+                </div>
+                <div *ngIf="gettemplateList.length" class="text-center text-secondary p-2">
+                    {{gettemplateList(search.value).length === 0 ? 'No Records Found !' : ''}}
+                </div>
+
+            </mat-menu>
+        </div>
+    </div>
+</mat-expansion-panel>

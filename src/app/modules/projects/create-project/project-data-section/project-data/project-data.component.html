@@ -1,0 +1,96 @@
+<mat-expansion-panel class="mb-3 " [expanded]="step === 7" (opened)="setStep.emit(7)" hideToggle="true" #templateData>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon
+                [ngClass]="{'primary-font-color' : templateData.expanded , 'text-secondary' : !templateData.expanded}">
+                {{templateData.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : templateData.expanded , 'text-secondary' : !templateData.expanded}">Project
+                Data</span>
+            <!-- Self aware panel -->
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- Table View-->
+    <div class="project_data" *ngIf="projectInfoForm?.controls?.documentStructure?.value === 'Structured' ">
+        <div *ngIf="dataSourceForTemplates.data.length; else elseTemplateDataBlock">
+
+            <div class="container-fluid mb-2">
+
+                <div class="row" *ngFor="let template of dataSourceForTemplates.filteredData">
+                    <div class="col-md-12 mb-2">
+                        <div class="row">
+                            <div class="col-sm-12 d-flex align-items-center">
+                                <span class="mt-2 h6">
+                                    {{template.name}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mb-2">
+                        <div class="row project_element" *ngFor="let attributeList of template.templateAttributes">
+                            <div class="col-sm-4 mb-2" *ngFor="let attribute of attributeList.attributes">
+                                <div class="pt-2 pl-2 border rounded_5px project-attribute">
+                                    <h6 class="opacity3">{{attribute.name}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="project_data" *ngIf="projectInfoForm?.controls?.documentStructure?.value !== 'Structured' ">
+        <div *ngIf="drlAttributeList.length; else elseTemplateDataBlock">
+
+            <div class="container-fluid mb-2">
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <div class="row">
+                            <div class="col-sm-12 d-flex align-items-center">
+                                <span *ngIf="projectInfoForm?.controls?.documentStructure?.value !== 'Medical Chart'"
+                                    class="mt-2 h6">
+                                    Attributes List
+                                </span>
+                                <span *ngIf="projectInfoForm?.controls?.documentStructure?.value === 'Medical Chart'"
+                                    class="mt-2 h6">
+                                    PatientDemographics
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mb-2">
+                        <div class="row project_element">
+                            <div class="col-sm-4 mb-2" *ngFor="let attribute of drlAttributeList">
+                                <div class="pt-2 pl-2 border rounded_5px project-attribute">
+                                    <h6 class="opacity3">{{attribute.name}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template #elseTemplateDataBlock>
+        <div class="border rounded">
+            <h5 class="text-center text-secondary my-4"
+                *ngIf="projectInfoForm?.controls?.documentStructure?.value === 'Structured' ">
+                Template is not added
+            </h5>
+            <h5 class="text-center text-secondary my-4"
+                *ngIf="projectInfoForm?.controls?.documentStructure?.value !== 'Structured' && projectInfoForm?.controls?.documentStructure?.value !== 'Medical Chart' ">
+                Project attributes not added
+            </h5>
+            <h5 class="text-center text-secondary my-4"
+                *ngIf="projectInfoForm?.controls?.documentStructure?.value === 'Medical Chart' ">
+                PatientDemographics Entity not added
+            </h5>
+        </div>
+    </ng-template>
+
+</mat-expansion-panel>

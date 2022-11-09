@@ -1,0 +1,195 @@
+<mat-expansion-panel class="mb-3"
+    *ngIf="projectInfoForm.controls['documentStructure'].value === 'Free-Form' || projectInfoForm.controls['documentStructure'].value === 'Semi-Structured'"
+    [expanded]="step === 2" (opened)="setStep.emit(2)" hideToggle="true" #attributes>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon
+                [ngClass]="{'primary-font-color' : attributes.expanded , 'text-secondary' : !attributes.expanded}">
+                {{attributes.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : attributes.expanded , 'text-secondary' : !attributes.expanded}">Attributes</span>
+
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div *ngIf="dataSource.data.length; else elseAttributeBlock">
+        <mat-table mat-table [dataSource]="dataSource" class="mat-elevation-z8 h-25">
+
+            <ng-container matColumnDef="attributeName">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Field Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dataType">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class=""> Data type </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.dataType}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="mandatoryAttributes">
+                <mat-header-cell mat-header-cell *matHeaderCellDef
+                    class="font-14px d-flex align-items-center justify-content-center">
+                    <mat-checkbox color="primary" [(ngModel)]="isMandatoryHeader" (change)="toggleCheckboxAll($event)">
+                    </mat-checkbox> Mandatory Attributes
+                </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element" class="d-flex align-items-center justify-content-center">
+                    <mat-checkbox color="primary" [(ngModel)]="element.isMandatory"
+                        (change)="checkUncheckIsMandatory()"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="validation">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Validation </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.validationType}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px pl-3"> Action </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element; let i = index" class="text-center pl-3">
+                    <button mat-mini-fab class="foregroundColor" (click)="deleteAttribute(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"
+                class="table-list-header secondary-background"></mat-header-row>
+            <mat-row mat-row *matRowDef="let row; columns: displayedColumns;">{{row.attributeName}}</mat-row>
+        </mat-table>
+    </div>
+    <ng-template #elseAttributeBlock>
+        <div class="border rounded">
+            <h5 class="text-center text-secondary my-4"> Please Add Fields ...</h5>
+        </div>
+    </ng-template>
+
+    <div class="py-2">
+        <button mat-raised-button color="primary" [matMenuTriggerFor]="fieldOptions"
+            (click)="search.value=''; search.focus()" [disabled]="dataSource.data.length >= attributeList.length"
+            *ngIf="projectInfoForm.controls['documentStructure'].value === 'Free-Form'">
+            Add Fields <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" [matMenuTriggerFor]="fieldOptions"
+            (click)="search.value=''; search.focus()" [disabled]="dataSource.data.length >= attributeListChange.length"
+            *ngIf="projectInfoForm.controls['documentStructure'].value === 'Semi-Structured'">
+            Add Fields <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <mat-menu #fieldOptions="matMenu" xPosition="after" class="customize">
+            <div class="menuSmart_Search">
+                <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation();" autocomplete="off"
+                    (keyup)="search.value.length === 0 ? search.value='': '' " #search>
+            </div>
+            <div *ngIf="projectInfoForm.controls['documentStructure'].value === 'Free-Form'">
+                <div *ngFor="let attribute of getattributeList(search.value)">
+                    <button (click)="addFields(attribute)" mat-menu-item>{{ attribute.name }}</button>
+                </div>
+                <div *ngIf="getattributeList.length" class="text-center text-secondary p-2">
+                    {{getfilterattributeList(search.value,attributeList).length === 0 ? 'No Records Found !' : ''}}
+                </div>
+            </div>
+            <div *ngIf="projectInfoForm.controls['documentStructure'].value === 'Semi-Structured'">
+                <div *ngFor="let attribute of getattrListForSemiStructure(search.value)">
+                    <button (click)="addFields(attribute)" mat-menu-item>{{ attribute.name }}</button>
+                </div>
+                <div *ngIf="getattrListForSemiStructure.length" class="text-center text-secondary p-2">
+                    {{getfilterattributeList(search.value,attributeListChange).length === 0 ? 'No Records Found !' :
+                    ''}}
+                </div>
+            </div>
+        </mat-menu>
+    </div>
+
+</mat-expansion-panel>
+
+<mat-expansion-panel class="mb-3" *ngIf="projectInfoForm.value.processingEngine ==='Returns'" [expanded]="step === 3"
+    (opened)="setStep.emit(3)" hideToggle="true" #inmarHeaders>
+    <mat-expansion-panel-header>
+        <mat-panel-title class="justify-content-start">
+            <mat-icon
+                [ngClass]="{'primary-font-color' : inmarHeaders.expanded , 'text-secondary' : !inmarHeaders.expanded}">
+                {{inmarHeaders.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}
+            </mat-icon>
+            <span class="ml-2"
+                [ngClass]="{'primary-font-color' : inmarHeaders.expanded , 'text-secondary' : !inmarHeaders.expanded}">Table
+                Content</span>
+
+        </mat-panel-title>
+        <mat-panel-description>
+            <span class="invisible">Processing Time Taken By The Documents</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div *ngIf="columnHeadersForInmar.data.length; else elseInmarHeaderBlock">
+        <mat-table mat-table [dataSource]="columnHeadersForInmar" class="mat-elevation-z8 h-25">
+
+            <ng-container matColumnDef="attributeName">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Field Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dataType">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Data type </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.dataType}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="mandatoryAttributes">
+                <mat-header-cell mat-header-cell *matHeaderCellDef
+                    class="font-14px d-flex align-items-center justify-content-center">
+                    <mat-checkbox color="primary" [(ngModel)]="isMandatoryHeader" (change)="toggleCheckboxAll($event)">
+                    </mat-checkbox> Mandatory Attributes
+                </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element" class="d-flex align-items-center justify-content-center">
+                    <mat-checkbox color="primary" [(ngModel)]="element.isMandatory"
+                        (change)="checkUncheckIsMandatory()"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="validation">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px"> Validation </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element"> {{element.validationType}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <mat-header-cell mat-header-cell *matHeaderCellDef class="font-14px pl-3"> Action </mat-header-cell>
+                <mat-cell mat-cell *matCellDef="let element; let i = index" class="text-center pl-3">
+                    <button mat-mini-fab class="foregroundColor" (click)="deleteColumnHeadersForInmar(i)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns;sticky:true;"
+                class="table-list-header secondary-background"></mat-header-row>
+            <mat-row mat-row *matRowDef="let row; columns: displayedColumns;">{{row.attributeName}}</mat-row>
+        </mat-table>
+    </div>
+
+    <ng-template #elseInmarHeaderBlock>
+        <div class="border rounded">
+            <h5 class="text-center text-secondary my-4"> Please Add Fields ...</h5>
+        </div>
+    </ng-template>
+
+    <div class="py-2" *ngIf="projectInfoForm.controls['documentStructure'].value === 'Semi-Structured'">
+        <button mat-raised-button color="primary" [matMenuTriggerFor]="fieldOptions"
+            (click)="search.value=''; search.focus()"
+            [disabled]="columnHeadersForInmar.data.length >= headerListForInmar.length">
+            Add Fields <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <mat-menu #fieldOptions="matMenu" xPosition="after" class="customize">
+            <div class="menuSmart_Search">
+                <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                    (keydown)="$event.stopPropagation();" autocomplete="off"
+                    (keyup)="search.value.length === 0 ? search.value='': '' " #search>
+            </div>
+            <div
+                *ngFor="let attribute of getColumnHeadersForInmar(search.value)">
+                <button (click)="addColumnHeaders(attribute)" mat-menu-item>{{ attribute.name }}</button>
+            </div>
+            <div *ngIf="getColumnHeadersForInmar.length" class="text-center text-secondary p-2">
+                {{getfilterColumnHeaders(search.value,headerListForInmar).length === 0 ? 'No Records Found !' : ''}}
+            </div>
+        </mat-menu>
+    </div>
+</mat-expansion-panel>
