@@ -20,24 +20,6 @@
     position: relative;
 }
 
-.table-container {
-    height: 400px;
-    overflow: auto;
-}
-
-mat-header-cell,
-mat-cell {
-    word-wrap: break-word !important;
-    white-space: unset !important;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
-    -ms-hyphens: auto;
-    -moz-hyphens: auto;
-    -webkit-hyphens: auto;
-    hyphens: auto;
-}
-
 .mat-column-email,
 .mat-column-name,
 .mat-column-assignedProjects {
@@ -60,17 +42,6 @@ mat-cell {
 .mat-column-action {
     flex: 0 0 10% !important;
     width: 10% !important;
-}
-
-.example-container {
-    overflow: overlay;
-    width: 100%;
-    min-height: 280px;
-}
-
-.mat-table {
-    max-height: calc(100vh - 195px) !important;
-    table-layout: fixed;
 }
 
 tr.mat-row {
@@ -175,7 +146,22 @@ tr.mat-row {
 }
 
 .mat-icon {
-    font-size: 24px !important;
     height: 24px !important;
     width: 24px !important;
+}
+
+.mat-table {
+    max-height: calc(100vh - 175px) !important;
+    table-layout: fixed;
+    overflow: auto;
+}
+
+.mat-header-cell {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.material {
+    font-size: 24px !important;
 }

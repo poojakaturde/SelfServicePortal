@@ -98,4 +98,9 @@ export class RoleComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  pageSizeChange() {
+    const matTable: any = document.getElementById('matTable');
+    matTable.scrollIntoView();
+  }
 }

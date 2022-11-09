@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="row px-2 align-items-top gridicon mb-3">
+    <div class="row px-1 align-items-top gridicon mb-3">
         <div class="col-lg-7 col-md-3 col-sm-4 col-5 pt-3 pr-0">
             <ul class="nav nav-pills">
                 <li class="nav-item">
@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid px-4">
+<div class="container-fluid px-3">
     <div class="row" *ngIf="showCards">
         <ng-container *ngIf="enabledProjList.filteredData.length !== 0;else elseBlock1">
             <div class="col-xl-4 col-md-6 mb-3" *ngFor="let project of enabledProjList.filteredData">
@@ -40,9 +40,10 @@
                             <div class="col-8">
                                 <h5 class="my-0 project-name" #el
                                     [matTooltip]="(el.scrollWidth > el.clientWidth) ? project.projectName : ''">
-                                    <span class="mr-2"
-                                        [ngClass]="{'primary-font-color' : project.isEnabled , 'text-secondary' : !project.isEnabled}">
-                                        <mat-icon class="docStIconPos">{{ docStructureIconMap[project.documentStructure]
+                                    <span class="mr-2">
+                                        <mat-icon class="docStIconPos"
+                                            [ngClass]="{'primary-font-color' : project.isEnabled , 'text-secondary' : !project.isEnabled}">
+                                            {{ docStructureIconMap[project.documentStructure]
                                             }} </mat-icon>
                                     </span>{{project.projectName}}
                                 </h5>
@@ -86,10 +87,8 @@
                         <div class="mb-1">
                             <div class="row">
                                 <div class="col-6 col-sm-2 pr-0 d-flex-center">
-                                    <!-- <h6 *ngIf="project.startDate; else noStartDate"> {{project.totalValidationCount | number: '.0-2'}} <br> <span class="text-secondary font-12" style=" color: #575757;">sec  </span></h6> -->
                                     <h6 *ngIf="project.startDate; else noStartDate"> {{project.totalValidationCount}}
                                     </h6>
-                                    <!-- <span >12345678</span> -->
                                     <ng-template #noStartDate>
                                         <h6>No Data Available</h6>
                                     </ng-template>
@@ -100,9 +99,7 @@
                                     </span>
                                 </div>
                                 <div class="col-6 col-sm-4 pr-0 d-flex-center">
-                                    <!-- <h6 *ngIf="project.endDate; else noEndDate"> {{project.totalValidationTime | number: '.0-2'}} <br> <span class="text-secondary font-12" style=" color: #575757;">sec  </span></h6> -->
                                     <h6 *ngIf="project.endDate; else noEndDate"> {{project.totalValidationTime}} </h6>
-                                    <!-- <span >540h 44m 60s</span> -->
                                     <ng-template #noEndDate>
                                         <h6>No Data Available</h6>
                                     </ng-template>
@@ -135,17 +132,11 @@
 
         <div *ngIf="dataSource.filteredData.length !== 0; else elseBlock">
             <div class="example-container  mt-4 documentTable">
-                <table mat-table matSort multiTemplateDataRows [dataSource]="dataSource" matSortActive="updated"
-                    matSortDirection="desc" matSortDisableClear>
-                    <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+                <table mat-table id="matTable" matSort multiTemplateDataRows [dataSource]="dataSource"
+                    matSortActive="updated" matSortDirection="desc" matSortDisableClear>
 
                     <ng-container matColumnDef="projectName">
                         <th class="font-14px" mat-header-cell mat-sort-header *matHeaderCellDef> Projects </th>
-                        <!-- <td [routerLink]="['./edit-project', element.projectId]" mat-cell *matCellDef="let element" matTooltip="{{element.projectName}}" >  
-                    <mat-icon class="docStIconPos">{{ docStructureIconMap[project.documentStructure] }} </mat-icon>
-                    <i class="fa fa-briefcase primary-font-color mr-2"  [ngClass]="{'primary-font-color' : element.isEnabled , 'text-secondary' : !element.isEnabled}" aria-hidden="true"></i>
-                    {{element.projectName}} 
-                </td> -->
                         <td [routerLink]="['./edit-project', element.projectId]" mat-cell *matCellDef="let element"
                             matTooltipClass="primary-tooltip" #el
                             [matTooltip]="(el.scrollWidth > el.clientWidth) ? element.projectName : ''">
@@ -203,7 +194,8 @@
                         [routerLink]="['./edit-project', row.projectId]"></tr>
                 </table>
             </div>
-            <mat-paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons>
+            <mat-paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons
+                (page)="pageSizeChange()">
             </mat-paginator>
         </div>
         <ng-template #elseBlock>
@@ -218,5 +210,4 @@
             </div>
         </ng-template>
     </div>
-    <!-- <mat-paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons></mat-paginator> -->
 </div>

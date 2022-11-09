@@ -170,12 +170,17 @@ export class ProjectsComponent implements OnInit {
   toggleCardView(value: any) {
     this.showCards = value;
   }
- 
+
 
   ngOnDestroy() {
     if (this.userInfoSunscription) {
       this.userInfoSunscription.unsubscribe();
     }
+  }
+
+  pageSizeChange() {
+    const matTable: any = document.getElementById('matTable');
+    matTable.scrollIntoView();
   }
 
 }

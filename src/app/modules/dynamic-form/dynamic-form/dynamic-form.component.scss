@@ -1,18 +1,11 @@
-.tableScroll {
-    height: 50vh;
-    overflow: auto !important;
+.example-container {
+    max-height: 61vh !important;
+    table-layout: fixed;
+    overflow: auto;
 }
 
 .mat-header-cell {
     position: sticky;
     top: 0;
     z-index: 100;
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgb(205, 205, 205);
 }

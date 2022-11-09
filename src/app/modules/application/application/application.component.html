@@ -93,7 +93,7 @@
 
     <div class="row mb-3" *ngIf="dataSource.filteredData.length !== 0; else elseBlock">
         <div class="col-sm-12">
-            <div class="example-container tableScroll mat-elevation-z0 documentTable">
+            <div class="example-container mat-elevation-z0 ">
                 <table mat-table id="matTable" [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
 
                     <ng-container matColumnDef="status">

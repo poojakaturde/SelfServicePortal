@@ -167,8 +167,10 @@ body.body,
 .example-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
   min-width: 300px;
-  min-height: 61vh;
+  min-height: 280px;
+  max-height: 70vh;
   overflow: overlay;
   opacity: 0.95;
   background-color: #fff;

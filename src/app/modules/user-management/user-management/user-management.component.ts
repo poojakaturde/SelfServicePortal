@@ -154,4 +154,9 @@ export class UserManagementComponent implements OnInit {
     return 0;
   }
 
+  pageSizeChange() {
+    const matTable: any = document.getElementById('matTable');
+    matTable.scrollIntoView();
+  }
+
 }

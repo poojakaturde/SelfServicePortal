@@ -251,6 +251,7 @@ export class CreateEditUserComponent implements OnInit {
       name: this.rem(el)
     })
   }
+  
   trimEmail(el: any) {
     this.userInfoForm.patchValue({
       email: this.rem(el)

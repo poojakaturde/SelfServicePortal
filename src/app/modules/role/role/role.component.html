@@ -21,9 +21,9 @@
 
     <div *ngIf="dataSource.filteredData.length != 0; else elseBlock">
         <div class="example-container mat-elevation-z0 documentTable">
-            <table mat-table matSort multiTemplateDataRows [dataSource]="dataSource" matSortActive="updated"
+            <table mat-table id="matTable" matSort multiTemplateDataRows [dataSource]="dataSource" matSortActive="updated"
                 matSortDirection="desc" matSortDisableClear>
-       
+
                 <ng-container matColumnDef="role">
                     <th class="font-14px" mat-header-cell mat-sort-header *matHeaderCellDef>Roles </th>
 
@@ -68,7 +68,8 @@
             </table>
 
         </div>
-        <mat-paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons></mat-paginator>
+        <mat-paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 50, 100, 200]" showFirstLastButtons
+            (page)="pageSizeChange()"></mat-paginator>
     </div>
     <ng-template #elseBlock>
         <div *ngIf="isRecordLoaded" class="card bg-default h-100-pb30 opacity95">

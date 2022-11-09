@@ -22,22 +22,6 @@
   position: relative;
 }
 
-.table-container {
-  height: 400px;
-  overflow: auto;
-}
-
-.example-container {
-  overflow: overlay;
-  width: 100%;
-}
-
-.mat-table {
-
-  max-height: calc(100vh - 185px) !important;
-  table-layout: fixed;
-}
-
 .mat-column-projectName,
 .mat-column-documentStructure,
 .mat-column-projectLead {
@@ -187,6 +171,7 @@ div#demo {
 
 .project-name {
   font-size: 1.25rem;
+  line-height: 1.2;
 }
 
 .mat-mini-fab {
@@ -198,4 +183,16 @@ div#demo {
   font-size: 24px !important;
   height: 24px !important;
   width: 24px !important;
+}
+
+.mat-table {
+  max-height: calc(100vh - 185px) !important;
+  table-layout: fixed;
+  overflow: auto;
+}
+
+.mat-header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
