@@ -1,3 +1,9 @@
+
+
+
+
+
+
 <div class="d-flex flex-row ml-2 py-2" style="width: -webkit-fill-available">
   <div [ngClass]="{'step-current-first' : Stepper[0].status === 'current'}" style="width: 20%;">
     <div class="chevron-first py-1"
@@ -20,227 +26,276 @@
     </div>
   </div>
 </div>
-
-<div [ngClass]="Stepper[0].status === 'current'?'':'d-none'">
-  <div class="container-fluid p-3 body_bgtrans ">
-
-    <form [formGroup]="projectInfoForm" autocomplete="off">
-      <mat-card class="border rounded p-3 mb-3 create_project">
-        <div class="row">
-          <div class="col-sm-6 col-md-4 col-lg-3">
-            <mat-label>Project Name</mat-label>
-            <mat-form-field appearance="outline" class="example-form-field">
-              <input maxlength="75" matInput (keyup)="sourceDataChanged($event.target,'projectName')"
-                [ngClass]="{'disabled-project': isProjectReadOnly}" [readOnly]="isProjectReadOnly" type="text" #project
-                formControlName="project" required (blur)="trim($event.target)">
-              <mat-error>{{projectErrorMsg}}</mat-error>
-              <mat-hint [align]="'end'">{{project.value.length}} / 75</mat-hint>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6 col-md-4 col-lg-3">
-            <mat-label>Lead</mat-label>
-            <mat-form-field appearance="outline" class="example-form-field">
-              <mat-select formControlName="lead" #lead class="select_panel" (click)="search.value=''; search.focus()">
-                <div class="menuSmart_Search">
-                  <input class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
-                    (keydown)="$event.stopPropagation();" (keyup)="search.value.length === 0 ? search.value='': '' "
-                    #search style="width: 100%; border:none;">
+<div style="width: 99%;margin-left:0.5%">
+  <mat-accordion>
+    <mat-expansion-panel (opened)="panelOpenState = true"
+    (closed)="panelOpenState = false">
+  <mat-expansion-panel-header>
+  <mat-panel-title>
+  
+  <b>
+    Create Project &nbsp;<i class="fa fa-id-card primary-font-color mr-2"></i>
+  </b>
+  </mat-panel-title>
+  <mat-panel-description>
+  <!-- Currently I am {{panelOpenState ? 'open' : 'closed'}}   -->
+  </mat-panel-description>
+  </mat-expansion-panel-header>
+  
+  <div [ngClass]="Stepper[0].status === 'current'?'':'d-none'">
+    <div class="container-fluid p-3 body_bgtrans ">
+  
+      <form [formGroup]="projectInfoForm" autocomplete="off">
+        <mat-card class="border rounded p-3 mb-3 create_project">
+          <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <mat-label>Project Name</mat-label>
+              <mat-form-field appearance="outline" class="example-form-field">
+                <input maxlength="75" matInput (keyup)="sourceDataChanged($event.target,'projectName')"
+                  [ngClass]="{'disabled-project': isProjectReadOnly}" [readOnly]="isProjectReadOnly" type="text" #project
+                  formControlName="project" required (blur)="trim($event.target)">
+                <mat-error>{{projectErrorMsg}}</mat-error>
+                <mat-hint [align]="'end'">{{project.value.length}} / 75</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <mat-label>Lead</mat-label>
+              <mat-form-field appearance="outline" class="example-form-field"  >
+                <!-- <mat-select formControlName="lead" class="select_panel">
+                        <mat-option *ngFor="let userName of userList" [value]="userName"> {{ userName }} </mat-option>
+                    </mat-select> -->
+                <mat-select formControlName="lead" #lead class="select_panel" (click)="search.value=''; search.focus()">
+                  <div class="menuSmart_Search">
+                    <input  class="p-2 theme_color" placeholder="Search" (click)="$event.stopPropagation()"
+                      (keydown)="$event.stopPropagation();" (keyup)="search.value.length === 0 ? search.value='': '' "
+                      #search style="width: 100%; border:none;">
+                  </div>
+                  <div *ngFor="let userName of getuserList(search.value)">
+                    <mat-option [value]="userName"> {{ userName }} </mat-option>
+                  </div>
+                  <div *ngIf="getuserList.length" class="text-center text-secondary p-2">
+                    {{getuserList(search.value).length === 0 ? 'No Records Found !' : ''}}
+                  </div>
+  
+                </mat-select>
+                <mat-error *ngIf="projectInfoForm.controls['lead'].hasError('required')">Please enter the lead name.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <mat-label>Start Date</mat-label>
+              <mat-form-field color="primary" appearance="outline">
+                <input formControlName="startDate" matInput [matDatepicker]="startDate">
+                <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                <mat-datepicker #startDate color="primary"></mat-datepicker>
+                <mat-error *ngIf="projectInfoForm.controls['startDate'].hasError('required')">Please enter the date in MM/DD/YYYY format.</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <mat-label>End Date</mat-label>
+              <mat-form-field color="primary" appearance="outline">
+                <input formControlName="endDate" matInput [matDatepicker]="endDate" [min]="minDate"
+                  [disabled]="projectInfoForm.controls['startDate'].invalid">
+                <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                <mat-datepicker #endDate color="primary"></mat-datepicker>
+                <mat-error *ngIf="projectInfoForm.controls['endDate'].hasError('required')">Please enter the date in MM/DD/YYYY format.</mat-error>
+                <mat-error *ngIf="!projectInfoForm.controls['endDate'].hasError('required'|| 'minDate' )">End date cannot be
+                  less
+                  than Start Date</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                  <mat-label> Document Structure </mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-select formControlName="documentStructure" (valueChange)="onDocumentStructureChange()">
+                      <mat-option *ngFor="let docType of docTypeList" [value]="docType"> {{ docType }} </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="projectInfoForm.controls['documentStructure'].hasError('required')">Please enter the Document Structure name.</mat-error>
+                  </mat-form-field>
                 </div>
-                <div *ngFor="let userName of getuserList(search.value)">
-                  <mat-option [value]="userName"> {{ userName }} </mat-option>
-                </div>
-                <div *ngIf="getuserList.length" class="text-center text-secondary p-2">
-                  {{getuserList(search.value).length === 0 ? 'No Records Found !' : ''}}
-                </div>
-
-              </mat-select>
-              <mat-error *ngIf="projectInfoForm.controls['lead'].hasError('required')">Please enter the lead name.
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6 col-md-4 col-lg-3">
-            <mat-label>Start Date</mat-label>
-            <mat-form-field color="primary" appearance="outline">
-              <input formControlName="startDate" matInput [matDatepicker]="startDate">
-              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-              <mat-datepicker #startDate color="primary"></mat-datepicker>
-              <mat-error *ngIf="projectInfoForm.controls['startDate'].hasError('required')">Please enter the date in
-                MM/DD/YYYY format.</mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-6 col-md-4 col-lg-3">
-            <mat-label>End Date</mat-label>
-            <mat-form-field color="primary" appearance="outline">
-              <input formControlName="endDate" matInput [matDatepicker]="endDate" [min]="minDate"
-                [disabled]="projectInfoForm.controls['startDate'].invalid">
-              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-              <mat-datepicker #endDate color="primary"></mat-datepicker>
-              <mat-error *ngIf="projectInfoForm.controls['endDate'].hasError('required')">Please enter the date in
-                MM/DD/YYYY format.</mat-error>
-              <mat-error *ngIf="!projectInfoForm.controls['endDate'].hasError('required'|| 'minDate' )">End date cannot
-                be
-                less
-                than Start Date</mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-sm-12">
-            <div class="row">
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <mat-label> Document Structure </mat-label>
-                <mat-form-field appearance="outline">
-                  <mat-select formControlName="documentStructure" (valueChange)="onDocumentStructureChange()">
-                    <mat-option *ngFor="let docType of docTypeList" [value]="docType"> {{ docType }} </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="projectInfoForm.controls['documentStructure'].hasError('required')">Please enter the
-                    Document Structure name.</mat-error>
-                </mat-form-field>
-              </div>
-              <div *ngIf="projectInfoForm.controls['processingEngine']" class="col-sm-6 col-md-4 col-lg-3"
-                [ngClass]="{'d-none':(projectInfoForm.controls['documentStructure'].value !== 'Structured') && (projectInfoForm.controls['documentStructure'].value !== 'Semi-Structured')}">
-                <mat-label
+                <div *ngIf="projectInfoForm?.controls?.['processingEngine']" class="col-sm-6 col-md-4 col-lg-3"
+                  [ngClass]="{'d-none':(projectInfoForm.controls['documentStructure'].value !== 'Structured') && (projectInfoForm.controls['documentStructure'].value !== 'Semi-Structured')}">
+                  <mat-label
                   [ngClass]="{'disabled-font-color':(projectInfoForm.controls['documentStructure'].value !== 'Structured') && (projectInfoForm.controls['documentStructure'].value !== 'Semi-Structured')}">
-                  Processing Engine </mat-label>
-                <mat-form-field appearance="outline">
-                  <mat-select formControlName="processingEngine"
+                    Processing Engine </mat-label>
+                  <mat-form-field appearance="outline" >
+                    <mat-select formControlName="processingEngine"                   
                     (selectionChange)="onProcessingEngineChange($event.value)"
                     [disabled]="projectInfoForm.controls['documentStructure'].value !== 'Structured' && projectInfoForm.controls['documentStructure'].value !=='Semi-Structured'">
                     <mat-option *ngFor="let data of processingEngineAttributes" [value]="data">
                       {{data}}
                     </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="projectInfoForm.controls['processingEngine'].hasError('required')">Please enter a
-                    processing engine. </mat-error>
-                </mat-form-field>
-              </div>
-              <div *ngIf="projectInfoForm.controls['updated']" class="col-sm-6 col-md-4 col-lg-3">
-                <mat-label>Updated</mat-label>
-                <mat-form-field color="primary" appearance="outline">
-                  <input formControlName="updated" matInput>
-                </mat-form-field>
-              </div>
-              <div *ngIf="projectInfoForm.controls['created']" class="col-sm-6 col-md-4 col-lg-3">
-                <mat-label>Created</mat-label>
-                <mat-form-field color="primary" appearance="outline">
-                  <input formControlName="created" matInput>
-                </mat-form-field>
-              </div>
-
-            </div>
-          </div>
-          <div class="col-sm-12">
-            <div class="row ml-1 mr-1 border">
-              <div class="col-sm-6 col-md-4 col-lg-2">
-                <div class="my-3 border-right">
-                  <mat-label>Status&nbsp; &nbsp;</mat-label>
-                  <mat-slide-toggle color="primary" formControlName="status"> </mat-slide-toggle>
+                    </mat-select>
+                    <mat-error *ngIf="projectInfoForm.controls['processingEngine'].hasError('required')">Please enter a processing engine. </mat-error>
+                  </mat-form-field>
                 </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="my-3 pl-5 ml-5 border-right">
-                  <mat-label>Document Auto-Assignment&nbsp; &nbsp;</mat-label>
-                  <mat-slide-toggle color="primary" formControlName="autoAssignment">
-                  </mat-slide-toggle>
+                <div *ngIf="projectInfoForm?.controls?.['updated']" class="col-sm-6 col-md-4 col-lg-3">
+                  <mat-label>Updated</mat-label>
+                  <mat-form-field color="primary" appearance="outline">
+                    <input formControlName="updated" matInput>
+                  </mat-form-field>
                 </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="my-3 pl-5 ml-5 border-right">
-                  <mat-label>Audit Enabled&nbsp; &nbsp;</mat-label>
-                  <mat-slide-toggle color="primary" formControlName="auditRequired"> </mat-slide-toggle>
+                <div *ngIf="projectInfoForm?.controls?.['created']" class="col-sm-6 col-md-4 col-lg-3">
+                  <mat-label>Created</mat-label>
+                  <mat-form-field color="primary" appearance="outline">
+                    <input formControlName="created" matInput>
+                  </mat-form-field>
                 </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3" [ngClass]="{'d-none':(projectInfoForm.controls['documentStructure'].value !== 'Structured') && (projectInfoForm.controls['documentStructure'].value !== 'Semi-Structured')
-              && (projectInfoForm.controls['documentStructure'].value !== 'Free-Form')}"
-                [hidden]="projectInfoForm.controls['documentStructure'].value === 'Medical Chart'">
-                <div class="py-3">
-                  <mat-label>Straight Through Process&nbsp; &nbsp;</mat-label>
-                  <mat-slide-toggle (change)="addRemoveScoreCtrol()" formControlName="staightThroughProcessing"
-                    color="primary">
-                  </mat-slide-toggle>
-                </div>
-              </div>
-
-              <div *ngIf="projectInfoForm.controls['score']" class="col-sm-6 col-md-4 col-lg-3" [ngClass]="{'d-none':(projectInfoForm.controls['documentStructure'].value !== 'Structured') && (projectInfoForm.controls['documentStructure'].value !== 'Semi-Structured')
-              && (projectInfoForm.controls['documentStructure'].value !== 'Free-Form')}"
-                [hidden]="projectInfoForm.controls['documentStructure'].value === 'Medical Chart'">
-                <div class="row border-right">
-                  <div class="col-lg-6 pr-0 mt-3">
-                    <mat-label [ngClass]="{'disabled-font-color':!projectInfoForm.value.staightThroughProcessing}">
-                      Document
-                      Score
-                      (0-100)</mat-label>
-                  </div>
-                  <div class="col-lg-3">
-                    <mat-form-field appearance="legacy">
-                      <input type="number" matInput min="0" max="100" (keyup)="setDocumentScore($event.target)"
-                        formControlName="score" [readonly]="!projectInfoForm.value.staightThroughProcessing">
-                      <mat-error>Number between 0-100</mat-error>
-                    </mat-form-field>
+                <!-- <div class="col-sm-6 col-md-4 col-lg-3">
+                  <div class="py-3 mt-3">
+                    <mat-label>&nbsp;</mat-label>
+                    <mat-slide-toggle color="primary" formControlName="status"> Status </mat-slide-toggle>
                   </div>
                 </div>
-
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="my-3 pl-5 ml-5">
-                  <mat-label>Self Service Enabled&nbsp; &nbsp;</mat-label>
-                  <mat-slide-toggle color="primary" (change)="addRemoveProjectForm()"
-                    formControlName="isSelfServiceEnabled"> </mat-slide-toggle>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <mat-label [ngClass]="{'disabled-font-color':!projectInfoForm.value.isSelfServiceEnabled}"> Dynamic
-                  Forms </mat-label>
-                <mat-form-field appearance="outline">
-                  <mat-select [disabled]="!projectInfoForm.controls['isSelfServiceEnabled'].value"
-                    formControlName="selfServiceForm">
-                    <mat-option *ngFor="let proj of dynamicProjectList" [value]="proj"> {{ proj }} </mat-option>
-                  </mat-select>
-                  <mat-error>{{selfServiceFormMsg}}</mat-error>
-                </mat-form-field>
+                <div class="col-sm-6 col-md-4 col-lg-3 ">
+                  <div class="py-3 mt-3">
+                    <mat-label>&nbsp;</mat-label>
+                    <mat-slide-toggle color="primary" formControlName="autoAssignment"> Document Auto-Assignment
+                    </mat-slide-toggle>
+                  </div>
+                </div> -->
               </div>
             </div>
+            <div class="col-sm-12">
+              <div class="row ml-1 mr-1 border">
+                <div class="col-sm-6 col-md-4 col-lg-2">
+                  <div class="my-3 border-right">
+                    <mat-label>Status&nbsp; &nbsp;</mat-label>
+                      <mat-slide-toggle color="primary" formControlName="status">  </mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                  <div class="my-3 pl-5 ml-5 border-right">
+                    <mat-label>Document Auto-Assignment&nbsp; &nbsp;</mat-label>
+                    <mat-slide-toggle color="primary" formControlName="autoAssignment"> 
+                    </mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                  <div class="my-3 pl-5 ml-5 border-right">
+                    <mat-label>Audit Enabled&nbsp; &nbsp;</mat-label>
+                      <mat-slide-toggle color="primary" formControlName="auditRequired">  </mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3"
+                [ngClass]="{'d-none':(projectInfoForm.controls['documentStructure'].value !== 'Structured') && (projectInfoForm.controls['documentStructure'].value !== 'Semi-Structured')
+                && (projectInfoForm.controls['documentStructure'].value !== 'Free-Form')}"
+                  [hidden]="projectInfoForm.controls['documentStructure'].value === 'Medical Chart'">
+                  <div class="py-3">
+                    <mat-label>Straight Through Process&nbsp; &nbsp;</mat-label>
+                    <!-- <span [ngStyle]="{'visibility':projectInfoForm.controls['documentStructure'].value === 'Medical Chart' ? 'hidden' : 'visible'}"> -->
+                    <mat-slide-toggle (change)="addRemoveScoreCtrol()" formControlName="staightThroughProcessing"
+                      color="primary">
+                      </mat-slide-toggle>
+                    <!-- </span> -->
+                  </div>
+                </div>
+  
+                <div *ngIf="projectInfoForm?.controls?.['score']" class="col-sm-6 col-md-4 col-lg-3"
+                [ngClass]="{'d-none':(projectInfoForm.controls['documentStructure'].value !== 'Structured') && (projectInfoForm.controls['documentStructure'].value !== 'Semi-Structured')
+                && (projectInfoForm.controls['documentStructure'].value !== 'Free-Form')}"
+                  [hidden]="projectInfoForm.controls['documentStructure'].value === 'Medical Chart'">
+                  <div class="row border-right">
+                    <div class="col-lg-6 pr-0 mt-3">
+                      <mat-label [ngClass]="{'disabled-font-color':!projectInfoForm.value.staightThroughProcessing}">Document
+                        Score
+                        (0-100)</mat-label>
+                    </div>
+                    <div class="col-lg-3">
+                      <mat-form-field appearance="legacy">
+                        <input type="number" matInput min="0" max="100" (keyup)="setDocumentScore($event.target)"
+                          formControlName="score" [readonly]="!projectInfoForm.value.staightThroughProcessing">
+                        <mat-error>Number between 0-100</mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+  
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                  <div class="my-3 pl-5 ml-5">
+                    <mat-label>Self Service Enabled&nbsp; &nbsp;</mat-label>
+                      <mat-slide-toggle color="primary" (change)="addRemoveProjectForm()" formControlName="isSelfServiceEnabled">  </mat-slide-toggle>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                  <mat-label [ngClass]="{'disabled-font-color':!projectInfoForm.value.isSelfServiceEnabled}"> Dynamic Forms </mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-select [disabled]="!projectInfoForm.controls['isSelfServiceEnabled'].value" formControlName="selfServiceForm">
+                      <mat-option *ngFor="let proj of dynamicProjectList" [value]="proj"> {{ proj }} </mat-option>
+                    </mat-select>
+                    <mat-error>{{selfServiceFormMsg}}</mat-error>
+                  </mat-form-field>
+                </div>
+            </div>
+            </div>
+            <!-- <div *ngIf="projectInfoForm?.controls?.updated" class="col-sm-6 col-md-4 col-lg-3">
+              <mat-label>Updated</mat-label>
+              <mat-form-field color="primary" appearance="outline">
+                <input formControlName="updated" matInput>
+              </mat-form-field>
+            </div>
+            <div *ngIf="projectInfoForm?.controls?.created" class="col-sm-6 col-md-4 col-lg-3">
+              <mat-label>Created</mat-label>
+              <mat-form-field color="primary" appearance="outline">
+                <input formControlName="created" matInput>
+              </mat-form-field>
+            </div> -->
           </div>
+        </mat-card>
+        <!-- <div class="my-3 text-right">
+            <button (click)="createEditProject()" mat-raised-button  color="primary" class="ml-2">
+              {{ isCreateProjectOperation ? 'Create' : 'Update' }}</button>
+            <button mat-stroked-button color="accent" class="ml-2" [routerLink]="['/home/project-management']">Cancel</button>
+            <button mat-stroked-button color="accent"   class="ml-2" (click)="goNext()">
+              Next</button>
+          </div> -->
+  
+  
+        <!-- <project-info-section [minDate]="minDate" [projectInfoForm]="projectInfoForm"
+          [isProjectReadOnly]="isProjectReadOnly" [projectErrorMsg]="projectErrorMsg" [userList]="userList"
+          [dataSource]="dataSource" [isMandatoryHeader]="isMandatoryHeader" (isMandatoryHeaderChange)="isMandatoryHeader = $event" [straightThroughScore]="straightThroughScore" [testedSourceData]="testedSourceData"
+          (projectInfoFormChange)="projectInfoForm = $event" (straightThroughScoreChange)="straightThroughScore = $event"
+          (setStep)="step=$event" [attrListForSemiStructure]="attrListForSemiStructure" 
+          [attrListForInmarReturns]="attrListForInmarReturns" [columnHeadersForInmarType]="columnHeadersForInmarType"
+          [attributeList]="attributeList" [attributeListChange] ="attributeListChange" [headerListForInmar]="headerListForInmar"
+          [columnHeadersForInmar]="columnHeadersForInmar" (columnHeadersForInmarChange)="columnHeadersForInmar = $event"
+          [attributeListRCM]="attributeListRCM" [dataSourceForTemplates]="dataSourceForTemplates"
+          [templateList]="templateList" [step]="step" (dataSourceForTemplatesChange)="dataSourceForTemplates = $event"
+          (dataSourceChange)="dataSource = $event" [selectedProjectInfo]="selectedProjectInfo"
+          (selectedProjectInfoChange)="selectedProjectInfo = $event" [selectedRoles]="selectedRoles"
+          (selectedRolesChange)="selectedRoles = $event" [roleList]="roleList"
+          [dataSourceForDatasets]="dataSourceForDatasets" [datasetList]="datasetList" [categoryList]="categoryList"
+          (dataSourceForDatasetsChange)="dataSourceForDatasets = $event" [sourceList]="sourceList"
+          [sourceTypeList]="sourceTypeList" [srcImagePath]="srcImagePath" [SourceChannelResponse]="SourceChannelResponse"
+          [isCreateProjectOperation]="isCreateProjectOperation" [isSourceVerifiedChange]="isSourceVerified"
+          (isSourceVerifiedChanged)="isSourceVerified= $event"
+          (SourceChannelfilenameChange)="SourceChannelfilename=($event)" (fileIndexChange)="fileIndex = ($event)"
+          (sourceChanelForm1Change)="sourceChanelForm1 = ($event)" (sourceListChange)="sourceList = ($event)"
+          (isSourceDataChange)="isSourceDataChange = ($event)" [dataSourceForApi]="dataSourceForApi" 
+          (dataSourceForApiChange)="dataSourceForApi = $event" [dataSourceForTargetChannel]="dataSourceForTargetChannel"
+           (dataSourceForTargetChannelChange)="dataSourceForTargetChannel = $event"></project-info-section> -->
+  
+        <div class="my-3 text-right">
+          <button (click)="createEditProject()" mat-raised-button color="primary" class="ml-2">
+            {{ isCreateProjectOperation ? 'Create' : 'Update' }}</button>
+          <button mat-stroked-button color="accent" class="ml-2"
+            [routerLink]="['/home/project-management']">Cancel</button>
+          <button mat-stroked-button color="accent" class="ml-2" (click)="goNext()">
+            Next</button>
         </div>
-      </mat-card>
-
-      <!-- <project-info-section [minDate]="minDate" [projectInfoForm]="projectInfoForm"
-        [isProjectReadOnly]="isProjectReadOnly" [projectErrorMsg]="projectErrorMsg" [userList]="userList"
-        [dataSource]="dataSource" [isMandatoryHeader]="isMandatoryHeader"
-        (isMandatoryHeaderChange)="isMandatoryHeader = $event" [straightThroughScore]="straightThroughScore"
-        [testedSourceData]="testedSourceData" (projectInfoFormChange)="projectInfoForm = $event"
-        (straightThroughScoreChange)="straightThroughScore = $event" (setStep)="step=$event"
-        [attrListForSemiStructure]="attrListForSemiStructure" [attrListForInmarReturns]="attrListForInmarReturns"
-        [columnHeadersForInmarType]="columnHeadersForInmarType" [attributeList]="attributeList"
-        [attributeListChange]="attributeListChange" [headerListForInmar]="headerListForInmar"
-        [columnHeadersForInmar]="columnHeadersForInmar" (columnHeadersForInmarChange)="columnHeadersForInmar = $event"
-        [attributeListRCM]="attributeListRCM" [dataSourceForTemplates]="dataSourceForTemplates"
-        [templateList]="templateList" [step]="step" (dataSourceForTemplatesChange)="dataSourceForTemplates = $event"
-        (dataSourceChange)="dataSource = $event" [selectedProjectInfo]="selectedProjectInfo"
-        (selectedProjectInfoChange)="selectedProjectInfo = $event" [selectedRoles]="selectedRoles"
-        (selectedRolesChange)="selectedRoles = $event" [roleList]="roleList"
-        [dataSourceForDatasets]="dataSourceForDatasets" [datasetList]="datasetList" [categoryList]="categoryList"
-        (dataSourceForDatasetsChange)="dataSourceForDatasets = $event" [sourceList]="sourceList"
-        [sourceTypeList]="sourceTypeList" [srcImagePath]="srcImagePath" [SourceChannelResponse]="SourceChannelResponse"
-        [isCreateProjectOperation]="isCreateProjectOperation" [isSourceVerifiedChange]="isSourceVerified"
-        (isSourceVerifiedChanged)="isSourceVerified= $event"
-        (SourceChannelfilenameChange)="SourceChannelfilename=($event)" (fileIndexChange)="fileIndex = ($event)"
-        (sourceChanelForm1Change)="sourceChanelForm1 = ($event)" (sourceListChange)="sourceList = ($event)"
-        (isSourceDataChange)="isSourceDataChange = ($event)" [dataSourceForApi]="dataSourceForApi"
-        (dataSourceForApiChange)="dataSourceForApi = $event" [dataSourceForTargetChannel]="dataSourceForTargetChannel"
-        (dataSourceForTargetChannelChange)="dataSourceForTargetChannel = $event"></project-info-section> -->
-
-      <div class="my-3 text-right">
-        <button (click)="createEditProject()" mat-raised-button color="primary" class="ml-2">
-          {{ isCreateProjectOperation ? 'Create' : 'Update' }}</button>
-        <button mat-stroked-button color="accent" class="ml-2" [routerLink]="['/home/projects']">Cancel</button>
-        <button mat-stroked-button color="accent" class="ml-2" (click)="goNext()">
-          Next</button>
-      </div>
-    </form>
-
+      </form>
+  
+    </div>
   </div>
+  </mat-expansion-panel>
+  </mat-accordion>
 </div>
+
+
+
 
 <div [ngClass]="Stepper[1].status === 'current'?'':'d-none'">
   <div class="container-fluid p-3 body_bgtrans">

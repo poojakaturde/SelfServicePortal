@@ -5,7 +5,7 @@
             <button mat-stroked-button color="accent" class="float-right button-cls ml-2"
                 [routerLink]="['/home/role']">Cancel</button>
             <button (click)="createUpdateRole(); iscreateUpdateBtnClicked = true;" mat-raised-button color="primary"
-                class=" float-right button-cls">
+                class=" float-right button-cls"  [routerLink]="['/home/role']">
                 {{ isCreateRoleOperation ? 'Create' : 'Update' }}
             </button>
         </h5>

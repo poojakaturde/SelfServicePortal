@@ -3,9 +3,9 @@
         <mat-nav-list>
             <mat-list-item class="row-color">
                 <div class="logo-image">
-                    <img *ngIf="!isExpanded" src="../../../../assets/images/projectLogoN.png" class="img-fluid" />
-                    <span *ngIf="isExpanded" class="menu-item">
-                        <img src="../../../../assets/images/logo_nts2.png" class="img-fluid"
+                    <img  [routerLink]="['/home']" *ngIf="!isExpanded" src="../../../../assets/images/projectLogoN.png" class="img-fluid" />
+                    <span *ngIf="isExpanded" class="menu-item"  >
+                        <img [routerLink]="['/home']" src="../../../../assets/images/logo_nts2.png" class="img-fluid"
                             style="height: 24px; width: 107px" />
                     </span>
                 </div>
@@ -51,6 +51,7 @@
                 <i class="fa fa-power-off" aria-hidden="true" style="font-size: 20px;"></i>&nbsp;
             </span>
         </mat-toolbar>
+        
 
         <mat-menu #menuProfile="matMenu" class="theme_color">
             <div (click)="$event.stopPropagation()">

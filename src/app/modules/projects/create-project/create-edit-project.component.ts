@@ -81,6 +81,7 @@ export class CreateEditProjectComponent implements OnInit {
   processingEngineAttributes: any[] = [];
   dataSource: any = new MatTableDataSource([]);
   step: any = 0;
+  panelOpenState = false;
   listForStruct: any[] = ['NN High', 'NN Low', 'Brute Force'];
   selectedProjectInfo: any = {
     id: '',

@@ -6,7 +6,7 @@
     <div *ngFor="let f of dynamicFormDetails.sections" [ngSwitch]="true">
         <mat-card class="border rounded p-3  m-3">
             <h5>{{f.sectionTitle}}</h5>
-            <hr style="background-color: black;">
+            <mat-divider></mat-divider>
             <div *ngFor="let form of f.rows">
                 <div class="formRender" *ngFor="let formData of form.fields"
                     [ngStyle]="{'width':(form.fields.length === 2) ? '50%' : (form.fields.length === 3) ? '33%'  : (form.fields.length >= 4) ? '25%' : '100%'}">

@@ -4,7 +4,7 @@
 <div *ngFor="let form of viewFormData.sections" [ngSwitch]="true">
     <mat-card class="border rounded p-3 m-3">
         <h5 style="font-weight:bold;">{{form.sectionTitle}} :</h5>
-        <hr style="background-color: black;">
+       <mat-divider></mat-divider>
         <div *ngFor="let f of form.rows">
             <h6 style="font-weight:bold;" *ngIf="f.rowTitle.length != 0">{{f.rowTitle}}</h6>
 
