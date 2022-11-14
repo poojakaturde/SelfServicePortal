@@ -34,24 +34,24 @@ export class LandingComponent implements OnInit {
     private dialog: MatDialog, private idle: Idle,
     private changeDetector: ChangeDetectorRef) {
 
-    this.idle.setIdle(1);
-    this.idle.setTimeout(1);
+    this.idle.setIdle(environment.userSessionIdleTime);
+    this.idle.setTimeout(environment.userSessionTimeOut);
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    this.idle.watch();
 
-    this.idle.onIdleEnd.subscribe((res) => {
-      console.log(res)
+    this.idleEnd = this.idle.onIdleEnd.subscribe(() => {
       this.reset();
-    })
+    });
 
     this.idleTimeOut = this.idle.onTimeout.subscribe(() => {
       this.logout();
     });
 
-    this.idle.onIdleStart.subscribe(() => {
-      console.log("idle start")
+    this.onIdleStart = this.idle.onIdleStart.subscribe(() => {
       this.openDialog();
     });
 
+    this.reset();
   }
 
   ngOnInit(): void {
@@ -100,6 +100,16 @@ export class LandingComponent implements OnInit {
       }, (error: any) => {
         this.authenticationService.logout();
       })
+  }
+
+  ngOnDestroy() {
+    this.idle.stop();
+    if (this.dialogRef && this.dialog.openDialogs.length) {
+      this.dialogRef.close();
+    }
+    this.idleEnd.unsubscribe();
+    this.idleTimeOut.unsubscribe();
+    this.onIdleStart.unsubscribe();
   }
 
 }

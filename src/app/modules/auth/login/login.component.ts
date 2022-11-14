@@ -76,6 +76,7 @@ export class LoginComponent implements OnInit {
 
       this.apiServ.sendOtpRequest(reqObj)
         .subscribe((res: any) => {
+          console.log(res)
           if (res && res.responseCode == 'SU_DI_200' && res.description == 'Otp sent successfully' && res.description != 'Credential are verified , connect to reset password' && this.checkOTPRecived == false || checkForResendOtp == 'resendOtp') {
             this.sucssesCodeForOTP = res.description;
             this.validateOtpRequest = res.responseCode;
@@ -136,9 +137,8 @@ export class LoginComponent implements OnInit {
               if (res.detail.isPatient) {
                 // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0]));
                 // this.authenticationService.setAssignedProjectList(res.detail);
-                this.getAssignedProjects();
+                this.getPatientAssignedProjects();
                 let url = './home/application';
-
                 this.routeToPermissibleModule(url);
               } else {
                 this.getAssignedProjects();
@@ -171,6 +171,18 @@ export class LoginComponent implements OnInit {
         let routeLink = res.detail && res.detail.length ? this.returnUrl : '/home';
         this.routeToPermissibleModule(routeLink);
 
+      }, error => {
+        this.snackbar.open('Something Went Wrong ...!', '', { type: 'warning' });
+      })
+  }
+
+  getPatientAssignedProjects() {
+    this.apiServ.getSSPEnabledProjects(this.form.value.userName)
+      .subscribe((res: any) => {
+        console.log(res)
+        if (res && res.detail && res.detail.length) {
+          this.authenticationService.setAssignedProjectList(res.detail);
+        }
       }, error => {
         this.snackbar.open('Something Went Wrong ...!', '', { type: 'warning' });
       })
