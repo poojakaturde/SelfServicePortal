@@ -59,7 +59,7 @@ export class AddTargetChannelDialogComponent implements OnInit {
       this.snackbar.open('Please fill all fields for target channel.', '', { type: 'warning' });
       return;
     }
-    let reqObj = {
+    let reqObj: any = {
       "body": [],
       "endPoint": this.channel_data.endPoint,
       "methodType": this.EditChannel.controls['methodType'].value,

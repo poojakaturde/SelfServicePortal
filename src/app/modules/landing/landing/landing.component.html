@@ -3,8 +3,9 @@
         <mat-nav-list>
             <mat-list-item class="row-color">
                 <div class="logo-image">
-                    <img  [routerLink]="['/home']" *ngIf="!isExpanded" src="../../../../assets/images/projectLogoN.png" class="img-fluid" />
-                    <span *ngIf="isExpanded" class="menu-item"  >
+                    <img [routerLink]="['/home']" *ngIf="!isExpanded" src="../../../../assets/images/projectLogoN.png"
+                        class="img-fluid" />
+                    <span *ngIf="isExpanded" class="menu-item">
                         <img [routerLink]="['/home']" src="../../../../assets/images/logo_nts2.png" class="img-fluid"
                             style="height: 24px; width: 107px" />
                     </span>
@@ -20,7 +21,7 @@
 
             <mat-list-item [routerLinkActive]="['active']" #rla="routerLinkActive" [routerLink]="['/home/application']">
                 <img class="img-fluid" matTooltip="{{!isExpanded ? 'Application' : ''}}" [matTooltipPosition]="'right'"
-                src="../../../../assets/icons/Icons_Application.svg" alt="Application">
+                    src="../../../../assets/icons/Icons_Application.svg" alt="Application">
                 <span class="ml-2"> {{isExpanded ? 'Application' : ''}} </span>
             </mat-list-item>
 
@@ -51,7 +52,7 @@
                 <i class="fa fa-power-off" aria-hidden="true" style="font-size: 20px;"></i>&nbsp;
             </span>
         </mat-toolbar>
-        
+
 
         <mat-menu #menuProfile="matMenu" class="theme_color">
             <div (click)="$event.stopPropagation()">
@@ -77,7 +78,8 @@
                     <span> {{ userMail }} </span>
                 </div><br>
             </div>
-            <button mat-menu-item id="profile-modal-button" data-toggle="modal" data-target="#profileModal">
+            <button mat-menu-item (click)="editProfilePageModel()" id="profile-modal-button" data-toggle="modal"
+                data-target="#profileModal">
                 <mat-icon class="primary-font-color font-20 p-1">create</mat-icon>
                 Edit Profile
             </button>
@@ -86,3 +88,59 @@
         <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>
+
+<div class="modal fade" id="profileModal">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>Edit Profile</span>
+                </h4>
+                <button mat-mini-fab class="foregroundColor" id="profiles-close-modal" data-dismiss="modal">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+
+            <!-- Modal body for edit profile-->
+            <div class="modal-body p-4">
+                <div class="center-text">
+                    <mat-label>Edit Profile Picture</mat-label>
+                    <div class="edit-profile">
+                        <label class="hoverable link mt-2" for="fileInput">
+
+                            <div *ngIf="dialogPhotoUrl == null; else editBlock" class="profileImage">
+                                {{userInfo.charAt(0).toUpperCase()}}</div>
+                            <ng-template #editBlock>
+                                <img class="profileImage" [src]="dialogPhotoUrl">
+                            </ng-template>
+
+                        </label>
+                    </div>
+
+                    <button class="mt-1 text-center" *ngIf="dialogPhotoUrl" mat-stroked-button color="accent"
+                        (click)="delete()">Remove
+                    </button>
+                    <h6 *ngIf="!dialogPhotoUrl" class="text-danger error-msg-pos font-11">Please upload PNG or JPEG with
+                        resolution less than 400*400 and size less than 1 MB.</h6>
+                </div>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="mt-3 col-md-8 font-12">
+                        <mat-label>Name
+                            <span class="required-asterisk">*</span>
+                        </mat-label>
+                        <mat-form-field appearance="outline">
+                            <input matInput type="text" value="{{userInfo}}" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="center-text">
+                    <button mat-flat-button color="primary" (click)="uploadProfilePicture()"> Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input id="fileInput" type='file' enctype="multipart/form-data" (change)="onSelectFile($event)">
+</div>

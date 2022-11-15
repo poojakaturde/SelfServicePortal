@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { LogoutWarningDialogComponent } from '../logout-warning-dialog/logout-warning-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
+import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
 
 @Component({
   selector: 'app-landing',
@@ -16,12 +17,13 @@ export class LandingComponent implements OnInit {
 
   isExpanded: boolean = false;
   photoUrl: any;
+  dialogPhotoUrl: any;
   userInfo: string = '';
   userMail: any;
   userId: any;
   userInfoSubscription: any = null;
   navigationOptions: any = [];
-
+  file: any;
   dialogRef: any = null;
   showDialog: boolean = true;
 
@@ -32,6 +34,7 @@ export class LandingComponent implements OnInit {
   constructor(public router: Router, private apiRequest: RequestApiService,
     private authenticationService: AuthenticationService,
     private dialog: MatDialog, private idle: Idle,
+    private snackbar: SnackbarService,
     private changeDetector: ChangeDetectorRef) {
 
     this.idle.setIdle(environment.userSessionIdleTime);
@@ -102,6 +105,56 @@ export class LandingComponent implements OnInit {
       })
   }
 
+  editProfilePageModel() {
+    
+  }
+
+  closeDialog(id: any) {
+    const ele: HTMLElement = document.getElementById(id) as HTMLElement;
+    ele.click();
+  }
+
+  onSelectFile(event: any) {
+    // this.file = event.target.files[0];
+    // this.imgType = this.file.type.match('\.(png|jpg|jpeg)$');
+    // this.fileSize = event.target.files[0].size;
+    // this.loading = !this.loading;
+    // let reader = new FileReader();
+    // reader.onload = () => {
+    //   if (this.imgType == null) {    //(/image\/*/)
+    //     this.snackbar.open('Please upload an image in PNG or JPEG format.', '', { type: 'warning', duration: 5000 });
+    //     this.dialogPhotoUrl = null;
+    //     this.file = null;
+    //     return;
+    //   }
+    // }
+  }
+
+  uploadProfilePicture() {
+
+    // this.apiRequest.uploadProfilePicture(this.userId, this.file)
+    //   .subscribe((resp: any) => {
+    //     if (resp && resp.status === 'S') {
+    //       let userInfo = JSON.parse(localStorage.getItem('__UI'));
+    //       this.photoUrl = this.dialogPhotoUrl;
+    //       userInfo.photo = this.dialogPhotoUrl;
+    //       localStorage.setItem('__UI', JSON.stringify(userInfo));
+    //       this.closeDialog('profiles-close-modal');
+    //     }
+    //     if (resp && resp.status === 'E' && resp.description) {
+    //       this.snackbar.open(resp.description, '', { type: 'warning' });
+    //     }
+    //   }, (err: any) => {
+    //     this.snackbar.open('Failed to upload Image ...!', '', { type: 'warning' });
+    //     this.closeDialog('profiles-close-modal');
+    //   });
+  }
+
+  delete() {
+    this.dialogPhotoUrl = null;
+    this.file = null;
+  }
+
   ngOnDestroy() {
     this.idle.stop();
     if (this.dialogRef && this.dialog.openDialogs.length) {
@@ -113,3 +166,5 @@ export class LandingComponent implements OnInit {
   }
 
 }
+
+

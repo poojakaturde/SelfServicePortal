@@ -16,7 +16,7 @@ export class ProjectListDialogComponent implements OnInit {
   projectsList: any;
   formName: any;
   filteredOptions: any;
-  options = [];
+  options: any[] = [];
   myControl: FormControl = new FormControl();
 
   constructor(private apiRequest: RequestApiService, private snackbar: SnackbarService,

@@ -16,7 +16,7 @@ export class CreateEditRoleComponent implements OnInit {
   permissionWithDesc: any = null;
   iscreateUpdateBtnClicked: boolean = false;
   roleInfoForm!: FormGroup;
-  permissionList = [];
+  permissionList: any[] = [];
   selectedPermission: any = [];
   selectedCategory: any = "";
   categoryNode: any[] = [];

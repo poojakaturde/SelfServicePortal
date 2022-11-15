@@ -17,7 +17,7 @@ export class ProjectRolesComponent implements OnInit {
 
   @Output() selectedProjectInfoChange: EventEmitter<any> = new EventEmitter();
   @Output() selectedRolesChange: EventEmitter<any> = new EventEmitter();
-  permissionList = [];
+  permissionList: any[] = [];
   constructor(
     private snackbar: SnackbarService
   ) { }

@@ -150,8 +150,8 @@ tr.mat-row {
     width: 24px !important;
 }
 
-.mat-table {
-    max-height: calc(100vh - 175px) !important;
+.example-container {
+    max-height: 72vh !important;
     table-layout: fixed;
     overflow: auto;
 }

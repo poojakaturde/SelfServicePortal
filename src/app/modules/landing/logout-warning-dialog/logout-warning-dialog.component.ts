@@ -11,24 +11,20 @@ import { environment } from 'src/environments/environment';
 })
 export class LogoutWarningDialogComponent implements OnInit {
 
-  sessionTimeOut = environment.userSessionTimeOut;
-
-  timer$: any = timer(0, 1000).pipe(
-    scan(acc => --acc, environment.userSessionTimeOut),
-    takeWhile(x => x >= 0)
-  )
-
-  public percentage: number = (this.timer$ / this.sessionTimeOut) * 100;
-  public final = Number('percentage')
-
   constructor(public modaldialogRef: MatDialogRef<LogoutWarningDialogComponent>) {
-    // this.percentage = Number(this.timer$ / this.sessionTimeOut * 100)
   }
 
   logout(status: any) {
     this.modaldialogRef.close(status);
   }
-  ngOnInit(): void {
+  sessionTimeOut = environment.userSessionTimeOut;
+
+  timer$ = timer(0, 1000).pipe(
+    scan(acc => --acc, environment.userSessionTimeOut),
+    takeWhile(x => x >= 0),
+  )
+
+  ngOnInit() {
   }
 
 }
