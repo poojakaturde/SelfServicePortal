@@ -16,13 +16,18 @@
     padding-left: 10%;
 }
 
-.fix_bottom {
-    position: fixed;
-    right: 1%;
-    bottom: 0%;
-    z-index: 1000;
-    transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
+// .fix_bottom {
+//     position: fixed;
+//     right: 1%;
+//     bottom: 0%;
+//     z-index: 1000;
+//     transform: rotate(360deg);
+//     -webkit-transform: rotate(360deg);
+//     -moz-transform: rotate(360deg);
+//     -o-transform: rotate(360deg);
+// }
+
+.create_form {
+    max-height: 67vh;
+    overflow: auto;
 }

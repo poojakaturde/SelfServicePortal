@@ -1,4 +1,4 @@
-<mat-card style="background-color:#E3E3E3;" class="border rounded m-3 p-3">
+<mat-card style="background-color:#E3E3E3;" class="border rounded m-3 p-2">
     <h4>{{viewFormData.name}} </h4>
 </mat-card>
 <div *ngFor="let form of viewFormData.sections" [ngSwitch]="true">
@@ -17,12 +17,6 @@
                     <mat-form-field appearance="outline">
                         <input matInput placeholder="">
                     </mat-form-field>
-                </div>
-
-                <div *ngSwitchCase="formData.type === 'EDIT_LABEL'">
-                    <h5 style="font-weight: bold;"> {{formData.title}}</h5>
-
-
                 </div>
 
                 <div *ngSwitchCase="formData.type === 'EDIT_TEXT_PHONE'">

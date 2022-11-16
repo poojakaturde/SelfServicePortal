@@ -5,6 +5,7 @@ import { RequestApiService } from 'src/app/core/request-service/request-api.serv
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Field, Row, Section, WidgetData } from '../dynamic-form.model';
+import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
 
 @Component({
   selector: 'app-create-edit-dynamic-form',
@@ -26,26 +27,32 @@ export class CreateEditDynamicFormComponent implements OnInit {
   controlTypeList: string[] = ['EDIT_TEXT', 'EDIT_TEXT_PHONE', 'DROPDOWN', 'DATE_PICKER', 'RADIO', 'AUTOCOMPLETE', 'CHECKBOX']
 
   constructor(private formbuilder: FormBuilder, private http: HttpClient, private apiRequest: RequestApiService, private snackbar: SnackbarService,
-    private router: Router, private routes: ActivatedRoute,) {
+    private router: Router, private routes: ActivatedRoute, private authenticationService: AuthenticationService) {
     this.isCreateDynamicFormOperation = this.routes.snapshot.params['name'] ? false : true;
+    this.createForm();
   }
 
   ngOnInit(): void {
-
-    this.fetchValidators();
-    this.getAllForms();
-    this.createForm();
-    const formName = this.routes.snapshot.params['name'];
-    if (formName) {
-      this.apiRequest.getDynamicFormByName(formName)
-        .subscribe((res: any) => {
-          if (res && res.detail) {
-            this.selectedFormData = res.detail;
-            this.updateForm();
-          }
-        }, error => {
-          this.snackbar.open('Error In getting Form Details', '', { type: 'warning' })
-        })
+    let permission = this.authenticationService.getPermissions();
+    let permissions = Array.from(permission);
+    if (permissions.includes('CREATE_DYNAMIC_FORM') || (permissions.includes('EDIT_DYNAMIC_FORM') && !this.isCreateDynamicFormOperation)) {
+      this.fetchValidators();
+      this.getAllForms();
+      const formName = this.routes.snapshot.params['name'];
+      if (formName) {
+        this.apiRequest.getDynamicFormByName(formName)
+          .subscribe((res: any) => {
+            if (res && res.detail) {
+              this.selectedFormData = res.detail;
+              this.updateForm();
+            }
+          }, error => {
+            this.snackbar.open('Error In getting Form Details', '', { type: 'warning' })
+          })
+      }
+    } else {
+      this.snackbar.open('User Does Not Have permission', '', { type: 'warning' });
+      this.router.navigate(['./home/dynamic-form']);
     }
   }
 

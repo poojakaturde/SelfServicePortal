@@ -138,6 +138,7 @@ export class CreateEditRoleComponent implements OnInit {
       }
       this.apiRequest.createUpdateRole(reqObj, this.isCreateRoleOperation)
         .subscribe((res: any) => {
+          console.log(res)
           if (res) {
             if (res.status === 'S') {
               this.router.navigate(['./home/role-management'])
@@ -146,7 +147,7 @@ export class CreateEditRoleComponent implements OnInit {
             }
           }
         }, (error: any) => {
-          this.snackbar.open(`Failed to  ${this.isCreateRoleOperation ? 'Created' : 'Updated'} Role`, '', { type: 'warning' });
+          this.snackbar.open(`Failed to  ${this.isCreateRoleOperation ? 'Create' : 'Update'} Role`, '', { type: 'warning' });
         })
     } else {
       this.snackbar.open(`Please enter all the details before submitting`, '', { type: 'warning' });

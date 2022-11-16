@@ -1,8 +1,8 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-2 col-md-3 col-sm-3 col-7 pt-3 ml-auto font-color">
-            <button mat-raised-button color="primary" class="font-17 float-right" [routerLink]="['./create-forms']">
-                Create Form </button>
+            <button mat-raised-button color="primary" class="font-17 float-right" *ngIf="dynamicFormPermission.create"
+                [routerLink]="['./create-forms']"> Create Form </button>
         </div>
     </div>
     <mat-accordion class="example-headers-align m-2">
@@ -123,11 +123,13 @@
                     <ng-container matColumnDef="action">
                         <th class="font-14px" mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
                         <td mat-cell *matCellDef="let element let i = index;">
-                            <button class="outline-none foregroundColor" mat-mini-fab>
+                            <button class="outline-none foregroundColor" mat-mini-fab
+                                *ngIf="dynamicFormPermission.view">
                                 <mat-icon [routerLink]="['./view-form', element.name]">visibility
                                 </mat-icon>
                             </button>&nbsp;
-                            <button class="outline-none foregroundColor" mat-mini-fab>
+                            <button class="outline-none foregroundColor" mat-mini-fab
+                                *ngIf="dynamicFormPermission.edit">
                                 <mat-icon [routerLink]="['./edit-form', element.name]">create</mat-icon>
                             </button>&nbsp;
                         </td>

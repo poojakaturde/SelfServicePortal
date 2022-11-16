@@ -17,25 +17,35 @@ export class LandingComponent implements OnInit {
 
   isExpanded: boolean = false;
   photoUrl: any;
-  dialogPhotoUrl: any;
   userInfo: string = '';
   userMail: any;
   userId: any;
   userInfoSubscription: any = null;
   navigationOptions: any = [];
-  file: any;
   dialogRef: any = null;
+  profileDialog: any = null;
   showDialog: boolean = true;
 
   idleEnd: any = null;
   idleTimeOut: any = null;
   onIdleStart: any = null;
+  display: string = "none";
+
+  dialogPhotoUrl: any;
+  file: any;
+  fileSize: any;
+  imgType: any;
+  loading: boolean = false;
+  width: number;
+  height: number;
+  permissibleImageSizeLimit = environment.maxAllowedSizeForImage;
+  permissibleImageResolutionLimit = environment.resolutionForImage;
 
   constructor(public router: Router, private apiRequest: RequestApiService,
     private authenticationService: AuthenticationService,
     private dialog: MatDialog, private idle: Idle,
-    private snackbar: SnackbarService,
-    private changeDetector: ChangeDetectorRef) {
+    private changeDetector: ChangeDetectorRef,
+    private snackbar: SnackbarService) {
 
     this.idle.setIdle(environment.userSessionIdleTime);
     this.idle.setTimeout(environment.userSessionTimeOut);
@@ -105,49 +115,71 @@ export class LandingComponent implements OnInit {
       })
   }
 
-  editProfilePageModel() {
-    
+  openModal() {
+    this.display = "block";
   }
 
-  closeDialog(id: any) {
-    const ele: HTMLElement = document.getElementById(id) as HTMLElement;
-    ele.click();
+  onCloseHandled() {
+    this.display = "none";
   }
 
   onSelectFile(event: any) {
-    // this.file = event.target.files[0];
-    // this.imgType = this.file.type.match('\.(png|jpg|jpeg)$');
-    // this.fileSize = event.target.files[0].size;
-    // this.loading = !this.loading;
-    // let reader = new FileReader();
-    // reader.onload = () => {
-    //   if (this.imgType == null) {    //(/image\/*/)
-    //     this.snackbar.open('Please upload an image in PNG or JPEG format.', '', { type: 'warning', duration: 5000 });
-    //     this.dialogPhotoUrl = null;
-    //     this.file = null;
-    //     return;
-    //   }
-    // }
+    this.file = event.target.files[0];
+    this.imgType = this.file.type.match('\.(png|jpg|jpeg)$');
+    this.fileSize = event.target.files[0].size;
+    this.loading = !this.loading;
+    let reader = new FileReader();
+
+    reader.onload = () => {
+      if (this.imgType == null) {
+        this.snackbar.open('Please upload an image in PNG or JPEG format.', '', { type: 'warning', duration: 5000 });
+        this.dialogPhotoUrl = null;
+        this.file = null;
+        return;
+      }
+
+      if (this.fileSize > this.permissibleImageSizeLimit * 1024) {
+        this.snackbar.open('Please upload an image with the size less than ' + this.permissibleImageSizeLimit + ' KB', '', { type: 'warning', duration: 5000 });
+        this.dialogPhotoUrl = null;
+        this.file = null;
+        return;
+      }
+      var img: any = new Image();
+
+      img.onload = () => {
+        this.width = img.width;
+        this.height = img.height;
+        if (this.width > this.permissibleImageResolutionLimit || this.height > this.permissibleImageResolutionLimit) {
+          this.snackbar.open('Please upload an image with the resolution less than 400*400.', '', { type: 'warning', duration: 5000 });
+          this.dialogPhotoUrl = null;
+          this.file = null;
+        }
+      };
+      img.src = reader.result;
+      this.dialogPhotoUrl = img.src;
+    };
+    reader.readAsDataURL(this.file);
+    event.srcElement.value = "";
   }
 
   uploadProfilePicture() {
 
-    // this.apiRequest.uploadProfilePicture(this.userId, this.file)
-    //   .subscribe((resp: any) => {
-    //     if (resp && resp.status === 'S') {
-    //       let userInfo = JSON.parse(localStorage.getItem('__UI'));
-    //       this.photoUrl = this.dialogPhotoUrl;
-    //       userInfo.photo = this.dialogPhotoUrl;
-    //       localStorage.setItem('__UI', JSON.stringify(userInfo));
-    //       this.closeDialog('profiles-close-modal');
-    //     }
-    //     if (resp && resp.status === 'E' && resp.description) {
-    //       this.snackbar.open(resp.description, '', { type: 'warning' });
-    //     }
-    //   }, (err: any) => {
-    //     this.snackbar.open('Failed to upload Image ...!', '', { type: 'warning' });
-    //     this.closeDialog('profiles-close-modal');
-    //   });
+    this.apiRequest.uploadProfilePicture(this.userId, this.file)
+      .subscribe((resp: any) => {
+        if (resp && resp.status === 'S') {
+          let userInfo = JSON.parse(localStorage.getItem('__UI'));
+          this.photoUrl = this.dialogPhotoUrl;
+          userInfo.photo = this.dialogPhotoUrl;
+          localStorage.setItem('__UI', JSON.stringify(userInfo));
+          this.onCloseHandled();
+        }
+        if (resp && resp.status === 'E' && resp.description) {
+          this.snackbar.open(resp.description, '', { type: 'warning' });
+        }
+      }, (err: any) => {
+        this.snackbar.open('Failed to upload Image ...!', '', { type: 'warning' });
+        this.onCloseHandled();
+      });
   }
 
   delete() {

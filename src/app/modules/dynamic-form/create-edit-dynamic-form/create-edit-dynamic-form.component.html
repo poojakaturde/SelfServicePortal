@@ -1,5 +1,5 @@
 <form [formGroup]="form" autocomplete="off">
-    <div *ngIf="showForm" class="container-fluid p-3" style="overflow-y: scroll; max-height: 85vh;">
+    <div *ngIf="showForm" class="container-fluid p-3">
         <div class="row ">
             <div class="col-sm-7 col-md-5 col-lg-3 mt-3">
                 <mat-form-field appearance="outline">
@@ -28,7 +28,7 @@
             </div>
 
         </div>
-        <mat-card class="border rounded p-3 mt-2 create_project" formArrayName="sections"
+        <mat-card class="border rounded p-3 mt-2 create_form" formArrayName="sections"
             *ngFor="let section of sections().controls; let sectionIndex = index">
 
             <div class="row" [formGroupName]="sectionIndex">
@@ -68,7 +68,7 @@
                                 Field</button>
                         </div>
 
-                        <mat-card class="border rounded p-3 m-3 mt-2 create_project " formArrayName="fields"
+                        <mat-card class="border rounded p-3 m-2 mt-2 create_project " formArrayName="fields"
                             *ngFor="let field of fields(sectionIndex,rowIndex).controls; let fieldIndex = index"
                             style="width: 98%;">
                             <div class="row" [formGroupName]="fieldIndex">
@@ -136,19 +136,19 @@
                                             (click)="removeField(sectionIndex,rowIndex,fieldIndex)">delete</i>
                                     </button>
                                 </div>
-                                <div formArrayName="widgetData">
+                                <div formArrayName="widgetData" class="p-2 m-2">
                                     <div
                                         *ngFor="let widget of widgetData(sectionIndex,rowIndex,fieldIndex).controls; let widgetDataIndex=index">
                                         <div class="row " [formGroupName]="widgetDataIndex">
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-5">
                                                 <mat-form-field appearance="outline">
                                                     <mat-label>Option Title</mat-label>
                                                     <input matInput formControlName="title">
                                                 </mat-form-field>
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-5">
                                                 <mat-form-field appearance="outline">
                                                     <mat-label>Option Value</mat-label>
                                                     <input matInput formControlName="value">
@@ -172,12 +172,12 @@
 
         </mat-card>
     </div>
-    <div class="my-3 text-right fix_bottom" *ngIf="showForm">
+    <div class="my-2 text-right" *ngIf="showForm">
 
         <button type="submit" (click)="onSave()" mat-raised-button class="ml-2" color="primary">{{
             isCreateDynamicFormOperation ? 'Create' : 'Update' }}</button>
         <button (click)="onPreview()" mat-stroked-button color="accent" class="ml-2">Preview</button>
-        <button mat-stroked-button color="accent" class="ml-2" [routerLink]="['/home/dynamic-form']">Cancel</button>
+        <button mat-stroked-button color="accent" class="ml-2 mr-3" [routerLink]="['/home/dynamic-form']">Cancel</button>
     </div>
 
 

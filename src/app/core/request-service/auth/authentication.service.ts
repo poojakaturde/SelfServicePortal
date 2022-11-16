@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs/internal/Observable';
+import { RequestApiService } from '../request-api.service';
 
 declare var require: any;
 const __routes: Array<any> = require('../../navigation-options/routes.json');
@@ -29,16 +30,17 @@ export class AuthenticationService {
   navigationOptions: any = [];
   private appRoutes: any[] = __routes;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private apiServ: RequestApiService) {
 
     this.authenticationToken = localStorage.getItem('token');
     let currentUserProject = localStorage.getItem('userProjects');
     let selectedProject = localStorage.getItem('selectedProject');
+    let userData = localStorage.getItem('patientInfo');
     if (currentUserProject && JSON.parse(currentUserProject) && JSON.parse(currentUserProject)[0]) {
       this.currentProjectSubject = new BehaviorSubject<any>(JSON.parse(currentUserProject)[0]);
       this.selectedProject.next(selectedProject ? JSON.parse(selectedProject) : JSON.parse(currentUserProject)[0]);
       this.assignedProjects.next(JSON.parse(currentUserProject));
-      this.setAssignedProjectList(JSON.parse(currentUserProject));
+      this.setAssignedProjectList(JSON.parse(currentUserProject), JSON.parse(userData));
     } else {
       this.currentProjectSubject = new BehaviorSubject<any>([]);
     }
@@ -69,6 +71,7 @@ export class AuthenticationService {
         }
       })
     }
+    this.router.navigate(['/home'])
   }
 
   validateCredential(eid: any, password: any): { status: boolean, msg: string } {
@@ -102,18 +105,14 @@ export class AuthenticationService {
     return this.userInfo;
   }
 
-  setAssignedProjectList(projectList: any) {
+  setAssignedProjectList(projectList: any, userData?: any) {
     this.assignedProjects.next(projectList);
     localStorage.setItem('userProjects', JSON.stringify(projectList));
-    this.updatePermissions();
+    this.updatePermissions(userData);
     if (projectList && projectList.length) {
       if (!this.selectedProject.value) {
-        this.setUserProject(projectList[0]);
+        this.setUserProject(projectList[0], userData);
       }
-    } else if (projectList.isPatient) {
-      // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0].permissions));
-      // this.router.navigate(['./home/application']);
-      //   let url = '/home/application';
     } else {
       this.setUserProject(null);
       localStorage.removeItem('userProjects');
@@ -122,19 +121,18 @@ export class AuthenticationService {
     }
   }
 
-  updatePermissions() {
+  updatePermissions(userInfo?: any) {
     this.projectPermissions = [];
-    this.projectIdList = []
-
-    if (this.assignedProjects.value && this.assignedProjects.value.length) {
+    this.projectIdList = [];
+    if (this.assignedProjects.value && this.assignedProjects.value.length && userInfo == undefined) {
       this.assignedProjects.value.forEach((project: any) => {
         this.projectIdList.push(project.projectId);
         this.projectPermissions = new Set([...this.projectPermissions, ...project.permissions]);
       });
       this.projectPermissions = [...this.projectPermissions];
 
-    } else if (this.assignedProjects.value.isPatient) {
-      // this.projectPermissions = new Set([...this.projectPermissions, ...(attributesList.patientPermissionList[0].permissions)]);
+    } else {
+      this.projectPermissions = new Set([...this.projectPermissions, ...userInfo.permissions]);
       this.projectPermissions = [...this.projectPermissions];
     }
     this.updateNavigation();
@@ -144,10 +142,10 @@ export class AuthenticationService {
     return this.projectPermissions;
   }
 
-  setUserProject(selectedProject: any) {
+  setUserProject(selectedProject: any, userData?: any) {
     this.selectedProject.next(selectedProject);
     localStorage.setItem('selectedProject', JSON.stringify(selectedProject))
-    this.updatePermissions();
+    this.updatePermissions(userData);
   }
 
   logout() {
@@ -155,6 +153,7 @@ export class AuthenticationService {
     localStorage.removeItem('selectedProject');
     localStorage.removeItem('__UI');
     localStorage.removeItem('token');
+    localStorage.removeItem('patientInfo');
     this.assignedProjects.next(null);
     this.selectedProject.next(null);
     this.userInfo.next(null);

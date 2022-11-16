@@ -40,8 +40,9 @@
         "blk_icon": "./../../assets/icons/Icons_Application.svg",
         "route": "/home/application",
         "permissions": [
-            "CREATE_APPLICATION",
-            "VIEW_APPLICATION"
+            "Create Application",
+            "View Application",
+            "Update Application"
         ]
     },
     {

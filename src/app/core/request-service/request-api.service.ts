@@ -140,6 +140,7 @@ export class RequestApiService {
   getAssignedProject(userName: any) {
     return this.http.get(this.url + "/activeprojectdetails/" + userName)
   }
+
   //  -------------------------------- API SERVICES FOR PROJECT ---------------------------------//
 
   getAllProjets(userName: any, userRole?: any) {
@@ -200,7 +201,6 @@ export class RequestApiService {
     return this.http.get(this.url + "/permission")
   }
 
-
   getSourceList() {
     return this.http.get(this.url + "/channel/src")
   }
@@ -226,4 +226,12 @@ export class RequestApiService {
   testTargetChannelConnection(reqObj: any) {
     return this.http.post(this.url + '/api/data/testTargetChannelConnection', reqObj)
   }
+
+  uploadProfilePicture(userId: any, fileToUpload?: File) {
+    const fd = new FormData();
+    fd.append('photo', fileToUpload);
+    return this.http.post(this.url + '/admin/user/photo/' + userId, fd)
+  }
+
+  
 }

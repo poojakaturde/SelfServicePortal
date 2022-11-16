@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
     otp: new FormControl(''),
   });
-  
+
   constructor(private authenticationService: AuthenticationService, private snackbar: SnackbarService,
     private router: Router, private apiServ: RequestApiService, private route: ActivatedRoute,
     private userDataService: UserDataService) { }
@@ -76,7 +76,6 @@ export class LoginComponent implements OnInit {
 
       this.apiServ.sendOtpRequest(reqObj)
         .subscribe((res: any) => {
-          console.log(res)
           if (res && res.responseCode == 'SU_DI_200' && res.description == 'Otp sent successfully' && res.description != 'Credential are verified , connect to reset password' && this.checkOTPRecived == false || checkForResendOtp == 'resendOtp') {
             this.sucssesCodeForOTP = res.description;
             this.validateOtpRequest = res.responseCode;
@@ -99,11 +98,8 @@ export class LoginComponent implements OnInit {
               this.authenticationService.setUserInfo({ ...reqObj, name: res.detail.name, userId: res.detail.id, activeTheme: res.detail.activeTheme?.signedUrl, photo: res.detail.photo });
               this.authenticationService.setAuthenticationToken(res.detail.type + ' ' + res.detail.token)
               if (res.detail.isPatient) {
-                // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0]));
-                this.authenticationService.setAssignedProjectList(res.detail);
-                let url = './home/application';
-
-                this.routeToPermissibleModule(url);
+                localStorage.setItem('patientInfo', JSON.stringify(res.detail));
+                this.getPatientAssignedProjects(res.detail);
               } else {
                 this.getAssignedProjects();
               }
@@ -121,7 +117,6 @@ export class LoginComponent implements OnInit {
       this.apiServ.login(reqObj)
         .subscribe((res: any) => {
           if (res) {
-            console.log(res)
             if (res.responseCode === 'SU_DI_200') {
               const userInfo = JSON.stringify({
                 "userName": res.detail.username,
@@ -135,11 +130,8 @@ export class LoginComponent implements OnInit {
               this.authenticationService.setUserInfo({ ...reqObj, name: res.detail.name, userId: res.detail.id, activeTheme: res.detail.activeTheme?.signedUrl, photo: res.detail.photo });
               this.authenticationService.setAuthenticationToken(res.detail.type + ' ' + res.detail.token);
               if (res.detail.isPatient) {
-                // localStorage.setItem('userProjects', JSON.stringify(attributesList.patientPermissionList[0]));
-                // this.authenticationService.setAssignedProjectList(res.detail);
-                this.getPatientAssignedProjects();
-                let url = './home/application';
-                this.routeToPermissibleModule(url);
+                localStorage.setItem('patientInfo', JSON.stringify(res.detail));
+                this.getPatientAssignedProjects(res.detail);
               } else {
                 this.getAssignedProjects();
               }
@@ -164,11 +156,10 @@ export class LoginComponent implements OnInit {
   getAssignedProjects() {
     this.apiServ.getAssignedProject(this.form.value.userName)
       .subscribe((res: any) => {
-        console.log(res)
         if (res && res.detail && res.detail.length) {
           this.authenticationService.setAssignedProjectList(res.detail);
         }
-        let routeLink = res.detail && res.detail.length ? this.returnUrl : '/home';
+        let routeLink = '/home';
         this.routeToPermissibleModule(routeLink);
 
       }, error => {
@@ -176,12 +167,11 @@ export class LoginComponent implements OnInit {
       })
   }
 
-  getPatientAssignedProjects() {
+  getPatientAssignedProjects(userData: any) {
     this.apiServ.getSSPEnabledProjects(this.form.value.userName)
       .subscribe((res: any) => {
-        console.log(res)
         if (res && res.detail && res.detail.length) {
-          this.authenticationService.setAssignedProjectList(res.detail);
+          this.authenticationService.setAssignedProjectList(res.detail, userData);
         }
       }, error => {
         this.snackbar.open('Something Went Wrong ...!', '', { type: 'warning' });

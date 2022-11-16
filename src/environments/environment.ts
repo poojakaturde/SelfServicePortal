@@ -6,6 +6,8 @@ export const environment = {
   production: false,
   userSessionTimeOut: 900,
   userSessionIdleTime: 300,
+  maxAllowedSizeForImage: 1024, // image size in KB 
+  resolutionForImage: 400
 };
 
 /*

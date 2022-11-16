@@ -47,6 +47,7 @@ export class ApplicationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.specificuserpatient();
   }
 
   // calling api for all submitted forms

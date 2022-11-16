@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
 
@@ -13,7 +14,7 @@ import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
 })
 export class DynamicFormComponent implements OnInit {
 
-  displayedColumns = ['name', 'createdBy', 'status', 'created', 'updated', 'action'];
+  displayedColumns = ['name', 'createdBy', 'status', 'created', 'updated'];
   dataSource: any = new MatTableDataSource([]);
 
   formList: any;
@@ -37,11 +38,33 @@ export class DynamicFormComponent implements OnInit {
     sortingOrder: true,
   }
 
-  constructor(private apiRequest: RequestApiService, private snackbar: SnackbarService,) {
-    this.fetchTableData();
+  dynamicFormPermission = {
+    edit: false,
+    view: false,
+    create: true
   }
 
-  ngOnInit(): void { }
+  constructor(private apiRequest: RequestApiService, private snackbar: SnackbarService,
+    private authenticationService: AuthenticationService,) {
+  }
+
+  ngOnInit(): void {
+    this.initPermissions();
+    this.fetchTableData();
+    if (this.dynamicFormPermission.edit || this.dynamicFormPermission.view) {
+      this.displayedColumns.push('action');
+    }
+  }
+
+  initPermissions() {
+    let permission = this.authenticationService.getPermissions();
+    let permissions = Array.from(permission)
+    this.dynamicFormPermission = {
+      edit: Array.from(permissions).includes('CREATE_DYNAMIC_FORM') || Array.from(permissions).includes('EDIT_DYNAMIC_FORM'),
+      create: Array.from(permissions).includes('CREATE_DYNAMIC_FORM'),
+      view: Array.from(permissions).includes('VIEW_DYNAMIC_FORM')
+    }
+  }
 
   searchByFilter(searchFilter: any) {
     const obj = {

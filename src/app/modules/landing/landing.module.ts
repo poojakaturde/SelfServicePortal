@@ -6,13 +6,11 @@ import { MaterialModule } from '../Material/material.module';
 import { HomeComponent } from './home/home.component';
 import { LogoutWarningDialogComponent } from './logout-warning-dialog/logout-warning-dialog.component';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { EditProfileDialogComponent } from './edit-profile-dialog/edit-profile-dialog.component';
 @NgModule({
   declarations: [
     LandingComponent,
     HomeComponent,
     LogoutWarningDialogComponent,
-    EditProfileDialogComponent,
   ],
   imports: [
     CommonModule,
