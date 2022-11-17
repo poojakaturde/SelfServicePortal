@@ -19,28 +19,13 @@ export class ProjectListDialogComponent implements OnInit {
   options: any[] = [];
   myControl: FormControl = new FormControl();
 
-  constructor(private apiRequest: RequestApiService, private snackbar: SnackbarService,
-    private service: SharedService, private router: Router) {
-    const UI = JSON.parse(localStorage.getItem('__UI')!);
-    this.username = UI.userName;
+  constructor(private service: SharedService) {
+    const userProjects = JSON.parse(localStorage.getItem('userProjects'));
+    this.projectsList = userProjects;
   }
-
 
   ngOnInit(): void {
-    this.getSSPEnabledForms();
     this.initForm();
-  }
-
-  getSSPEnabledForms() {
-
-    this.apiRequest.getSSPEnabledProjects(this.username).subscribe((res: any) => {
-      if (res && res.detail && res.detail.length) {
-        this.projectsList = res.detail;
-        console.log(this.projectsList);
-      }
-    }, error => {
-      this.snackbar.open('Failed To Fetch the Form List ...!', '', { type: 'warning' });
-    })
   }
 
   selected(e: any) {

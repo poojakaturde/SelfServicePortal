@@ -55,7 +55,7 @@ export class ApplicationComponent implements OnInit {
   // calling api for all submitted forms
 
   specificuserpatient() {
-    if (this.username) {
+    if (this.username != "di-admin@neutrinotechsystems.com") {
       this.apiRequest.getPatientForms(this.username).subscribe((res: any) => {
         if (res && res.detail && res.detail.length) {
           this.FormList = res.detail;
@@ -64,7 +64,7 @@ export class ApplicationComponent implements OnInit {
         }
       })
     }
-    else if (!this.username) {
+    else {
       this.apiRequest.getAllSubmittedForms().subscribe((res: any) => {
         if (res && res.detail && res.detail.length) {
           this.FormList = res.detail;
@@ -176,12 +176,3 @@ export class ApplicationComponent implements OnInit {
     });
   }
 }
-
-
-
-
-
-
-
-
-

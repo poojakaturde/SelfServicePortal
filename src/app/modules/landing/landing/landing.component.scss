@@ -11,9 +11,6 @@ mat-sidenav-container {
         background-color: white;
 
         mat-nav-list {
-            .menu-item {
-                margin-left: 8px;
-            }
 
             img.img-fluid {
                 height: 24px;
@@ -34,11 +31,7 @@ mat-sidenav-container {
     }
 }
 
-.nav-item {
-    width: 35px;
-}
-
-hr {
+.hr {
     margin: 1px;
     color: inherit;
     background-color: currentColor;
@@ -72,7 +65,7 @@ hr {
 .btn-collapse-icon {
     position: absolute;
     bottom: 30px;
-    right: 10px;
+    right: 20px;
 }
 
 .btn-collapse-icon {

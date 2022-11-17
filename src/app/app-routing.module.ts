@@ -46,6 +46,7 @@ const routes: Routes = [
       {
         path: 'application',
         loadChildren: () => import('./modules/application/application.module').then(m => m.ApplicationModule),
+        canActivate: [AuthguardService]
       },
     ]
   },

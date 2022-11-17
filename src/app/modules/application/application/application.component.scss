@@ -1,5 +1,5 @@
 .example-container {
-    max-height: 61vh !important;
+    max-height: 60vh !important;
     table-layout: fixed;
     overflow: auto;
 }
@@ -8,4 +8,11 @@
     position: sticky;
     top: 0;
     z-index: 100;
+}
+
+.title {
+    color: #e87033;
+    font-weight: 500;
+    line-height: 1.2;
+    font-size: 1rem;
 }

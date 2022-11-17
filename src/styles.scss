@@ -19,7 +19,6 @@ body {
 }
 
 .mat-app-background {
-  height: 100%;
   height: 100vh;
 }
 
@@ -339,27 +338,6 @@ intelli-paginator .mat-mini-fab {
 
 .h5 {
   font-size: 14px;
-}
-
-
-.processed {
-  color: #86db46;
-}
-
-.audited {
-  color: #26AF54;
-}
-
-.pending {
-  color: #0F4DC9;
-}
-
-.ready {
-  color: #4FBFF9;
-}
-
-.rejected {
-  color: #d12424;
 }
 
 .menuSmart_Search {
