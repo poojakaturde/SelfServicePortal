@@ -71,7 +71,6 @@ export class AuthenticationService {
         }
       })
     }
-    this.router.navigate(['/home'])
   }
 
   validateCredential(eid: any, password: any): { status: boolean, msg: string } {

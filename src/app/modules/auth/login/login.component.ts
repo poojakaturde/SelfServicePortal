@@ -173,6 +173,8 @@ export class LoginComponent implements OnInit {
         if (res && res.detail && res.detail.length) {
           this.authenticationService.setAssignedProjectList(res.detail, userData);
         }
+        let routeLink = '/home';
+        this.routeToPermissibleModule(routeLink);
       }, error => {
         this.snackbar.open('Something Went Wrong ...!', '', { type: 'warning' });
       })

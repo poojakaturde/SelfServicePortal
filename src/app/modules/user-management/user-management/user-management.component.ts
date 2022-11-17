@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
@@ -121,8 +120,8 @@ export class UserManagementComponent implements OnInit {
       return { ...users };
     })
     this.dataSource.filterPredicate = function (data: any, filter: any): any {
-      return data.name.toLowerCase().includes(filter) || data.email.toLowerCase().includes(filter) ||
-        data.created.toLowerCase().includes(filter) || data.updated.toLowerCase().includes(filter) ||
+      return (data.name || '').toLowerCase().includes(filter) || (data.email || '').toLowerCase().includes(filter) ||
+        (data.created || '').toLowerCase().includes(filter) || (data.updated || '').toLowerCase().includes(filter) ||
         JSON.stringify(data.assignedProjects).toLowerCase().includes(filter);
     }
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -136,8 +135,8 @@ export class UserManagementComponent implements OnInit {
         return { ...user };
       })
       this.enabledUserList.filterPredicate = function (data: any, filter: any): any {
-        return data.name.toLowerCase().includes(filter) || data.email.toLowerCase().includes(filter) ||
-          data.created.toLowerCase().includes(filter) || data.updated.toLowerCase().includes(filter) ||
+        return (data.name || '').toLowerCase().includes(filter) || (data.email || '').toLowerCase().includes(filter) ||
+          (data.created || '').toLowerCase().includes(filter) || (data.updated || '').toLowerCase().includes(filter) ||
           JSON.stringify(data.assignedProjects).toLowerCase().includes(filter);
       }
       this.enabledUserList.filter = filterValue.trim().toLowerCase();

@@ -171,7 +171,6 @@ export class ProjectsComponent implements OnInit {
     this.showCards = value;
   }
 
-
   ngOnDestroy() {
     if (this.userInfoSunscription) {
       this.userInfoSunscription.unsubscribe();

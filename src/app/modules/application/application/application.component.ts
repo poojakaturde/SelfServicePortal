@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
 import { ProjectListDialogComponent } from '../project-list-dialog/project-list-dialog.component';
+
 @Component({
   selector: 'app-application',
   templateUrl: './application.component.html',
@@ -44,6 +45,7 @@ export class ApplicationComponent implements OnInit {
     const UI = JSON.parse(localStorage.getItem('__UI')!);
     this.username = UI.userName;
     this.fetchTableData();
+    this.specificuserpatient();
   }
 
   ngOnInit(): void {

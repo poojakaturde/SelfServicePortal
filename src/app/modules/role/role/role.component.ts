@@ -1,8 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/core/request-service/auth/authentication.service';
 import { RequestApiService } from 'src/app/core/request-service/request-api.service';
 import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
@@ -10,6 +10,7 @@ import { SnackbarService } from 'src/app/core/snack-bar/snackbar.service';
   selector: 'app-role',
   templateUrl: './role.component.html',
   styleUrls: ['./role.component.scss'],
+  providers: [DatePipe]
 })
 export class RoleComponent implements OnInit {
 
@@ -36,7 +37,8 @@ export class RoleComponent implements OnInit {
   }
 
   constructor(private snackbar: SnackbarService, private authenticationService: AuthenticationService,
-    private apiRequest: RequestApiService, private changeDetector: ChangeDetectorRef
+    private apiRequest: RequestApiService, private changeDetector: ChangeDetectorRef,
+    private datePipe: DatePipe,
   ) { }
 
   ngOnInit(): void {
@@ -85,8 +87,8 @@ export class RoleComponent implements OnInit {
   filterUserTableData(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.data = this.dataSource.data.map((role: any) => {
-      // role.created = this.datePipe.transform(role.created, 'MM-dd-yyyy HH:mm:ss');
-      // role.updated = this.datePipe.transform(role.updated, 'MM-dd-yyyy HH:mm:ss');
+      role.created = this.datePipe.transform(role.created, 'MM-dd-yyyy HH:mm:ss');
+      role.updated = this.datePipe.transform(role.updated, 'MM-dd-yyyy HH:mm:ss');
       return { ...role };
     })
     this.dataSource.filterPredicate = function (data: any, filter: any): any {

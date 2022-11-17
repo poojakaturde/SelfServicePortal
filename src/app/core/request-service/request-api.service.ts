@@ -152,7 +152,6 @@ export class RequestApiService {
     }
   }
 
-
   enableDisableProject(projectId: any, status: any) {
     return this.http.get(this.url + '/admin/project/status/' + projectId + '/' + status)
   }
@@ -179,7 +178,6 @@ export class RequestApiService {
     return this.http.get(this.url + '/template/activeTemplateList')
   }
 
-
   createUpdateProject(reqObj: any, isCreateOperation: any) {
     if (isCreateOperation) {
       return this.http.post(this.url + '/admin/project', reqObj)
@@ -187,7 +185,6 @@ export class RequestApiService {
     else {
       return this.http.patch(this.url + '/admin/project', reqObj)
     }
-
   }
 
   getDynamicFormList() {
@@ -232,6 +229,5 @@ export class RequestApiService {
     fd.append('photo', fileToUpload);
     return this.http.post(this.url + '/admin/user/photo/' + userId, fd)
   }
-
   
 }
